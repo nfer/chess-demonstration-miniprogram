@@ -282,3 +282,9 @@ export const getTextByChar = (ch: string) => {
     default: return '空';
   }
 };
+
+export const getScale = () => {
+  const info = wx.getSystemInfoSync();
+  const scale = info.screenWidth / CANVAS_WIDTH;
+  return scale;
+}
