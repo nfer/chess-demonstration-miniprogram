@@ -1,31 +1,29 @@
-/*
- * Eslint config file
- * Documentation: https://eslint.org/docs/user-guide/configuring/
- * Install the Eslint extension before using this feature.
- */
 module.exports = {
   env: {
-    es6: true,
     browser: true,
-    node: true,
+    commonjs: true,
+    es2021: true,
   },
-  ecmaFeatures: {
-    modules: true,
-  },
+  extends: [
+    'airbnb-typescript',
+  ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module',
+    ecmaVersion: 13,
+    project: './tsconfig.json',
+  },
+  plugins: [
+    '@typescript-eslint',
+    'import',
+  ],
+  rules: {
+    'react/jsx-filename-extension': 'off',
   },
   globals: {
-    wx: true,
     App: true,
     Page: true,
-    getCurrentPages: true,
+    wx: true,
     getApp: true,
-    Component: true,
-    requirePlugin: true,
-    requireMiniProgram: true,
+    IAppOption: true,
   },
-  // extends: 'eslint:recommended',
-  rules: {},
-}
+};
