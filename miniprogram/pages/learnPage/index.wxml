@@ -1,0 +1,12 @@
+<view class="section__title">
+    <text class="userinfo-nickname">第{{stepIdx}}关</text>
+</view>
+<view class="section__full">
+    <canvas class="section__image section__absolute" canvas-id="bgCanvas"></canvas>
+    <canvas class="section__image section__absolute" canvas-id="itemCanvas" bindtap="selectItem"></canvas>
+</view>
+
+<view class="section__btns">
+    <button class="section__btn" type="default" bindtap="goBack">退出</button>
+    <button class="section__btn" type="warn" bindtap="reload">重来</button>
+</view>
