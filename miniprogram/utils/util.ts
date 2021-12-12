@@ -210,6 +210,36 @@ export const drawChessKeys = (id: string, scale: number, keyInfos: Array<KeyInfo
   context.draw();
 };
 
+export const drawCursor = (id: string, scale: number, x: number, y: number) => {
+    // 使用 wx.createContext 获取绘图上下文 context
+    const context = wx.createCanvasContext(id);
+
+    // scale
+    context.scale(scale, scale);
+
+    context.setStrokeStyle('#f00');
+    context.setLineWidth(2);
+
+    const pointX = START_X + LINE_SPACE * x;
+    const pointY = START_Y + LINE_SPACE * y;
+
+    function drewPoint(offsetX: number, offsetY: number) {
+      const POINT_WIDTH = 42;
+      const POINT_LENGTH = 20;
+      context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
+      context.lineTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH - offsetY * POINT_LENGTH);
+      context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
+      context.lineTo(pointX + offsetX * POINT_WIDTH - offsetX * POINT_LENGTH, pointY + offsetY * POINT_WIDTH);
+    }
+    drewPoint(1, 1);
+    drewPoint(-1, -1);
+    drewPoint(1, -1);
+    drewPoint(-1, 1);
+    context.stroke();
+
+    context.draw();
+}
+
 export interface KeyInfo {
   key: string;
   name: string;

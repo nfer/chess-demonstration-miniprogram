@@ -1,8 +1,9 @@
-<view class="section__title">
+<!-- <view class="section__title">
     <text class="userinfo-nickname">第{{stepIdx}}关</text>
-</view>
+</view> -->
 <view class="section__full">
     <canvas class="section__image section__absolute" canvas-id="bgCanvas"></canvas>
+    <canvas class="section__image section__absolute" canvas-id="cursorCanvas"></canvas>
     <canvas class="section__image section__absolute" canvas-id="itemCanvas" bindtap="selectItem"></canvas>
 </view>
 
