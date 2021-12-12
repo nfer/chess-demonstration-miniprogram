@@ -6,6 +6,7 @@ import {
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
 }  from './constants';
+import { KeyInfo } from '../interface/index'
 
 export const drawChessBackground = (id: string, scale: number) => {
   // 使用 wx.createContext 获取绘图上下文 context
@@ -206,47 +207,49 @@ export const drawChessKeys = (id: string, scale: number, keyInfos: Array<KeyInfo
       context.setFillStyle('#F00');
     }
     context.fillText(item.name, posX - 20, posY + 15);
-  })
+  });
   context.draw();
 };
 
 export const drawCursor = (id: string, scale: number, x: number, y: number) => {
-    // 使用 wx.createContext 获取绘图上下文 context
-    const context = wx.createCanvasContext(id);
+  // 使用 wx.createContext 获取绘图上下文 context
+  const context = wx.createCanvasContext(id);
 
-    // scale
-    context.scale(scale, scale);
+  // scale
+  context.scale(scale, scale);
 
-    context.setStrokeStyle('#f00');
-    context.setLineWidth(2);
+  context.setStrokeStyle('#f00');
+  context.setLineWidth(2);
 
-    const pointX = START_X + LINE_SPACE * x;
-    const pointY = START_Y + LINE_SPACE * y;
+  const pointX = START_X + LINE_SPACE * x;
+  const pointY = START_Y + LINE_SPACE * y;
 
-    function drewPoint(offsetX: number, offsetY: number) {
-      const POINT_WIDTH = 42;
-      const POINT_LENGTH = 20;
-      context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
-      context.lineTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH - offsetY * POINT_LENGTH);
-      context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
-      context.lineTo(pointX + offsetX * POINT_WIDTH - offsetX * POINT_LENGTH, pointY + offsetY * POINT_WIDTH);
-    }
-    drewPoint(1, 1);
-    drewPoint(-1, -1);
-    drewPoint(1, -1);
-    drewPoint(-1, 1);
-    context.stroke();
+  function drewPoint(offsetX: number, offsetY: number) {
+    const POINT_WIDTH = 42;
+    const POINT_LENGTH = 20;
+    context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
+    context.lineTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH - offsetY * POINT_LENGTH);
+    context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
+    context.lineTo(pointX + offsetX * POINT_WIDTH - offsetX * POINT_LENGTH, pointY + offsetY * POINT_WIDTH);
+  }
+  drewPoint(1, 1);
+  drewPoint(-1, -1);
+  drewPoint(1, -1);
+  drewPoint(-1, 1);
+  context.stroke();
 
-    context.draw();
-}
+  context.draw();
+};
 
-export interface KeyInfo {
-  key: string;
-  name: string;
-  type: number;
-  x: number;
-  y: number;
-}
+export const clearCursor = (id: string, scale: number) => {
+  // 使用 wx.createContext 获取绘图上下文 context
+  const context = wx.createCanvasContext(id);
+
+  // scale
+  context.scale(scale, scale);
+
+  context.draw();
+};
 
 // '3kN1b1C/8r/9/3Cr4/9/9/9/9/4p4/5K3 w - - 0 1'
 export const parseFenStr = (str: string) => {
@@ -317,4 +320,4 @@ export const getScale = () => {
   const info = wx.getSystemInfoSync();
   const scale = info.screenWidth / CANVAS_WIDTH;
   return scale;
-}
+};
