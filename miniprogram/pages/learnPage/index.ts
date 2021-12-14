@@ -66,10 +66,10 @@ Page({
       }
 
       //  1.3 吃掉棋子
-      const idx = keyInfos.findIndex(item => item.key === lastKey.key);
+      const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
-      const newKeyInfos = keyInfos.filter(item => item.key !== key.key);
+      const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
       console.log(newKeyInfos, keyInfos, key, lastKey);
       this.setData({ keyInfos: newKeyInfos, lastKey: null });
       util.drawChessKeys('itemCanvas', scale, keyInfos);

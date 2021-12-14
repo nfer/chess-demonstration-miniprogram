@@ -267,7 +267,7 @@ export const parseFenStr = (str: string) => {
       } else {
         const name = getTextByChar(c);
         const type = c > 'a' ? 1 : 0;
-        output.push({ key: c, name, type, x, y });
+        output.push({ hash: `${c}_${output.length}`, key: c, name, type, x, y });
         x += 1;
       }
     }
