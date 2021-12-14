@@ -9,246 +9,266 @@ import {
 import { KeyInfo } from '../interface/index'
 
 export const drawChessBackground = (id: string, scale: number) => {
-  // 使用 wx.createContext 获取绘图上下文 context
-  const context = wx.createCanvasContext(id);
+  const query = wx.createSelectorQuery()
+  query.select(`#${id}`)
+    .fields({ node: true, size: true })
+    .exec((res) => {
+      const canvas = res[0].node
+      const context = canvas.getContext('2d')
 
-  // scale
-  context.scale(scale, scale);
+      const dpr = wx.getSystemInfoSync().pixelRatio
+      canvas.width = res[0].width * dpr
+      canvas.height = res[0].height * dpr
+      context.scale(scale * dpr, scale * dpr)
+      // 底色
+      context.fillStyle = '#f1cb9d';
+      context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  // 底色
-  context.setFillStyle('#f1cb9d');
-  context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      const lineWidth = 2;
+      const halfLineWidth = lineWidth / 2;
 
-  const lineWidth = 2;
-  const halfLineWidth = lineWidth / 2;
+      // 棋盘9*10
+      context.strokeStyle = '#000';
+      context.lineWidth = lineWidth;
+      for (let index = 0; index < 9; index += 1) {
+        context.moveTo(START_X + LINE_SPACE * index, START_Y);
+        context.lineTo(START_X + LINE_SPACE * index, START_Y + CANVAS_HEIGHT - LINE_SPACE);
+      }
+      for (let index = 0; index < 10; index += 1) {
+        context.moveTo(START_X, START_Y + LINE_SPACE * index);
+        context.lineTo(START_X + CANVAS_WIDTH - LINE_SPACE, START_Y + LINE_SPACE * index);
+      }
+      context.stroke();
 
-  // 棋盘9*10
-  context.setStrokeStyle('#000');
-  context.setLineWidth(lineWidth);
-  for (let index = 0; index < 9; index += 1) {
-    context.moveTo(START_X + LINE_SPACE * index, START_Y);
-    context.lineTo(START_X + LINE_SPACE * index, START_Y + CANVAS_HEIGHT - LINE_SPACE);
-  }
-  for (let index = 0; index < 10; index += 1) {
-    context.moveTo(START_X, START_Y + LINE_SPACE * index);
-    context.lineTo(START_X + CANVAS_WIDTH - LINE_SPACE, START_Y + LINE_SPACE * index);
-  }
-  context.stroke();
+      // 士斜线
+      context.moveTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 0);
+      context.lineTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 2);
+      context.moveTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 0);
+      context.lineTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 2);
 
-  // 士斜线
-  context.moveTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 0);
-  context.lineTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 2);
-  context.moveTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 0);
-  context.lineTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 2);
+      context.moveTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 7);
+      context.lineTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 9);
+      context.moveTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 7);
+      context.lineTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 9);
+      context.stroke();
 
-  context.moveTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 7);
-  context.lineTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 9);
-  context.moveTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 7);
-  context.lineTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 9);
-  context.stroke();
+      const seqWidth = lineWidth * 4;
+      const seqHeight = lineWidth * 10;
+      // 兵的位置
+      for (let i = 0; i < 5; i += 1) {
+        const offsetX = START_X + i * 2 * LINE_SPACE;
+        const offsetY = START_Y + 3 * LINE_SPACE;
+        if (i !== 4) {
+          context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
+          context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
+          context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
+          context.lineTo(offsetX + seqWidth + seqHeight, offsetY + seqWidth);
 
-  const seqWidth = lineWidth * 4;
-  const seqHeight = lineWidth * 10;
-  // 兵的位置
-  for (let i = 0; i < 5; i += 1) {
-    const offsetX = START_X + i * 2 * LINE_SPACE;
-    const offsetY = START_Y + 3 * LINE_SPACE;
-    if (i !== 4) {
-      context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
-      context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
-      context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
-      context.lineTo(offsetX + seqWidth + seqHeight, offsetY + seqWidth);
+          context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
+          context.lineTo(offsetX + seqWidth, offsetY - seqWidth - seqHeight);
+          context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
+          context.lineTo(offsetX + seqWidth + seqHeight, offsetY - seqWidth);
+        }
 
-      context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
-      context.lineTo(offsetX + seqWidth, offsetY - seqWidth - seqHeight);
-      context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
-      context.lineTo(offsetX + seqWidth + seqHeight, offsetY - seqWidth);
-    }
+        if (i !== 0) {
+          context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
+          context.lineTo(offsetX - seqWidth, offsetY - seqWidth - seqHeight);
+          context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
+          context.lineTo(offsetX - seqWidth - seqHeight, offsetY - seqWidth);
 
-    if (i !== 0) {
-      context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
-      context.lineTo(offsetX - seqWidth, offsetY - seqWidth - seqHeight);
-      context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
-      context.lineTo(offsetX - seqWidth - seqHeight, offsetY - seqWidth);
+          context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
+          context.lineTo(offsetX - seqWidth, offsetY + seqWidth + seqHeight);
+          context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
+          context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
+        }
+      }
+      for (let i = 0; i < 5; i += 1) {
+        const offsetX = START_X + i * 2 * LINE_SPACE;
+        const offsetY = START_Y + 6 * LINE_SPACE;
+        if (i !== 4) {
+          context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
+          context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
+          context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
+          context.lineTo(offsetX + seqWidth + seqHeight, offsetY + seqWidth);
 
-      context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
-      context.lineTo(offsetX - seqWidth, offsetY + seqWidth + seqHeight);
-      context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
-      context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
-    }
-  }
-  for (let i = 0; i < 5; i += 1) {
-    const offsetX = START_X + i * 2 * LINE_SPACE;
-    const offsetY = START_Y + 6 * LINE_SPACE;
-    if (i !== 4) {
-      context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
-      context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
-      context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
-      context.lineTo(offsetX + seqWidth + seqHeight, offsetY + seqWidth);
+          context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
+          context.lineTo(offsetX + seqWidth, offsetY - seqWidth - seqHeight);
+          context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
+          context.lineTo(offsetX + seqWidth + seqHeight, offsetY - seqWidth);
+        }
 
-      context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
-      context.lineTo(offsetX + seqWidth, offsetY - seqWidth - seqHeight);
-      context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
-      context.lineTo(offsetX + seqWidth + seqHeight, offsetY - seqWidth);
-    }
+        if (i !== 0) {
+          context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
+          context.lineTo(offsetX - seqWidth, offsetY - seqWidth - seqHeight);
+          context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
+          context.lineTo(offsetX - seqWidth - seqHeight, offsetY - seqWidth);
 
-    if (i !== 0) {
-      context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
-      context.lineTo(offsetX - seqWidth, offsetY - seqWidth - seqHeight);
-      context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
-      context.lineTo(offsetX - seqWidth - seqHeight, offsetY - seqWidth);
+          context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
+          context.lineTo(offsetX - seqWidth, offsetY + seqWidth + seqHeight);
+          context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
+          context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
+        }
+      }
+      // 炮的位置
+      for (let i = 0; i < 2; i += 1) {
+        const offsetX = START_X + i * 6 * LINE_SPACE + LINE_SPACE;
+        const offsetY = START_Y + 2 * LINE_SPACE;
+        context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
+        context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
+        context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
+        context.lineTo(offsetX + seqWidth + seqHeight, offsetY + seqWidth);
 
-      context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
-      context.lineTo(offsetX - seqWidth, offsetY + seqWidth + seqHeight);
-      context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
-      context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
-    }
-  }
-  // 炮的位置
-  for (let i = 0; i < 2; i += 1) {
-    const offsetX = START_X + i * 6 * LINE_SPACE + LINE_SPACE;
-    const offsetY = START_Y + 2 * LINE_SPACE;
-    context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
-    context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
-    context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
-    context.lineTo(offsetX + seqWidth + seqHeight, offsetY + seqWidth);
+        context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
+        context.lineTo(offsetX + seqWidth, offsetY - seqWidth - seqHeight);
+        context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
+        context.lineTo(offsetX + seqWidth + seqHeight, offsetY - seqWidth);
 
-    context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
-    context.lineTo(offsetX + seqWidth, offsetY - seqWidth - seqHeight);
-    context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
-    context.lineTo(offsetX + seqWidth + seqHeight, offsetY - seqWidth);
+        context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
+        context.lineTo(offsetX - seqWidth, offsetY - seqWidth - seqHeight);
+        context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
+        context.lineTo(offsetX - seqWidth - seqHeight, offsetY - seqWidth);
 
-    context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
-    context.lineTo(offsetX - seqWidth, offsetY - seqWidth - seqHeight);
-    context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
-    context.lineTo(offsetX - seqWidth - seqHeight, offsetY - seqWidth);
+        context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
+        context.lineTo(offsetX - seqWidth, offsetY + seqWidth + seqHeight);
+        context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
+        context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
+      }
+      for (let i = 0; i < 2; i += 1) {
+        const offsetX = START_X + i * 6 * LINE_SPACE + LINE_SPACE;
+        const offsetY = START_Y + 7 * LINE_SPACE;
+        context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
+        context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
+        context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
+        context.lineTo(offsetX + seqWidth + seqHeight, offsetY + seqWidth);
 
-    context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
-    context.lineTo(offsetX - seqWidth, offsetY + seqWidth + seqHeight);
-    context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
-    context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
-  }
-  for (let i = 0; i < 2; i += 1) {
-    const offsetX = START_X + i * 6 * LINE_SPACE + LINE_SPACE;
-    const offsetY = START_Y + 7 * LINE_SPACE;
-    context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
-    context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
-    context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
-    context.lineTo(offsetX + seqWidth + seqHeight, offsetY + seqWidth);
+        context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
+        context.lineTo(offsetX + seqWidth, offsetY - seqWidth - seqHeight);
+        context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
+        context.lineTo(offsetX + seqWidth + seqHeight, offsetY - seqWidth);
 
-    context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
-    context.lineTo(offsetX + seqWidth, offsetY - seqWidth - seqHeight);
-    context.moveTo(offsetX + seqWidth, offsetY - seqWidth);
-    context.lineTo(offsetX + seqWidth + seqHeight, offsetY - seqWidth);
+        context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
+        context.lineTo(offsetX - seqWidth, offsetY - seqWidth - seqHeight);
+        context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
+        context.lineTo(offsetX - seqWidth - seqHeight, offsetY - seqWidth);
 
-    context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
-    context.lineTo(offsetX - seqWidth, offsetY - seqWidth - seqHeight);
-    context.moveTo(offsetX - seqWidth, offsetY - seqWidth);
-    context.lineTo(offsetX - seqWidth - seqHeight, offsetY - seqWidth);
+        context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
+        context.lineTo(offsetX - seqWidth, offsetY + seqWidth + seqHeight);
+        context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
+        context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
+      }
+      context.stroke();
 
-    context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
-    context.lineTo(offsetX - seqWidth, offsetY + seqWidth + seqHeight);
-    context.moveTo(offsetX - seqWidth, offsetY + seqWidth);
-    context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
-  }
-  context.stroke();
-
-  // 楚河汉界
-  context.setFillStyle('#fff');
-  context.fillRect(
-    START_X + halfLineWidth,
-    START_Y + 4 * LINE_SPACE + halfLineWidth,
-    CANVAS_WIDTH - LINE_SPACE - lineWidth,
-    LINE_SPACE - lineWidth,
-  );
-  context.setFillStyle('#000');
-  context.font = '55px Georgia';
-  context.fillText('楚', 190, 520);
-  context.fillText('河', 290, 520);
-  context.fillText('汉', 550, 520);
-  context.fillText('界', 650, 520);
-
-  context.draw();
+      // 楚河汉界
+      context.fillStyle = '#fff';
+      context.fillRect(
+        START_X + halfLineWidth,
+        START_Y + 4 * LINE_SPACE + halfLineWidth,
+        CANVAS_WIDTH - LINE_SPACE - lineWidth,
+        LINE_SPACE - lineWidth,
+      );
+      context.fillStyle = '#000';
+      context.font = '55px Georgia';
+      context.fillText('楚', 190, 520);
+      context.fillText('河', 290, 520);
+      context.fillText('汉', 550, 520);
+      context.fillText('界', 650, 520);
+    })
 };
 
 export const drawChessKeys = (id: string, scale: number, keyInfos: Array<KeyInfo>) => {
-  // 使用 wx.createContext 获取绘图上下文 context
-  const context = wx.createCanvasContext(id);
+  const query = wx.createSelectorQuery()
+  query.select(`#${id}`)
+    .fields({ node: true, size: true })
+    .exec((res) => {
+      const canvas = res[0].node
+      const context = canvas.getContext('2d')
 
-  // scale
-  context.scale(scale, scale);
+      const dpr = wx.getSystemInfoSync().pixelRatio
+      canvas.width = res[0].width * dpr
+      canvas.height = res[0].height * dpr
+      context.scale(scale * dpr, scale * dpr)
 
-  context.font = '40px Georgia';
+      context.font = '40px Georgia';
 
-  keyInfos.forEach(item => {
-    const posX = item.x * LINE_SPACE + START_X;
-    const posY = item.y * LINE_SPACE + START_Y;
-    if (item.type) {
-      context.setStrokeStyle('#000');
-      context.setFillStyle('#f1ffe0');
-      context.beginPath();
-      context.arc(posX, posY, 40, 0, 2 * Math.PI);
-      context.fill();
-      context.stroke();
-      context.beginPath();
-      context.arc(posX, posY, 33, 0, 2 * Math.PI);
-      context.stroke();
-      context.setFillStyle('#000');
-    } else {
-      context.setStrokeStyle('#F00');
-      context.setFillStyle('#f2eff5');
-      context.beginPath();
-      context.arc(posX, posY, 40, 0, 2 * Math.PI);
-      context.fill();
-      context.stroke();
-      context.beginPath();
-      context.arc(posX, posY, 33, 0, 2 * Math.PI);
-      context.stroke();
-      context.setFillStyle('#F00');
-    }
-    context.fillText(item.name, posX - 20, posY + 15);
-  });
-  context.draw();
+      keyInfos.forEach(item => {
+        const posX = item.x * LINE_SPACE + START_X;
+        const posY = item.y * LINE_SPACE + START_Y;
+        if (item.type) {
+          context.strokeStyle ='#000';
+          context.fillStyle = '#f1ffe0';
+          context.beginPath();
+          context.arc(posX, posY, 40, 0, 2 * Math.PI);
+          context.fill();
+          context.stroke();
+          context.beginPath();
+          context.arc(posX, posY, 33, 0, 2 * Math.PI);
+          context.stroke();
+          context.fillStyle = '#000';
+        } else {
+          context.strokeStyle = '#F00';
+          context.fillStyle = '#f2eff5';
+          context.beginPath();
+          context.arc(posX, posY, 40, 0, 2 * Math.PI);
+          context.fill();
+          context.stroke();
+          context.beginPath();
+          context.arc(posX, posY, 33, 0, 2 * Math.PI);
+          context.stroke();
+          context.fillStyle = '#F00';
+        }
+        context.fillText(item.name, posX - 20, posY + 15);
+      });
+    })
 };
 
 export const drawCursor = (id: string, scale: number, x: number, y: number) => {
-  // 使用 wx.createContext 获取绘图上下文 context
-  const context = wx.createCanvasContext(id);
+  const query = wx.createSelectorQuery()
+  query.select(`#${id}`)
+    .fields({ node: true, size: true })
+    .exec((res) => {
+      const canvas = res[0].node
+      const context = canvas.getContext('2d')
 
-  // scale
-  context.scale(scale, scale);
+      const dpr = wx.getSystemInfoSync().pixelRatio
+      canvas.width = res[0].width * dpr
+      canvas.height = res[0].height * dpr
+      context.scale(scale * dpr, scale * dpr)
 
-  context.setStrokeStyle('#f00');
-  context.setLineWidth(2);
+      context.strokeStyle = '#f00';
+      context.lineWidth = 2;
 
-  const pointX = START_X + LINE_SPACE * x;
-  const pointY = START_Y + LINE_SPACE * y;
+      const pointX = START_X + LINE_SPACE * x;
+      const pointY = START_Y + LINE_SPACE * y;
 
-  function drewPoint(offsetX: number, offsetY: number) {
-    const POINT_WIDTH = 42;
-    const POINT_LENGTH = 20;
-    context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
-    context.lineTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH - offsetY * POINT_LENGTH);
-    context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
-    context.lineTo(pointX + offsetX * POINT_WIDTH - offsetX * POINT_LENGTH, pointY + offsetY * POINT_WIDTH);
-  }
-  drewPoint(1, 1);
-  drewPoint(-1, -1);
-  drewPoint(1, -1);
-  drewPoint(-1, 1);
-  context.stroke();
-
-  context.draw();
+      function drewPoint(offsetX: number, offsetY: number) {
+        const POINT_WIDTH = 42;
+        const POINT_LENGTH = 20;
+        context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
+        context.lineTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH - offsetY * POINT_LENGTH);
+        context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
+        context.lineTo(pointX + offsetX * POINT_WIDTH - offsetX * POINT_LENGTH, pointY + offsetY * POINT_WIDTH);
+      }
+      drewPoint(1, 1);
+      drewPoint(-1, -1);
+      drewPoint(1, -1);
+      drewPoint(-1, 1);
+      context.stroke();
+    })
 };
 
 export const clearCursor = (id: string, scale: number) => {
-  // 使用 wx.createContext 获取绘图上下文 context
-  const context = wx.createCanvasContext(id);
+  const query = wx.createSelectorQuery()
+  query.select(`#${id}`)
+    .fields({ node: true, size: true })
+    .exec((res) => {
+      const canvas = res[0].node
+      const context = canvas.getContext('2d')
 
-  // scale
-  context.scale(scale, scale);
-
-  context.draw();
+      const dpr = wx.getSystemInfoSync().pixelRatio
+      canvas.width = res[0].width * dpr
+      canvas.height = res[0].height * dpr
+      context.scale(scale * dpr, scale * dpr)
+    })
 };
 
 // '3kN1b1C/8r/9/3Cr4/9/9/9/9/4p4/5K3 w - - 0 1'

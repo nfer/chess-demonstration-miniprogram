@@ -2,9 +2,9 @@
     <text class="userinfo-nickname">第{{stepIdx}}关</text>
 </view> -->
 <view class="section__full">
-    <canvas class="section__image section__absolute" canvas-id="bgCanvas"></canvas>
-    <canvas class="section__image section__absolute" canvas-id="cursorCanvas"></canvas>
-    <canvas class="section__image section__absolute" canvas-id="itemCanvas" bindtap="selectItem"></canvas>
+    <canvas type="2d" class="section__image section__absolute" id="bgCanvas"></canvas>
+    <canvas type="2d" class="section__image section__absolute" id="cursorCanvas"></canvas>
+    <canvas type="2d" class="section__image section__absolute" id="itemCanvas" bindtap="selectItem"></canvas>
 </view>
 
 <view class="section__btns">
