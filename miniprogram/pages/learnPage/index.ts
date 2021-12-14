@@ -34,6 +34,7 @@ Page({
       lastKey: null,
     });
     util.drawChessKeys('itemCanvas', this.data.scale, this.data.keyInfos);
+    util.clearCursor('cursorCanvas', this.data.scale);
   },
   selectItem(e: any) {
     const { scale, keyInfos, lastKey } = this.data;
