@@ -1,6 +1,6 @@
 import { START_X, START_Y } from '../../utils/constants';
 import * as util from '../../utils/util';
-import { KeyInfo } from '../../interface/index'
+import { KeyInfo } from '../../interface/index';
 
 Page({
   data: {
@@ -8,7 +8,7 @@ Page({
     scale: 1,
     oriKeyInfos: [] as Array<KeyInfo>,
     keyInfos: [] as Array<KeyInfo>,
-    lastKey: null as KeyInfo|null,
+    lastKey: null as KeyInfo | null,
   },
   onReady() {
     this.init();
@@ -28,7 +28,7 @@ Page({
     wx.navigateBack({});
   },
   reload() {
-    const keyInfos = this.data.oriKeyInfos.map(item => ({...item}));
+    const keyInfos = this.data.oriKeyInfos.map(item => ({ ...item }));
     this.setData({
       keyInfos,
       lastKey: null,
@@ -63,7 +63,7 @@ Page({
       if (lastKey.x === key.x && lastKey.y === key.y) {
         this.setData({ lastKey: null });
         util.clearCursor('cursorCanvas', scale);
-        return
+        return;
       }
 
       if (!util.checkMoveValid(lastKey, key.x, key.y)) {

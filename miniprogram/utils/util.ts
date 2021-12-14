@@ -6,20 +6,20 @@ import {
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
 }  from './constants';
-import { KeyInfo } from '../interface/index'
+import { KeyInfo } from '../interface/index';
 
 export const drawChessBackground = (id: string, scale: number) => {
-  const query = wx.createSelectorQuery()
+  const query = wx.createSelectorQuery();
   query.select(`#${id}`)
     .fields({ node: true, size: true })
     .exec((res) => {
-      const canvas = res[0].node
-      const context = canvas.getContext('2d')
+      const canvas = res[0].node;
+      const context = canvas.getContext('2d');
 
-      const dpr = wx.getSystemInfoSync().pixelRatio
-      canvas.width = res[0].width * dpr
-      canvas.height = res[0].height * dpr
-      context.scale(scale * dpr, scale * dpr)
+      const dpr = wx.getSystemInfoSync().pixelRatio;
+      canvas.width = res[0].width * dpr;
+      canvas.height = res[0].height * dpr;
+      context.scale(scale * dpr, scale * dpr);
       // 底色
       context.fillStyle = '#f1cb9d';
       context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -172,21 +172,21 @@ export const drawChessBackground = (id: string, scale: number) => {
       context.fillText('河', 290, 520);
       context.fillText('汉', 550, 520);
       context.fillText('界', 650, 520);
-    })
+    });
 };
 
 export const drawChessKeys = (id: string, scale: number, keyInfos: Array<KeyInfo>) => {
-  const query = wx.createSelectorQuery()
+  const query = wx.createSelectorQuery();
   query.select(`#${id}`)
     .fields({ node: true, size: true })
     .exec((res) => {
-      const canvas = res[0].node
-      const context = canvas.getContext('2d')
+      const canvas = res[0].node;
+      const context = canvas.getContext('2d');
 
-      const dpr = wx.getSystemInfoSync().pixelRatio
-      canvas.width = res[0].width * dpr
-      canvas.height = res[0].height * dpr
-      context.scale(scale * dpr, scale * dpr)
+      const dpr = wx.getSystemInfoSync().pixelRatio;
+      canvas.width = res[0].width * dpr;
+      canvas.height = res[0].height * dpr;
+      context.scale(scale * dpr, scale * dpr);
 
       context.font = '40px Georgia';
 
@@ -194,7 +194,7 @@ export const drawChessKeys = (id: string, scale: number, keyInfos: Array<KeyInfo
         const posX = item.x * LINE_SPACE + START_X;
         const posY = item.y * LINE_SPACE + START_Y;
         if (item.type) {
-          context.strokeStyle ='#000';
+          context.strokeStyle = '#000';
           context.fillStyle = '#f1ffe0';
           context.beginPath();
           context.arc(posX, posY, 40, 0, 2 * Math.PI);
@@ -218,21 +218,21 @@ export const drawChessKeys = (id: string, scale: number, keyInfos: Array<KeyInfo
         }
         context.fillText(item.name, posX - 20, posY + 15);
       });
-    })
+    });
 };
 
 export const drawCursor = (id: string, scale: number, x: number, y: number) => {
-  const query = wx.createSelectorQuery()
+  const query = wx.createSelectorQuery();
   query.select(`#${id}`)
     .fields({ node: true, size: true })
     .exec((res) => {
-      const canvas = res[0].node
-      const context = canvas.getContext('2d')
+      const canvas = res[0].node;
+      const context = canvas.getContext('2d');
 
-      const dpr = wx.getSystemInfoSync().pixelRatio
-      canvas.width = res[0].width * dpr
-      canvas.height = res[0].height * dpr
-      context.scale(scale * dpr, scale * dpr)
+      const dpr = wx.getSystemInfoSync().pixelRatio;
+      canvas.width = res[0].width * dpr;
+      canvas.height = res[0].height * dpr;
+      context.scale(scale * dpr, scale * dpr);
 
       context.strokeStyle = '#f00';
       context.lineWidth = 2;
@@ -253,22 +253,42 @@ export const drawCursor = (id: string, scale: number, x: number, y: number) => {
       drewPoint(1, -1);
       drewPoint(-1, 1);
       context.stroke();
-    })
+    });
 };
 
 export const clearCursor = (id: string, scale: number) => {
-  const query = wx.createSelectorQuery()
+  const query = wx.createSelectorQuery();
   query.select(`#${id}`)
     .fields({ node: true, size: true })
     .exec((res) => {
-      const canvas = res[0].node
-      const context = canvas.getContext('2d')
+      const canvas = res[0].node;
+      const context = canvas.getContext('2d');
 
-      const dpr = wx.getSystemInfoSync().pixelRatio
-      canvas.width = res[0].width * dpr
-      canvas.height = res[0].height * dpr
-      context.scale(scale * dpr, scale * dpr)
-    })
+      const dpr = wx.getSystemInfoSync().pixelRatio;
+      canvas.width = res[0].width * dpr;
+      canvas.height = res[0].height * dpr;
+      context.scale(scale * dpr, scale * dpr);
+    });
+};
+
+export const getTextByChar = (ch: string) => {
+  switch (ch) {
+    case 'k': return '将';
+    case 'K': return '帅';
+    case 'a': return '士';
+    case 'A': return '仕';
+    case 'b': return '象';
+    case 'B': return '相';
+    case 'n': return '马';
+    case 'N': return '马';
+    case 'r': return '车';
+    case 'R': return '车';
+    case 'c': return '炮';
+    case 'C': return '炮';
+    case 'p': return '卒';
+    case 'P': return '兵';
+    default: return '空';
+  }
 };
 
 // '3kN1b1C/8r/9/3Cr4/9/9/9/9/4p4/5K3 w - - 0 1'
@@ -316,26 +336,6 @@ export const formatTime = (date: Date) => {
   );
 };
 
-export const getTextByChar = (ch: string) => {
-  switch (ch) {
-    case 'k': return '将';
-    case 'K': return '帅';
-    case 'a': return '士';
-    case 'A': return '仕';
-    case 'b': return '象';
-    case 'B': return '相';
-    case 'n': return '马';
-    case 'N': return '马';
-    case 'r': return '车';
-    case 'R': return '车';
-    case 'c': return '炮';
-    case 'C': return '炮';
-    case 'p': return '卒';
-    case 'P': return '兵';
-    default: return '空';
-  }
-};
-
 export const getScale = () => {
   const info = wx.getSystemInfoSync();
   const scale = info.screenWidth / CANVAS_WIDTH;
@@ -363,4 +363,4 @@ export const checkMoveValid = (keyInfo: KeyInfo, x: number, y: number) => {
       return checkKMove(keyInfo, x, y, true);
   }
   return false;
-}
+};
