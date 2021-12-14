@@ -9,18 +9,24 @@ Page({
     oriKeyInfos: [] as Array<KeyInfo>,
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
+    bgCtx: {} as any,
+    cursorCtx: {} as any,
+    itemCtx: {} as any,
   },
   onReady() {
     this.init();
   },
-  init() {
+  async init() {
     const scale = util.getScale();
     const oriKeyInfos = util.parseFenStr('3kN1b1C/8r/9/3Cr4/9/9/9/9/4p4/5K3 w - - 0 1');
+    this.data.bgCtx = await util.createCursorContext('bgCanvas', scale);
+    this.data.cursorCtx = await util.createCursorContext('cursorCanvas', scale);
+    this.data.itemCtx = await util.createCursorContext('itemCanvas', scale);
     this.setData({
       scale,
       oriKeyInfos,
     });
-    util.drawChessBackground('bgCanvas', this.data.scale);
+    util.drawChessBackground(this.data.bgCtx);
     this.reload();
   },
   // 事件处理函数
@@ -33,8 +39,8 @@ Page({
       keyInfos,
       lastKey: null,
     });
-    util.drawChessKeys('itemCanvas', this.data.scale, this.data.keyInfos);
-    util.clearCursor('cursorCanvas', this.data.scale);
+    util.drawChessKeys(this.data.itemCtx, this.data.keyInfos);
+    util.clearCursor(this.data.cursorCtx);
   },
   selectItem(e: any) {
     const { scale, keyInfos, lastKey } = this.data;
@@ -55,14 +61,14 @@ Page({
       // 1.1 选择棋子
       if (!lastKey) {
         this.setData({ lastKey: key });
-        util.drawCursor('cursorCanvas', scale, posX, posY);
+        util.drawCursor(this.data.cursorCtx, posX, posY);
         return;
       }
 
       // 1.2 取消选择棋子
       if (lastKey.x === key.x && lastKey.y === key.y) {
         this.setData({ lastKey: null });
-        util.clearCursor('cursorCanvas', scale);
+        util.clearCursor(this.data.cursorCtx);
         return;
       }
 
@@ -78,8 +84,8 @@ Page({
       const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
       console.log(newKeyInfos, keyInfos, key, lastKey);
       this.setData({ keyInfos: newKeyInfos, lastKey: null });
-      util.drawChessKeys('itemCanvas', scale, keyInfos);
-      util.clearCursor('cursorCanvas', scale);
+      util.drawChessKeys(this.data.itemCtx, keyInfos);
+      util.clearCursor(this.data.cursorCtx);
       return;
     }
 
@@ -94,8 +100,8 @@ Page({
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
       this.setData({ keyInfos, lastKey: null });
-      util.drawChessKeys('itemCanvas', scale, keyInfos);
-      util.clearCursor('cursorCanvas', scale);
+      util.drawChessKeys(this.data.itemCtx, keyInfos);
+      util.clearCursor(this.data.cursorCtx);
     }
   },
 });
