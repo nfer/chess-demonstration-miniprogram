@@ -65,6 +65,11 @@ Page({
         return
       }
 
+      if (!util.checkMoveValid(lastKey, key.x, key.y)) {
+        console.log('bad posistion for lastKey', lastKey, key.x, key.y);
+        return;
+      }
+
       //  1.3 吃掉棋子
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
@@ -79,6 +84,11 @@ Page({
 
     // 场景三：点击在网格上
     if (lastKey) {
+      if (!util.checkMoveValid(lastKey, posX, posY)) {
+        console.log('bad posistion for lastKey', lastKey, posX, posY);
+        return;
+      }
+
       const idx = keyInfos.findIndex(item => item.key === lastKey.key);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
