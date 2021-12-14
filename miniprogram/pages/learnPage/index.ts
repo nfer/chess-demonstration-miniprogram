@@ -16,21 +16,24 @@ Page({
   init() {
     const scale = util.getScale();
     const oriKeyInfos = util.parseFenStr('3kN1b1C/8r/9/3Cr4/9/9/9/9/4p4/5K3 w - - 0 1');
-    const keyInfos = oriKeyInfos.map(item => ({...item}));
     this.setData({
       scale,
       oriKeyInfos,
-      keyInfos,
     });
     util.drawChessBackground('bgCanvas', this.data.scale);
-    util.drawChessKeys('itemCanvas', this.data.scale, this.data.oriKeyInfos);
+    this.reload();
   },
   // 事件处理函数
   goBack() {
     wx.navigateBack({});
   },
   reload() {
-    util.drawChessKeys('itemCanvas', this.data.scale, this.data.oriKeyInfos);
+    const keyInfos = this.data.oriKeyInfos.map(item => ({...item}));
+    this.setData({
+      keyInfos,
+      lastKey: null,
+    });
+    util.drawChessKeys('itemCanvas', this.data.scale, this.data.keyInfos);
   },
   selectItem(e: any) {
     const { scale, keyInfos, lastKey } = this.data;
