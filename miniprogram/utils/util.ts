@@ -164,6 +164,7 @@ export const drawChessBackground = (context: any) => {
 };
 
 export const drawChessKeys = (context: any, keyInfos: Array<KeyInfo>) => {
+  context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   context.font = '40px Georgia';
 
   keyInfos.forEach(item => {
