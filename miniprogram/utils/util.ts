@@ -203,10 +203,9 @@ export const drawCursor = (context: any, x: number, y: number) => {
   context.strokeStyle = '#f00';
   context.lineWidth = 2;
 
-  const pointX = START_X + LINE_SPACE * x;
-  const pointY = START_Y + LINE_SPACE * y;
-
   function drewPoint(offsetX: number, offsetY: number) {
+    const pointX = START_X + LINE_SPACE * x;
+    const pointY = START_Y + LINE_SPACE * y;
     const POINT_WIDTH = 42;
     const POINT_LENGTH = 20;
     context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
