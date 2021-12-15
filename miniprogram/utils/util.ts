@@ -288,7 +288,7 @@ export const parseFenStr = (str: string) => {
         x += Number(c);
       } else {
         const name = getTextByChar(c);
-        const type = c > 'a' ? 1 : 0;
+        const type = c >= 'a' ? 1 : 0;
         output.push({ hash: `${c}_${output.length}`, key: c, name, type, x, y });
         x += 1;
       }
@@ -322,27 +322,4 @@ export const getScale = () => {
   const info = wx.getSystemInfoSync();
   const scale = info.screenWidth / CANVAS_WIDTH;
   return scale;
-};
-
-function checkKMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
-  if (x < 3 || x > 5) return false;
-
-  if (isRed) {
-    if (y < 7 || y > 9) return false;
-  } else {
-    if (y < 0 || y > 3) return false;
-  }
-
-  const step = Math.abs(keyInfo.x - x) + Math.abs(keyInfo.y - y);
-  return step === 1;
-}
-
-export const checkMoveValid = (keyInfo: KeyInfo, x: number, y: number) => {
-  switch (keyInfo.key) {
-    case 'k':
-      return checkKMove(keyInfo, x, y, false);
-    case 'K':
-      return checkKMove(keyInfo, x, y, true);
-  }
-  return false;
 };

@@ -1,6 +1,9 @@
 import { START_X, START_Y } from '../../utils/constants';
 import * as util from '../../utils/util';
+import { checkMove } from '../../utils/checkMove';
 import { KeyInfo } from '../../interface/index';
+
+const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
 
 Page({
   data: {
@@ -15,7 +18,7 @@ Page({
   },
   async init() {
     const scale = util.getScale();
-    const oriKeyInfos = util.parseFenStr('3kN1b1C/8r/9/3Cr4/9/9/9/9/4p4/5K3 w - - 0 1');
+    const oriKeyInfos = util.parseFenStr(keyMapFenStr);
     this.setData({
       scale,
       oriKeyInfos,
@@ -66,7 +69,7 @@ Page({
         return;
       }
 
-      if (!util.checkMoveValid(lastKey, key.x, key.y)) {
+      if (!checkMove(lastKey, key.x, key.y)) {
         console.log('bad posistion for lastKey', lastKey, key.x, key.y);
         return;
       }
@@ -84,7 +87,7 @@ Page({
 
     // 场景三：点击在网格上
     if (lastKey) {
-      if (!util.checkMoveValid(lastKey, posX, posY)) {
+      if (!checkMove(lastKey, posX, posY)) {
         console.log('bad posistion for lastKey', lastKey, posX, posY);
         return;
       }
