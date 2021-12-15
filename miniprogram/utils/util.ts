@@ -8,8 +8,33 @@ import {
 }  from './constants';
 import { KeyInfo } from '../interface/index';
 
-export const drawChessBackground = async (id: string, scale: number) => {
-  const context = await createCursorContext(id, scale) as any;
+const createCursorContext = async (id: string) => {
+  return new Promise((resolve, reject) => {
+    const query = wx.createSelectorQuery();
+    query.select(`#${id}`)
+      .fields({ node: true, size: true })
+      .exec((res) => {
+        if (!res || !res.length || !res[0].node) {
+          reject(new Error('select null'));
+          return;
+        }
+
+        const canvas = res[0].node;
+        const context = canvas.getContext('2d');
+
+        const info = wx.getSystemInfoSync();
+        canvas.width = res[0].width * info.pixelRatio;
+        canvas.height = res[0].height * info.pixelRatio;
+        const scale = info.screenWidth / CANVAS_WIDTH * info.pixelRatio;
+        context.scale(scale, scale);
+
+        resolve(context);
+      });
+  });
+};
+
+export const drawChessBackground = async (id: string) => {
+  const context = await createCursorContext(id) as any;
   // 底色
   context.fillStyle = '#f1cb9d';
   context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -164,8 +189,8 @@ export const drawChessBackground = async (id: string, scale: number) => {
   context.fillText('界', 650, 520);
 };
 
-export const drawChessKeys = async (id: string, scale: number, keyInfos: Array<KeyInfo>) => {
-  const context = await createCursorContext(id, scale) as any;
+export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
+  const context = await createCursorContext(id) as any;
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   context.font = '40px Georgia';
 
@@ -199,8 +224,8 @@ export const drawChessKeys = async (id: string, scale: number, keyInfos: Array<K
   });
 };
 
-export const drawCursor = async (id: string, scale: number, x: number, y: number) => {
-  const context = await createCursorContext(id, scale) as any;
+export const drawCursor = async (id: string, x: number, y: number) => {
+  const context = await createCursorContext(id) as any;
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   context.strokeStyle = '#f00';
@@ -223,33 +248,9 @@ export const drawCursor = async (id: string, scale: number, x: number, y: number
   context.stroke();
 };
 
-export const clearCursor = async (id: string, scale: number) => {
-  const context = await createCursorContext(id, scale) as any;
+export const clearCursor = async (id: string) => {
+  const context = await createCursorContext(id) as any;
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-};
-
-export const createCursorContext = async (id: string, scale: number) => {
-  return new Promise((resolve, reject) => {
-    const query = wx.createSelectorQuery();
-    query.select(`#${id}`)
-      .fields({ node: true, size: true })
-      .exec((res) => {
-        if (!res || !res.length || !res[0].node) {
-          reject(new Error('select null'))
-          return;
-        }
-
-        const canvas = res[0].node;
-        const context = canvas.getContext('2d');
-
-        const dpr = wx.getSystemInfoSync().pixelRatio;
-        canvas.width = res[0].width * dpr;
-        canvas.height = res[0].height * dpr;
-        context.scale(scale * dpr, scale * dpr);
-
-        resolve(context);
-      });
-  })
 };
 
 export const getTextByChar = (ch: string) => {

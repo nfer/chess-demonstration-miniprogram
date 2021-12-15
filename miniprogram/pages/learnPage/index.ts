@@ -20,7 +20,7 @@ Page({
       scale,
       oriKeyInfos,
     });
-    util.drawChessBackground('bgCanvas', this.data.scale);
+    util.drawChessBackground('bgCanvas');
     this.reload();
   },
   // 事件处理函数
@@ -33,8 +33,8 @@ Page({
       keyInfos,
       lastKey: null,
     });
-    util.drawChessKeys('itemCanvas', this.data.scale, this.data.keyInfos);
-    util.clearCursor('cursorCanvas', this.data.scale);
+    util.drawChessKeys('itemCanvas', this.data.keyInfos);
+    util.clearCursor('cursorCanvas');
   },
   selectItem(e: any) {
     const { scale, keyInfos, lastKey } = this.data;
@@ -55,14 +55,14 @@ Page({
       // 1.1 选择棋子
       if (!lastKey) {
         this.setData({ lastKey: key });
-        util.drawCursor('cursorCanvas', this.data.scale, posX, posY);
+        util.drawCursor('cursorCanvas', posX, posY);
         return;
       }
 
       // 1.2 取消选择棋子
       if (lastKey.x === key.x && lastKey.y === key.y) {
         this.setData({ lastKey: null });
-        util.clearCursor('cursorCanvas', this.data.scale);
+        util.clearCursor('cursorCanvas');
         return;
       }
 
@@ -77,8 +77,8 @@ Page({
       keyInfos[idx].x = posX;
       const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
       this.setData({ keyInfos: newKeyInfos, lastKey: null });
-      util.drawChessKeys('itemCanvas', this.data.scale, newKeyInfos);
-      util.clearCursor('cursorCanvas', this.data.scale);
+      util.drawChessKeys('itemCanvas', newKeyInfos);
+      util.clearCursor('cursorCanvas');
       return;
     }
 
@@ -93,8 +93,8 @@ Page({
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
       this.setData({ keyInfos, lastKey: null });
-      util.drawChessKeys('itemCanvas', this.data.scale, keyInfos);
-      util.clearCursor('cursorCanvas', this.data.scale);
+      util.drawChessKeys('itemCanvas', keyInfos);
+      util.clearCursor('cursorCanvas');
     }
   },
 });
