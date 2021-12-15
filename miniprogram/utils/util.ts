@@ -8,7 +8,8 @@ import {
 }  from './constants';
 import { KeyInfo } from '../interface/index';
 
-export const drawChessBackground = (context: any) => {
+export const drawChessBackground = async (id: string, scale: number) => {
+  const context = await createCursorContext(id, scale) as any;
   // 底色
   context.fillStyle = '#f1cb9d';
   context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -163,7 +164,8 @@ export const drawChessBackground = (context: any) => {
   context.fillText('界', 650, 520);
 };
 
-export const drawChessKeys = (context: any, keyInfos: Array<KeyInfo>) => {
+export const drawChessKeys = async (id: string, scale: number, keyInfos: Array<KeyInfo>) => {
+  const context = await createCursorContext(id, scale) as any;
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   context.font = '40px Georgia';
 
@@ -197,7 +199,8 @@ export const drawChessKeys = (context: any, keyInfos: Array<KeyInfo>) => {
   });
 };
 
-export const drawCursor = (context: any, x: number, y: number) => {
+export const drawCursor = async (id: string, scale: number, x: number, y: number) => {
+  const context = await createCursorContext(id, scale) as any;
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   context.strokeStyle = '#f00';
@@ -220,7 +223,8 @@ export const drawCursor = (context: any, x: number, y: number) => {
   context.stroke();
 };
 
-export const clearCursor = (context: any) => {
+export const clearCursor = async (id: string, scale: number) => {
+  const context = await createCursorContext(id, scale) as any;
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 };
 
