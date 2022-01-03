@@ -67,6 +67,22 @@ function checkCMove(keyInfo: KeyInfo, x: number, y: number) {
   return xRange === 0 || yRange === 0;
 }
 
+// 兵
+function checPMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
+  const xRange = Math.abs(keyInfo.x - x);
+  const yRange = Math.abs(keyInfo.y - y);
+  if (xRange + yRange !== 1) return false
+
+  if (isRed) {
+    if (y > keyInfo.y) return false;
+    if (keyInfo.y > 4 && x !== keyInfo.x) return false;
+  } else {
+    if (y < keyInfo.y) return false;
+    if (keyInfo.y < 5 && x !== keyInfo.x) return false;
+  }
+  return true;
+}
+
 export const checkMove = (keyInfo: KeyInfo, x: number, y: number) => {
   switch (keyInfo.key) {
     case 'k':
@@ -90,6 +106,10 @@ export const checkMove = (keyInfo: KeyInfo, x: number, y: number) => {
     case 'c':
     case 'C':
       return checkCMove(keyInfo, x, y);
+    case 'p':
+      return checPMove(keyInfo, x, y, false);
+    case 'P':
+      return checPMove(keyInfo, x, y, true);
   }
   return false;
 };
