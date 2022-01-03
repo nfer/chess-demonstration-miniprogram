@@ -69,7 +69,7 @@ Page({
         return;
       }
 
-      if (!checkMove(lastKey, key.x, key.y)) {
+      if (!checkMove(lastKey, keyInfos, key.x, key.y)) {
         console.log('bad posistion for lastKey', lastKey, key.x, key.y);
         return;
       }
@@ -92,7 +92,7 @@ Page({
 
     // 场景三：点击在网格上
     if (lastKey) {
-      if (!checkMove(lastKey, posX, posY)) {
+      if (!checkMove(lastKey, keyInfos, posX, posY)) {
         console.log('bad posistion for lastKey', lastKey, posX, posY);
         return;
       }

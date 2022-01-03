@@ -83,7 +83,7 @@ function checPMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
   return true;
 }
 
-export const checkMove = (keyInfo: KeyInfo, x: number, y: number) => {
+export const checkPosMove = (keyInfo: KeyInfo, x: number, y: number) => {
   switch (keyInfo.key) {
     case 'k':
       return checkKMove(keyInfo, x, y, false);
@@ -116,4 +116,57 @@ export const checkMove = (keyInfo: KeyInfo, x: number, y: number) => {
 
 export const checkSameCamp = (keyInfo1: KeyInfo, keyInfo2: KeyInfo) => {
   return keyInfo1.type !== keyInfo2.type;
+};
+
+// 相
+function checkBBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) {
+  const keyX = (x + keyInfo.x) / 2;
+  const keyY = (y + keyInfo.y) / 2;
+
+  return keyInfos.some(item => item.x === keyX && item.y === keyY);
+}
+
+// 马
+function checkNBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) {
+  const xRange = x - keyInfo.x;
+  let keyX = 0, keyY = 0;
+  if (Math.abs(xRange) === 2) {
+    keyY = keyInfo.y;
+    keyX = (keyInfo.x + x) / 2;
+  } else {
+    keyX = keyInfo.x;
+    keyY = (y + keyInfo.y) / 2;
+  }
+
+  return keyInfos.some(item => item.x === keyX && item.y === keyY);
+}
+
+export const checkBlockMove = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) => {
+  switch (keyInfo.key) {
+    case 'b':
+    case 'B':
+      return checkBBlockMove(keyInfo, keyInfos, x, y);
+    case 'n':
+    case 'N':
+      return checkNBlockMove(keyInfo, keyInfos, x, y);
+    // case 'r':
+    // case 'R':
+    //   return checkRMove(keyInfo, keyInfos, x, y);
+    // case 'c':
+    // case 'C':
+    //   return checkCMove(keyInfo, keyInfos, x, y);
+  }
+  return false;
+};
+
+export const checkMove = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) => {
+  const posCheck = checkPosMove(keyInfo, x, y);
+  console.log('checkMove posCheck:', posCheck);
+  if (!posCheck) return false;
+
+  const blockCheck = checkBlockMove(keyInfo, keyInfos, x, y);
+  console.log('checkMove blockCheck:', blockCheck);
+  if (blockCheck) return false;
+
+  return true;
 };
