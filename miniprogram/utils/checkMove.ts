@@ -1,6 +1,6 @@
 import { KeyInfo } from '../interface/index';
 
-// 将和帅
+// 将
 function checkKMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
   if (x < 3 || x > 5) return false;
 
@@ -14,7 +14,7 @@ function checkKMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
   return step === 1;
 }
 
-// 士和仕
+// 士
 function checkAMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
   let arr = [];
   if (isRed) {
@@ -29,7 +29,7 @@ function checkAMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
   return Math.abs(keyInfo.x - x) === 1 && Math.abs(keyInfo.y - y) === 1;
 }
 
-// 相和象
+// 相
 function checkBMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
   let arr = [];
   if (isRed) {
@@ -42,6 +42,29 @@ function checkBMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
   if (!pos) return false;
 
   return Math.abs(keyInfo.x - x) === 2 && Math.abs(keyInfo.y - y) === 2;
+}
+
+// 马
+function checkNMove(keyInfo: KeyInfo, x: number, y: number) {
+  const xRange = Math.abs(keyInfo.x - x);
+  const yRange = Math.abs(keyInfo.y - y);
+  if (xRange !== 1 && xRange !== 2) return false;
+  if (yRange !== 1 && yRange !== 2) return false;
+  return xRange + yRange === 3;
+}
+
+// 车
+function checkRMove(keyInfo: KeyInfo, x: number, y: number) {
+  const xRange = Math.abs(keyInfo.x - x);
+  const yRange = Math.abs(keyInfo.y - y);
+  return xRange === 0 || yRange === 0;
+}
+
+// 炮
+function checkCMove(keyInfo: KeyInfo, x: number, y: number) {
+  const xRange = Math.abs(keyInfo.x - x);
+  const yRange = Math.abs(keyInfo.y - y);
+  return xRange === 0 || yRange === 0;
 }
 
 export const checkMove = (keyInfo: KeyInfo, x: number, y: number) => {
@@ -58,6 +81,15 @@ export const checkMove = (keyInfo: KeyInfo, x: number, y: number) => {
       return checkBMove(keyInfo, x, y, false);
     case 'B':
       return checkBMove(keyInfo, x, y, true);
+    case 'n':
+    case 'N':
+      return checkNMove(keyInfo, x, y);
+    case 'r':
+    case 'R':
+      return checkRMove(keyInfo, x, y);
+    case 'c':
+    case 'C':
+      return checkCMove(keyInfo, x, y);
   }
   return false;
 };
