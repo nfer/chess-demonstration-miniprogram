@@ -113,3 +113,7 @@ export const checkMove = (keyInfo: KeyInfo, x: number, y: number) => {
   }
   return false;
 };
+
+export const checkSameCamp = (keyInfo1: KeyInfo, keyInfo2: KeyInfo) => {
+  return keyInfo1.type !== keyInfo2.type;
+};

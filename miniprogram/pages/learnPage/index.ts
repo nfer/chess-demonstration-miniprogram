@@ -1,6 +1,6 @@
 import { START_X, START_Y } from '../../utils/constants';
 import * as util from '../../utils/util';
-import { checkMove } from '../../utils/checkMove';
+import { checkMove, checkSameCamp } from '../../utils/checkMove';
 import { KeyInfo } from '../../interface/index';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
@@ -71,6 +71,11 @@ Page({
 
       if (!checkMove(lastKey, key.x, key.y)) {
         console.log('bad posistion for lastKey', lastKey, key.x, key.y);
+        return;
+      }
+
+      if (!checkSameCamp(lastKey, key)) {
+        console.log('same camp', lastKey, key);
         return;
       }
 
