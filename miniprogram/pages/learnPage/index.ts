@@ -92,7 +92,7 @@ Page({
         return;
       }
 
-      const idx = keyInfos.findIndex(item => item.key === lastKey.key);
+      const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
       this.setData({ keyInfos, lastKey: null });
