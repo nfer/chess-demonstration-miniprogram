@@ -142,7 +142,7 @@ function checkNBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, 
 }
 
 // 炮
-function checkRBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) {
+function checkCBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) {
   let innerKeys = [] as Array<KeyInfo>;
   if (x === keyInfo.x) {
     const minY = Math.min(keyInfo.y, y);
@@ -162,7 +162,7 @@ function checkRBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, 
 }
 
 // 车
-function checkCBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) {
+function checkRBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) {
   if (x === keyInfo.x) {
     const minY = Math.min(keyInfo.y, y);
     const maxY = Math.max(keyInfo.y, y);
