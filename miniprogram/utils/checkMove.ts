@@ -115,7 +115,7 @@ export const checkPosMove = (keyInfo: KeyInfo, x: number, y: number) => {
 };
 
 export const checkSameCamp = (keyInfo1: KeyInfo, keyInfo2: KeyInfo) => {
-  return keyInfo1.type !== keyInfo2.type;
+  return keyInfo1.type === keyInfo2.type;
 };
 
 // 相

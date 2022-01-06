@@ -69,17 +69,19 @@ Page({
         return;
       }
 
+      // 1.3 同色棋子，点击后进行焦点更新
+      if (checkSameCamp(lastKey, key)) {
+        this.setData({ lastKey: key });
+        util.drawCursor('cursorCanvas', posX, posY);
+        return;
+      }
+
       if (!checkMove(lastKey, keyInfos, key.x, key.y)) {
         console.log('bad posistion for lastKey', lastKey, key.x, key.y);
         return;
       }
 
-      if (!checkSameCamp(lastKey, key)) {
-        console.log('same camp', lastKey, key);
-        return;
-      }
-
-      //  1.3 吃掉棋子
+      //  1.4 吃掉棋子
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
