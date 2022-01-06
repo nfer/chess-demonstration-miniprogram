@@ -12,6 +12,7 @@ Page({
     oriKeyInfos: [] as Array<KeyInfo>,
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
+    lastMoveType: -1,
   },
   onReady() {
     this.init();
@@ -35,12 +36,13 @@ Page({
     this.setData({
       keyInfos,
       lastKey: null,
+      lastMoveType: -1,
     });
     util.drawChessKeys('itemCanvas', this.data.keyInfos);
     util.clearCursor('cursorCanvas');
   },
   selectItem(e: any) {
-    const { scale, keyInfos, lastKey } = this.data;
+    const { scale, keyInfos, lastKey, lastMoveType } = this.data;
     const offsetX = Math.floor(e.detail.x / scale) - START_X;
     const offsetY = Math.floor(e.detail.y / scale) - START_Y;
     const posX = Math.round(offsetX / 100);
@@ -55,6 +57,11 @@ Page({
 
     // 场景二：点击在棋子上
     if (key) {
+      if (!lastKey && lastMoveType === key.type) {
+        console.log('bad move type', lastMoveType, key.type);
+        return;
+      }
+
       // 1.1 选择棋子
       if (!lastKey) {
         this.setData({ lastKey: key });
@@ -86,7 +93,7 @@ Page({
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
       const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
-      this.setData({ keyInfos: newKeyInfos, lastKey: null });
+      this.setData({ keyInfos: newKeyInfos, lastKey: null, lastMoveType: lastKey.type });
       util.drawChessKeys('itemCanvas', newKeyInfos);
       util.clearCursor('cursorCanvas');
       return;
@@ -102,7 +109,7 @@ Page({
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
-      this.setData({ keyInfos, lastKey: null });
+      this.setData({ keyInfos, lastKey: null, lastMoveType: lastKey.type });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
     }
