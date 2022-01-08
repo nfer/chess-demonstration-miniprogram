@@ -58,7 +58,7 @@ Page({
     // 场景二：点击在棋子上
     if (key) {
       if (!lastKey && lastMoveType === key.type) {
-        console.log('bad move type', lastMoveType, key.type);
+        console.warn('bad move type', lastMoveType, key.type);
         return;
       }
 
@@ -84,7 +84,7 @@ Page({
       }
 
       if (!checkMove(lastKey, keyInfos, key.x, key.y)) {
-        console.log('bad posistion for lastKey', lastKey, key.x, key.y);
+        console.warn('bad posistion for lastKey', lastKey, key.x, key.y);
         return;
       }
 
@@ -102,7 +102,7 @@ Page({
     // 场景三：点击在网格上
     if (lastKey) {
       if (!checkMove(lastKey, keyInfos, posX, posY)) {
-        console.log('bad posistion for lastKey', lastKey, posX, posY);
+        console.warn('bad posistion for lastKey', lastKey, posX, posY);
         return;
       }
 
