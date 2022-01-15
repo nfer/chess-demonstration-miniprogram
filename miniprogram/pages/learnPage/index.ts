@@ -1,5 +1,6 @@
 import { START_X, START_Y } from '../../utils/constants';
 import * as util from '../../utils/util';
+import * as step from '../../utils/step';
 import { checkMove, checkSameCamp } from '../../utils/checkMove';
 import { KeyInfo } from '../../interface/index';
 
@@ -89,6 +90,8 @@ Page({
       }
 
       //  1.4 吃掉棋子
+      console.log(step.getStep(lastKey, keyInfos, posX, posY));
+
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
@@ -105,6 +108,8 @@ Page({
         console.warn('bad posistion for lastKey', lastKey, posX, posY);
         return;
       }
+
+      console.log(step.getStep(lastKey, keyInfos, posX, posY));
 
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
