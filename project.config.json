@@ -6,7 +6,7 @@
     "miniprogramRoot": "miniprogram/",
     "compileType": "miniprogram",
     "libVersion": "2.15.0",
-    "projectname": "miniprogram-2",
+    "projectname": "象棋打谱",
     "setting": {
         "urlCheck": true,
         "es6": true,
