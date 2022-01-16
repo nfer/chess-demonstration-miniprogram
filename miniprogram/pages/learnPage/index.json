@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "象棋打谱"
+  "navigationBarTitleText": "象棋打谱",
+  "disableScroll": true
 }
