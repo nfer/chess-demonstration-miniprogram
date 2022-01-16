@@ -14,6 +14,7 @@ Page({
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
     lastMoveType: -1,
+    steps: [] as Array<Array<string>>,
   },
   onReady() {
     this.init();
@@ -90,13 +91,20 @@ Page({
       }
 
       //  1.4 吃掉棋子
+      const curStep = step.getStep(lastKey, keyInfos, posX, posY);
+      const lastStep = this.data.steps[this.data.steps.length - 1];
+      if (!lastStep || lastStep.length == 2) {
+        this.data.steps.push([curStep]);
+      } else {
+        lastStep.push(curStep);
+      }
       console.log(step.getStep(lastKey, keyInfos, posX, posY));
 
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
       const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
-      this.setData({ keyInfos: newKeyInfos, lastKey: null, lastMoveType: lastKey.type });
+      this.setData({ keyInfos: newKeyInfos, lastKey: null, lastMoveType: lastKey.type, steps: this.data.steps });
       util.drawChessKeys('itemCanvas', newKeyInfos);
       util.clearCursor('cursorCanvas');
       return;
@@ -109,12 +117,19 @@ Page({
         return;
       }
 
+      const curStep = step.getStep(lastKey, keyInfos, posX, posY);
+      const lastStep = this.data.steps[this.data.steps.length - 1];
+      if (!lastStep || lastStep.length == 2) {
+        this.data.steps.push([curStep]);
+      } else {
+        lastStep.push(curStep);
+      }
       console.log(step.getStep(lastKey, keyInfos, posX, posY));
 
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
-      this.setData({ keyInfos, lastKey: null, lastMoveType: lastKey.type });
+      this.setData({ keyInfos, lastKey: null, lastMoveType: lastKey.type, steps: this.data.steps });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
     }
