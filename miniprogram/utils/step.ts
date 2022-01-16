@@ -47,12 +47,14 @@ export const getStep = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y
     .filter(item => item.key === keyInfo.key && item.x === keyInfo.x)
     .sort((a, b) => a.type ? b.y - a.y : a.y - b.y);
   // console.log(sameKeys.length, sameKeys);
-  if (sameKeys[0].hash === keyInfo.hash) {
-    from = `前${keyInfo.name}`;
-  } else if (sameKeys[sameKeys.length - 1].hash === keyInfo.hash) {
-    from = `后${keyInfo.name}`;
-  } else {
-    from = `中${keyInfo.name}`;
+  if (sameKeys.length > 1) {
+    if (sameKeys[0].hash === keyInfo.hash) {
+      from = `前${keyInfo.name}`;
+    } else if (sameKeys[sameKeys.length - 1].hash === keyInfo.hash) {
+      from = `后${keyInfo.name}`;
+    } else {
+      from = `中${keyInfo.name}`;
+    }
   }
   return `${from}${type}${to}`;
 };
