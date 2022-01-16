@@ -39,6 +39,7 @@ Page({
       keyInfos,
       lastKey: null,
       lastMoveType: -1,
+      steps: [],
     });
     util.drawChessKeys('itemCanvas', this.data.keyInfos);
     util.clearCursor('cursorCanvas');
