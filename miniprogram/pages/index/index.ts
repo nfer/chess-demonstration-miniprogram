@@ -1,37 +1,25 @@
+import { BookInfo, ChapterInfo } from '../../interface';
+import { books } from './data';
+
 Page({
   data: {
-    currBook: '',
-    books: [
-      { name: '自出洞来无敌手' },
-      { name: '梅花谱' },
-      { name: '反梅花谱' },
-      { name: '适情雅趣' },
-      { name: '自出洞来无敌手' },
-      { name: '梅花谱' },
-      { name: '反梅花谱' },
-      { name: '适情雅趣' },
-      { name: '自出洞来无敌手' },
-      { name: '梅花谱' },
-      { name: '反梅花谱' },
-      { name: '适情雅趣' },
-      { name: '自出洞来无敌手' },
-      { name: '梅花谱' },
-      { name: '反梅花谱' },
-      { name: '适情雅趣' },
-      { name: '自出洞来无敌手' },
-      { name: '梅花谱' },
-      { name: '反梅花谱' },
-      { name: '适情雅趣' },
-      { name: '自出洞来无敌手' },
-      { name: '梅花谱' },
-      { name: '反梅花谱' },
-      { name: '适情雅趣' },
-    ]
+    currPath: '',
+    books: books,
+    chapter: [] as Array<ChapterInfo>,
   },
   // 事件处理函数
-  goToLevelPage() {
-    wx.navigateTo({
-      url: '../levelPage/index',
+  selectBook(event: WechatMiniprogram.BaseEvent) {
+    const bookName = event.currentTarget.dataset.name;
+    const book = books.find(item => item.name === bookName) as BookInfo;
+    this.setData({
+      currPath: book.name,
+      chapter: book.chapters,
+    });
+  },
+  backToBookLis() {
+    this.setData({
+      currPath: '',
+      chapter: [],
     });
   },
   goToLearnlPage() {
