@@ -1,4 +1,11 @@
-<view class="section__full">
-  <button type="default" bindtap="goToLevelPage">闯关模式</button>
-  <button type="primary" bindtap="goToLearnlPage">学习模式</button>
+<view class="page-section">
+  <view class="page-section-spacing">
+    <view><text class="curr-path">路径：</text><text>{{currBook}}</text></view>
+    <scroll-view scroll-y="true" style="height: 1000rpx;">
+      <view class="book-item navi-item" >..</view>
+      <view class="book-item" wx:for="{{books}}" wx:key="index">
+          <view>{{item.name}}</view>
+      </view>
+    </scroll-view>
+  </view>
 </view>

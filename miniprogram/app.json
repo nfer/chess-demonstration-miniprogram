@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/learnPage/index",
     "pages/index/index",
+    "pages/learnPage/index",
     "pages/logs/logs"
   ],
   "window": {
