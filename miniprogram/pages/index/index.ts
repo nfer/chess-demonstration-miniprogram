@@ -16,13 +16,21 @@ Page({
       chapter: book.chapters,
     });
   },
+  selectChapter(event: WechatMiniprogram.BaseEvent) {
+    const bookName = this.data.currPath;
+    const chapterName = event.currentTarget.dataset.name;
+    const book = books.find(item => item.name === bookName) as BookInfo;
+    const chapter = book.chapters.find(item => item.name === chapterName) as ChapterInfo;
+    this.goToLearnlPage(book, chapter);
+  },
   backToBookLis() {
     this.setData({
       currPath: '',
       chapter: [],
     });
   },
-  goToLearnlPage() {
+  goToLearnlPage(book: BookInfo, chapter: ChapterInfo) {
+    console.log(chapter, book)
     wx.navigateTo({
       url: '../learnPage/index',
     });
