@@ -1,5 +1,5 @@
 import { BookInfo, ChapterInfo } from '../../interface';
-import { books } from './data';
+import { books } from '../../data/books';
 
 Page({
   data: {
