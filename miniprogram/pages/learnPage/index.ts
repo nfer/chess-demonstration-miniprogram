@@ -3,6 +3,7 @@ import * as util from '../../utils/util';
 import * as step from '../../utils/step';
 import { checkMove, checkSameCamp } from '../../utils/checkMove';
 import { KeyInfo } from '../../interface/index';
+import { steps } from '../../data/steps';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
 
@@ -15,8 +16,14 @@ Page({
     lastKey: null as KeyInfo | null,
     lastMoveType: -1,
     steps: [] as Array<Array<string>>,
+    expectSteps: [] as Array<string>,
   },
-  onReady() {
+  onLoad(query: Record<string, string | undefined>) {
+    const step = steps.find(item => item.id.toString() === query.id) || {id: -1, data: [] as Array<string>};
+    this.setData({
+      expectSteps: step.data,
+    });
+    
     this.init();
   },
   async init() {

@@ -8,6 +8,7 @@ export interface KeyInfo {
 }
 
 export interface ChapterInfo {
+  id: number;
   type: string;
   name: string;
 }
