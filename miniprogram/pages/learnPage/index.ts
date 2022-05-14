@@ -112,7 +112,7 @@ Page({
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
       const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
-      this.setData({ keyInfos: newKeyInfos, lastKey: null, lastMoveType: lastKey.type, nowSteps: this.data.nowSteps });
+      this.setData({ keyInfos: newKeyInfos, lastKey: null, lastMoveType: lastKey.type });
       util.drawChessKeys('itemCanvas', newKeyInfos);
       util.clearCursor('cursorCanvas');
       return;
@@ -137,7 +137,7 @@ Page({
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
-      this.setData({ keyInfos, lastKey: null, lastMoveType: lastKey.type, nowSteps: this.data.nowSteps });
+      this.setData({ keyInfos, lastKey: null, lastMoveType: lastKey.type });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
     }
