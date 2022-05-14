@@ -9,7 +9,7 @@
 
 <view class="section__steps">
     <scroll-view scroll-y="true" style="height: 300rpx;">
-        <view wx:for="{{steps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx">
+        <view wx:for="{{nowSteps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx">
             <text class="step-idx">{{idx + 1}}.</text><text class="step-normal">{{item[0]}}</text><text class="step-black">{{item[1]}}</text>
         </view>
     </scroll-view>
