@@ -30,7 +30,6 @@ Page({
     });
   },
   goToLearnlPage(book: BookInfo, chapter: ChapterInfo) {
-    console.log(chapter, book)
     wx.navigateTo({
       url: '../learnPage/index?id=' + chapter.id,
     });
