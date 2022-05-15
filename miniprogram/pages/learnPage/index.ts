@@ -101,7 +101,6 @@ Page({
       //  1.4 吃掉棋子
       const curStep = step.getStep(lastKey, keyInfos, posX, posY);
       this.data.nowSteps.push(curStep);
-      console.log(step.getStep(lastKey, keyInfos, posX, posY));
 
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
@@ -127,7 +126,6 @@ Page({
 
       const curStep = step.getStep(lastKey, keyInfos, posX, posY);
       this.data.nowSteps.push(curStep);
-      console.log(step.getStep(lastKey, keyInfos, posX, posY));
 
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
