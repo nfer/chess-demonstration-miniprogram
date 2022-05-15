@@ -17,6 +17,7 @@ Page({
     lastMoveType: -1,
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
+    errorIndex: -1,
   },
   onLoad(query: Record<string, string | undefined>) {
     const step = steps.find(item => item.id.toString() === query.id) || {id: -1, data: [] as Array<string>};
@@ -36,6 +37,17 @@ Page({
     util.drawChessBackground('bgCanvas');
     this.reload();
   },
+  updateStepAndCheck(curStep: string) {
+    const curIndex = this.data.nowSteps.length;
+    const expectStep = this.data.expectSteps[curIndex];
+    const errorIndex = curStep === expectStep ? -1 : curIndex;
+    console.log(curStep, curIndex, expectStep, errorIndex);
+    this.data.nowSteps.push(curStep);
+    this.setData({
+      errorIndex,
+      nowSteps: this.data.nowSteps, // 数组变化强制更新
+    });
+  },
   // 事件处理函数
   goBack() {
     wx.navigateBack({});
@@ -47,6 +59,7 @@ Page({
       lastKey: null,
       lastMoveType: -1,
       nowSteps: [],
+      errorIndex: -1,
     });
     util.drawChessKeys('itemCanvas', this.data.keyInfos);
     util.clearCursor('cursorCanvas');
@@ -110,7 +123,6 @@ Page({
         keyInfos: newKeyInfos,
         lastKey: null,
         lastMoveType: lastKey.type,
-        nowSteps: this.data.nowSteps, // 数组变化强制更新
       });
       util.drawChessKeys('itemCanvas', newKeyInfos);
       util.clearCursor('cursorCanvas');
@@ -125,7 +137,7 @@ Page({
       }
 
       const curStep = step.getStep(lastKey, keyInfos, posX, posY);
-      this.data.nowSteps.push(curStep);
+      this.updateStepAndCheck(curStep);
 
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
@@ -134,7 +146,6 @@ Page({
         keyInfos,
         lastKey: null,
         lastMoveType: lastKey.type,
-        nowSteps: this.data.nowSteps, // 数组变化强制更新
       });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
