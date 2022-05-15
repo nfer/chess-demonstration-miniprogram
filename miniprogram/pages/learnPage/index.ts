@@ -15,7 +15,7 @@ Page({
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
     lastMoveType: -1,
-    nowSteps: [] as Array<Array<string>>,
+    nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
   },
   onLoad(query: Record<string, string | undefined>) {
@@ -100,19 +100,19 @@ Page({
 
       //  1.4 吃掉棋子
       const curStep = step.getStep(lastKey, keyInfos, posX, posY);
-      const lastStep = this.data.nowSteps[this.data.nowSteps.length - 1];
-      if (!lastStep || lastStep.length == 2) {
-        this.data.nowSteps.push([curStep]);
-      } else {
-        lastStep.push(curStep);
-      }
+      this.data.nowSteps.push(curStep);
       console.log(step.getStep(lastKey, keyInfos, posX, posY));
 
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
       const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
-      this.setData({ keyInfos: newKeyInfos, lastKey: null, lastMoveType: lastKey.type });
+      this.setData({
+        keyInfos: newKeyInfos,
+        lastKey: null,
+        lastMoveType: lastKey.type,
+        nowSteps: this.data.nowSteps, // 数组变化强制更新
+      });
       util.drawChessKeys('itemCanvas', newKeyInfos);
       util.clearCursor('cursorCanvas');
       return;
@@ -126,18 +126,18 @@ Page({
       }
 
       const curStep = step.getStep(lastKey, keyInfos, posX, posY);
-      const lastStep = this.data.nowSteps[this.data.nowSteps.length - 1];
-      if (!lastStep || lastStep.length == 2) {
-        this.data.nowSteps.push([curStep]);
-      } else {
-        lastStep.push(curStep);
-      }
+      this.data.nowSteps.push(curStep);
       console.log(step.getStep(lastKey, keyInfos, posX, posY));
 
       const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
       keyInfos[idx].y = posY;
       keyInfos[idx].x = posX;
-      this.setData({ keyInfos, lastKey: null, lastMoveType: lastKey.type });
+      this.setData({
+        keyInfos,
+        lastKey: null,
+        lastMoveType: lastKey.type,
+        nowSteps: this.data.nowSteps, // 数组变化强制更新
+      });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
     }
