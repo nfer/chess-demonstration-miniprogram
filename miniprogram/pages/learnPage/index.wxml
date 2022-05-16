@@ -8,7 +8,7 @@
 </view>
 
 <view class="section__steps {{errorIndex === -1 ? '' : 'section__steps-error'}}">
-    <scroll-view scroll-y="true" style="height: 300rpx;">
+    <scroll-view scroll-y="true" scroll-top="{{nowSteps.length * 30}}" scroll-with-animation="true" style="height: 300rpx;">
         <view wx:for="{{nowSteps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx"
             class="{{idx === nowSteps.length - 1 ? 'last-step' : ''}}">
             <text class="step-idx">{{idx + 1}}.</text>
