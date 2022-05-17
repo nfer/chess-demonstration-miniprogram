@@ -18,6 +18,7 @@ Page({
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
     errorIndex: -1,
+    success: false,
   },
   onLoad(query: Record<string, string | undefined>) {
     const step = steps.find(item => item.id.toString() === query.id) || {id: -1, data: [] as Array<string>};
@@ -54,6 +55,9 @@ Page({
         icon: 'success',
         duration: 2000
       })
+      this.setData({
+        success: true,
+      });
     }
   },
   // 事件处理函数
@@ -68,11 +72,16 @@ Page({
       lastMoveType: -1,
       nowSteps: [],
       errorIndex: -1,
+      success: false,
     });
     util.drawChessKeys('itemCanvas', this.data.keyInfos);
     util.clearCursor('cursorCanvas');
   },
   selectItem(e: any) {
+    if (this.data.success) {
+      return;
+    }
+
     const { scale, keyInfos, lastKey, lastMoveType } = this.data;
     const offsetX = Math.floor(e.detail.x / scale) - START_X;
     const offsetY = Math.floor(e.detail.y / scale) - START_Y;
