@@ -47,6 +47,14 @@ Page({
       errorIndex,
       nowSteps: this.data.nowSteps, // 数组变化强制更新
     });
+
+    if (this.data.nowSteps.length === this.data.expectSteps.length) {
+      wx.showToast({
+        title: '打谱成功',
+        icon: 'success',
+        duration: 2000
+      })
+    }
   },
   // 事件处理函数
   goBack() {
