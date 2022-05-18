@@ -1,8 +1,14 @@
+export const enum KeyType {
+  NONE = -1,
+  RED,
+  BLACK
+}
+
 export interface KeyInfo {
   hash: string;
   key: string;
   name: string;
-  type: number;
+  type: KeyType;
   x: number;
   y: number;
 }
