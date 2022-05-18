@@ -97,6 +97,11 @@ Page({
 
     // 场景二：点击在棋子上
     if (key) {
+      if (key.type === 1 && this.data.nowSteps.length === 0) {
+        console.warn('first move should be red key', key);
+        return;
+      }
+
       if (!lastKey && lastMoveType === key.type) {
         console.warn('bad move type', lastMoveType, key.type);
         return;
