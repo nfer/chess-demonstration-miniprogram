@@ -2,7 +2,7 @@ import { START_X, START_Y } from '../../utils/constants';
 import * as util from '../../utils/util';
 import * as step from '../../utils/step';
 import { checkMove, checkSameCamp } from '../../utils/checkMove';
-import { KeyInfo } from '../../interface/index';
+import { KeyInfo, KeyType } from '../../interface/index';
 import { steps } from '../../data/steps';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
@@ -14,7 +14,7 @@ Page({
     oriKeyInfos: [] as Array<KeyInfo>,
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
-    lastMoveType: -1,
+    lastMoveType: KeyType.NONE,
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
     errorIndex: -1,
@@ -69,7 +69,7 @@ Page({
     this.setData({
       keyInfos,
       lastKey: null,
-      lastMoveType: -1,
+      lastMoveType: KeyType.NONE,
       nowSteps: [],
       errorIndex: -1,
       success: false,
@@ -97,7 +97,7 @@ Page({
 
     // 场景二：点击在棋子上
     if (key) {
-      if (key.type === 1 && this.data.nowSteps.length === 0) {
+      if (key.type === KeyType.BLACK && this.data.nowSteps.length === 0) {
         console.warn('first move should be red key', key);
         return;
       }

@@ -6,7 +6,7 @@ import {
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
 }  from './constants';
-import { KeyInfo } from '../interface/index';
+import { KeyInfo, KeyType } from '../interface/index';
 
 const createCursorContext = async (id: string) => {
   return new Promise((resolve, reject) => {
@@ -197,7 +197,8 @@ export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
   keyInfos.forEach(item => {
     const posX = item.x * LINE_SPACE + START_X;
     const posY = item.y * LINE_SPACE + START_Y;
-    if (item.type) {
+
+    if (item.type === KeyType.BLACK) { // 黑棋
       context.strokeStyle = '#000';
       context.fillStyle = '#f1ffe0';
       context.beginPath();
@@ -208,7 +209,7 @@ export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
       context.arc(posX, posY, 33, 0, 2 * Math.PI);
       context.stroke();
       context.fillStyle = '#000';
-    } else {
+    } else { // 红棋
       context.strokeStyle = '#F00';
       context.fillStyle = '#f2eff5';
       context.beginPath();
@@ -288,7 +289,7 @@ export const parseFenStr = (str: string) => {
         x += Number(c);
       } else {
         const name = getTextByChar(c);
-        const type = c >= 'a' ? 1 : 0;
+        const type = c >= 'a' ? KeyType.BLACK : KeyType.RED;
         output.push({ hash: `${c}_${output.length}`, key: c, name, type, x, y });
         x += 1;
       }
