@@ -1,10 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 import {
-  START_X,
-  START_Y,
   LINE_SPACE,
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
+  CANVAS_MARGIN,
+  CHESSBOARD_HEIGHT,
+  CHESSBOARD_WIDTH,
 }  from './constants';
 import { KeyInfo, KeyType } from '../interface/index';
 
@@ -46,33 +47,37 @@ export const drawChessBackground = async (id: string) => {
   context.strokeStyle = '#000';
   context.lineWidth = lineWidth;
   for (let index = 0; index < 9; index += 1) {
-    context.moveTo(START_X + LINE_SPACE * index, START_Y);
-    context.lineTo(START_X + LINE_SPACE * index, START_Y + CANVAS_HEIGHT - LINE_SPACE);
+    const x = LINE_SPACE * index + CANVAS_MARGIN;
+    const y = CANVAS_MARGIN;
+    context.moveTo(x, y);
+    context.lineTo(x, y + CHESSBOARD_HEIGHT);
   }
   for (let index = 0; index < 10; index += 1) {
-    context.moveTo(START_X, START_Y + LINE_SPACE * index);
-    context.lineTo(START_X + CANVAS_WIDTH - LINE_SPACE, START_Y + LINE_SPACE * index);
+    const x = CANVAS_MARGIN;
+    const y = LINE_SPACE * index + CANVAS_MARGIN;
+    context.moveTo(x, y);
+    context.lineTo(x + CHESSBOARD_WIDTH, y);
   }
   context.stroke();
 
   // 士斜线
-  context.moveTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 0);
-  context.lineTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 2);
-  context.moveTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 0);
-  context.lineTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 2);
+  context.moveTo(CANVAS_MARGIN + LINE_SPACE * 3, CANVAS_MARGIN + LINE_SPACE * 0);
+  context.lineTo(CANVAS_MARGIN + LINE_SPACE * 5, CANVAS_MARGIN + LINE_SPACE * 2);
+  context.moveTo(CANVAS_MARGIN + LINE_SPACE * 5, CANVAS_MARGIN + LINE_SPACE * 0);
+  context.lineTo(CANVAS_MARGIN + LINE_SPACE * 3, CANVAS_MARGIN + LINE_SPACE * 2);
 
-  context.moveTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 7);
-  context.lineTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 9);
-  context.moveTo(START_X + LINE_SPACE * 5, START_Y + LINE_SPACE * 7);
-  context.lineTo(START_X + LINE_SPACE * 3, START_Y + LINE_SPACE * 9);
+  context.moveTo(CANVAS_MARGIN + LINE_SPACE * 3, CANVAS_MARGIN + LINE_SPACE * 7);
+  context.lineTo(CANVAS_MARGIN + LINE_SPACE * 5, CANVAS_MARGIN + LINE_SPACE * 9);
+  context.moveTo(CANVAS_MARGIN + LINE_SPACE * 5, CANVAS_MARGIN + LINE_SPACE * 7);
+  context.lineTo(CANVAS_MARGIN + LINE_SPACE * 3, CANVAS_MARGIN + LINE_SPACE * 9);
   context.stroke();
 
   const seqWidth = lineWidth * 4;
   const seqHeight = lineWidth * 10;
   // 兵的位置
   for (let i = 0; i < 5; i += 1) {
-    const offsetX = START_X + i * 2 * LINE_SPACE;
-    const offsetY = START_Y + 3 * LINE_SPACE;
+    const offsetX = CANVAS_MARGIN + i * 2 * LINE_SPACE;
+    const offsetY = CANVAS_MARGIN + 3 * LINE_SPACE;
     if (i !== 4) {
       context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
       context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
@@ -98,8 +103,8 @@ export const drawChessBackground = async (id: string) => {
     }
   }
   for (let i = 0; i < 5; i += 1) {
-    const offsetX = START_X + i * 2 * LINE_SPACE;
-    const offsetY = START_Y + 6 * LINE_SPACE;
+    const offsetX = CANVAS_MARGIN + i * 2 * LINE_SPACE;
+    const offsetY = CANVAS_MARGIN + 6 * LINE_SPACE;
     if (i !== 4) {
       context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
       context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
@@ -126,8 +131,8 @@ export const drawChessBackground = async (id: string) => {
   }
   // 炮的位置
   for (let i = 0; i < 2; i += 1) {
-    const offsetX = START_X + i * 6 * LINE_SPACE + LINE_SPACE;
-    const offsetY = START_Y + 2 * LINE_SPACE;
+    const offsetX = CANVAS_MARGIN + i * 6 * LINE_SPACE + LINE_SPACE;
+    const offsetY = CANVAS_MARGIN + 2 * LINE_SPACE;
     context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
     context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
     context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
@@ -149,8 +154,8 @@ export const drawChessBackground = async (id: string) => {
     context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
   }
   for (let i = 0; i < 2; i += 1) {
-    const offsetX = START_X + i * 6 * LINE_SPACE + LINE_SPACE;
-    const offsetY = START_Y + 7 * LINE_SPACE;
+    const offsetX = CANVAS_MARGIN + i * 6 * LINE_SPACE + LINE_SPACE;
+    const offsetY = CANVAS_MARGIN + 7 * LINE_SPACE;
     context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
     context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
     context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
@@ -176,9 +181,9 @@ export const drawChessBackground = async (id: string) => {
   // 楚河汉界
   context.fillStyle = '#fff';
   context.fillRect(
-    START_X + halfLineWidth,
-    START_Y + 4 * LINE_SPACE + halfLineWidth,
-    CANVAS_WIDTH - LINE_SPACE - lineWidth,
+    CANVAS_MARGIN + halfLineWidth,
+    CANVAS_MARGIN + 4 * LINE_SPACE + halfLineWidth,
+    CHESSBOARD_WIDTH - lineWidth,
     LINE_SPACE - lineWidth,
   );
   context.fillStyle = '#000';
@@ -195,8 +200,8 @@ export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
   context.font = '40px Georgia';
 
   keyInfos.forEach(item => {
-    const posX = item.x * LINE_SPACE + START_X;
-    const posY = item.y * LINE_SPACE + START_Y;
+    const posX = item.x * LINE_SPACE + CANVAS_MARGIN;
+    const posY = item.y * LINE_SPACE + CANVAS_MARGIN;
 
     if (item.type === KeyType.BLACK) { // 黑棋
       context.strokeStyle = '#000';
@@ -233,8 +238,8 @@ export const drawCursor = async (id: string, x: number, y: number) => {
   context.lineWidth = 2;
 
   function drewPoint(offsetX: number, offsetY: number) {
-    const pointX = START_X + LINE_SPACE * x;
-    const pointY = START_Y + LINE_SPACE * y;
+    const pointX = CANVAS_MARGIN + LINE_SPACE * x;
+    const pointY = CANVAS_MARGIN + LINE_SPACE * y;
     const POINT_WIDTH = 42;
     const POINT_LENGTH = 20;
     context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );

@@ -1,4 +1,4 @@
-import { START_X, START_Y } from '../../utils/constants';
+import { CANVAS_MARGIN } from '../../utils/constants';
 import * as util from '../../utils/util';
 import * as step from '../../utils/step';
 import { checkMove, checkSameCamp } from '../../utils/checkMove';
@@ -83,8 +83,8 @@ Page({
     }
 
     const { scale, keyInfos, lastKey, lastMoveType } = this.data;
-    const offsetX = Math.floor(e.detail.x / scale) - START_X;
-    const offsetY = Math.floor(e.detail.y / scale) - START_Y;
+    const offsetX = Math.floor(e.detail.x / scale) - CANVAS_MARGIN;
+    const offsetY = Math.floor(e.detail.y / scale) - CANVAS_MARGIN;
     const posX = Math.round(offsetX / 100);
     const posY = Math.round(offsetY / 100);
 
