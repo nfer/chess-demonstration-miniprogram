@@ -188,10 +188,15 @@ export const drawChessBackground = async (id: string) => {
   );
   context.fillStyle = '#000';
   context.font = '55px Georgia';
-  context.fillText('楚', 1 * LINE_SPACE + CANVAS_MARGIN, 5 * LINE_SPACE + CANVAS_MARGIN - 30);
-  context.fillText('河', 2 * LINE_SPACE + CANVAS_MARGIN, 5 * LINE_SPACE + CANVAS_MARGIN - 30);
-  context.fillText('汉', 5 * LINE_SPACE + CANVAS_MARGIN, 5 * LINE_SPACE + CANVAS_MARGIN - 30);
-  context.fillText('界', 6 * LINE_SPACE + CANVAS_MARGIN, 5 * LINE_SPACE + CANVAS_MARGIN - 30);
+  const metrics = context.measureText('河');
+  const fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+  const fontWidth = metrics.width;
+
+  const textY = 5 * LINE_SPACE + CANVAS_MARGIN - fontHeight / 2;
+  context.fillText('楚', 1 * LINE_SPACE + CANVAS_MARGIN, textY);
+  context.fillText('河', 2 * LINE_SPACE + CANVAS_MARGIN, textY);
+  context.fillText('汉', 6 * LINE_SPACE + CANVAS_MARGIN - fontWidth, textY);
+  context.fillText('界', 7 * LINE_SPACE + CANVAS_MARGIN - fontWidth, textY);
 };
 
 export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
