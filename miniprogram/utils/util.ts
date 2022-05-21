@@ -192,7 +192,10 @@ export const drawChessBackground = async (id: string) => {
   const fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
   const fontWidth = metrics.width;
 
-  const textY = 5 * LINE_SPACE + CANVAS_MARGIN - fontHeight / 2;
+  // 位置补偿
+  const compensate = fontHeight * 0.18;
+
+  const textY = 4.5 * LINE_SPACE + CANVAS_MARGIN + (fontHeight / 2) - compensate;
   context.fillText('楚', 1 * LINE_SPACE + CANVAS_MARGIN, textY);
   context.fillText('河', 2 * LINE_SPACE + CANVAS_MARGIN, textY);
   context.fillText('汉', 6 * LINE_SPACE + CANVAS_MARGIN - fontWidth, textY);
