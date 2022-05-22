@@ -21,6 +21,6 @@
 </view>
 
 <view class="section__btns">
-    <!-- <button class="section__btn" type="default" bindtap="goBack">退出</button> -->
+    <button class="section__btn" type="default" bindtap="revert" disabled="{{nowSteps.length === 0}}">悔棋</button>
     <button class="section__btn" type="warn" bindtap="reload">重来</button>
 </view>

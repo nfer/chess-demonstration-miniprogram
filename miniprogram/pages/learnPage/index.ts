@@ -76,9 +76,18 @@ Page({
       });
     }
   },
+  updateKeyInfos(keyInfos: Array<KeyInfo>) {
+    util.drawChessKeys('itemCanvas', keyInfos);
+    util.clearCursor('cursorCanvas');
+
+    this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
+    this.setData({
+      keyMapFenStrs: this.data.keyMapFenStrs,
+    })
+  },
   // 事件处理函数
-  goBack() {
-    wx.navigateBack({});
+  revert() {
+    console.log('revert')
   },
   reload() {
     const keyInfos = this.data.oriKeyInfos.map(item => ({ ...item }));
@@ -89,10 +98,9 @@ Page({
       nowSteps: [],
       errorIndex: -1,
       success: false,
-      keyMapFenStrs: [keyMapFenStr],
+      keyMapFenStrs: [],
     });
-    util.drawChessKeys('itemCanvas', this.data.keyInfos);
-    util.clearCursor('cursorCanvas');
+    this.updateKeyInfos(keyInfos);
   },
   selectItem(e: any) {
     if (this.data.success || this.data.errorIndex !== -1) {
@@ -163,12 +171,8 @@ Page({
         lastKey: null,
         lastMoveType: lastKey.type,
       });
-      util.drawChessKeys('itemCanvas', newKeyInfos);
-      util.clearCursor('cursorCanvas');
-      this.data.keyMapFenStrs.push(util.getFenStr(newKeyInfos));
-      this.setData({
-        keyMapFenStrs: this.data.keyMapFenStrs,
-      })
+
+      this.updateKeyInfos(newKeyInfos);
       return;
     }
 
@@ -190,12 +194,8 @@ Page({
         lastKey: null,
         lastMoveType: lastKey.type,
       });
-      util.drawChessKeys('itemCanvas', keyInfos);
-      util.clearCursor('cursorCanvas');
-      this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
-      this.setData({
-        keyMapFenStrs: this.data.keyMapFenStrs,
-      })
+
+      this.updateKeyInfos(keyInfos);
     }
   },
 });
