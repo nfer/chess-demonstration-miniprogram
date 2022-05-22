@@ -53,6 +53,15 @@ Page({
       nowSteps: this.data.nowSteps, // 数组变化强制更新
     });
 
+    if (errorIndex !== -1) {
+      wx.showToast({
+        title: '出错了！',
+        icon: 'error',
+        duration: 2000
+      })
+      return;
+    }
+
     if (this.data.nowSteps.length === this.data.expectSteps.length) {
       wx.showToast({
         title: '打谱成功',
