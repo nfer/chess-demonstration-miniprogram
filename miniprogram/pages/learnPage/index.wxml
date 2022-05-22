@@ -7,7 +7,7 @@
     <canvas type="2d" class="section__image section__absolute" id="itemCanvas" bindtap="selectItem"></canvas>
 </view>
 
-<view class="section__steps {{errorIndex === -1 ? '' : 'section__steps-error'}}">
+<view wx:if="{{showSteps}}" class="section__steps {{errorIndex === -1 ? '' : 'section__steps-error'}}">
     <scroll-view scroll-y="true" scroll-top="{{nowSteps.length * 30}}" scroll-with-animation="true" style="height: 300rpx;">
         <view wx:for="{{nowSteps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx"
             class="{{idx === nowSteps.length - 1 ? 'last-step' : ''}}">

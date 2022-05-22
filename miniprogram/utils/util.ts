@@ -337,3 +337,9 @@ export const getScale = () => {
   const scale = info.screenWidth / CANVAS_WIDTH;
   return scale;
 };
+
+export const getAspect = () => {
+  const info = wx.getSystemInfoSync();
+  const aspect = info.screenHeight / info.screenWidth;
+  return aspect;
+};

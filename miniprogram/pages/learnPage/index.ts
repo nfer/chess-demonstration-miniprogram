@@ -6,11 +6,13 @@ import { KeyInfo, KeyType } from '../../interface/index';
 import { steps } from '../../data/steps';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
+const MIN_ASPECT_SHOW_STEPS = 1.9;
 
 Page({
   data: {
     stepIdx: 1,
     scale: 1,
+    showSteps: false,
     oriKeyInfos: [] as Array<KeyInfo>,
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
@@ -29,9 +31,11 @@ Page({
     this.init();
   },
   async init() {
+    const aspect = util.getAspect();
     const scale = util.getScale();
     const oriKeyInfos = util.parseFenStr(keyMapFenStr);
     this.setData({
+      showSteps: aspect > MIN_ASPECT_SHOW_STEPS,
       scale,
       oriKeyInfos,
     });
