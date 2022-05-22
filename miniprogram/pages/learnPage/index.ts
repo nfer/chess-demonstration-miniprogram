@@ -23,7 +23,8 @@ Page({
     success: false,
   },
   onLoad(query: Record<string, string | undefined>) {
-    const step = steps.find(item => item.id.toString() === query.id) || {id: -1, data: [] as Array<string>};
+    const id = Number(query.id) || 10001;
+    const step = steps.find(item => item.id === id) || {id: -1, data: [] as Array<string>};
     this.setData({
       expectSteps: step.data,
     });
