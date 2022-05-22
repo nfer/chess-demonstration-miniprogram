@@ -21,6 +21,7 @@ Page({
     expectSteps: [] as Array<string>,
     errorIndex: -1,
     success: false,
+    keyMapFenStrs: [] as Array<string>,
   },
   onLoad(query: Record<string, string | undefined>) {
     const id = Number(query.id) || 10001;
@@ -39,6 +40,7 @@ Page({
       showSteps: aspect > MIN_ASPECT_SHOW_STEPS,
       scale,
       oriKeyInfos,
+      keyMapFenStrs: [keyMapFenStr],
     });
     util.drawChessBackground('bgCanvas');
     this.reload();
@@ -87,6 +89,7 @@ Page({
       nowSteps: [],
       errorIndex: -1,
       success: false,
+      keyMapFenStrs: [keyMapFenStr],
     });
     util.drawChessKeys('itemCanvas', this.data.keyInfos);
     util.clearCursor('cursorCanvas');
@@ -162,6 +165,10 @@ Page({
       });
       util.drawChessKeys('itemCanvas', newKeyInfos);
       util.clearCursor('cursorCanvas');
+      this.data.keyMapFenStrs.push(util.getFenStr(newKeyInfos));
+      this.setData({
+        keyMapFenStrs: this.data.keyMapFenStrs,
+      })
       return;
     }
 
@@ -185,6 +192,10 @@ Page({
       });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
+      this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
+      this.setData({
+        keyMapFenStrs: this.data.keyMapFenStrs,
+      })
     }
   },
 });
