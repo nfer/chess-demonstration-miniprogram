@@ -91,7 +91,7 @@ Page({
     util.clearCursor('cursorCanvas');
   },
   selectItem(e: any) {
-    if (this.data.success) {
+    if (this.data.success || this.data.errorIndex !== -1) {
       return;
     }
 
