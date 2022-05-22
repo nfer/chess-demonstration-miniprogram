@@ -312,6 +312,51 @@ export const parseFenStr = (str: string) => {
   return output;
 };
 
+// '3kN1b1C/8r/9/3Cr4/9/9/9/9/4p4/5K3'
+export const getFenStr = (keyInfos: Array<KeyInfo>) => {
+  const lines = [] as Array<Array<KeyInfo>>;
+  // 转换为10行数组
+  keyInfos.forEach(keyInfo => {
+    const { y } = keyInfo;
+    let item = lines[y];
+    if (!item) {
+      lines[y] = [] as Array<KeyInfo>;
+      item = lines[y];
+    }
+    item.push({...keyInfo});
+  })
+  // 排序
+  lines.forEach(line => line.sort((a, b) => a.x - b.x));
+
+  const strs = [] as Array<string>;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line) {
+      strs.push('9');
+      continue;
+    }
+
+    let lastX = -1;
+    let content = '';
+    for (let j = 0; j < line.length; j++) {
+      const keyInfo = line[j];
+      const offset = keyInfo.x - lastX - 1;
+      lastX = keyInfo.x;
+      if (offset) {
+        content = `${content}${offset}`;
+      }
+      content = `${content}${keyInfo.key}`;
+    }
+    if (lastX !== 8) {
+      content = `${content}${8 - lastX}`;
+    }
+
+    strs.push(content);
+  }
+
+  return strs.join('/');
+};
+
 const formatNumber = (n: number) => {
   const s = n.toString();
   return s[1] ? s : `0${s}`;
