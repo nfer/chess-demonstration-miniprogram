@@ -14,7 +14,6 @@ Page({
     showSteps: false,
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
-    lastMoveType: KeyType.NONE,
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
     errorIndex: -1,
@@ -111,7 +110,6 @@ Page({
     this.setData({
       keyInfos,
       lastKey: null,
-      lastMoveType: KeyType.NONE,
       nowSteps: [],
       errorIndex: -1,
       success: false,
@@ -124,7 +122,7 @@ Page({
       return;
     }
 
-    const { scale, keyInfos, lastKey, lastMoveType } = this.data;
+    const { scale, keyInfos, lastKey } = this.data;
     const offsetX = Math.floor(e.detail.x / scale) - CANVAS_MARGIN;
     const offsetY = Math.floor(e.detail.y / scale) - CANVAS_MARGIN;
     const posX = Math.round(offsetX / 100);
@@ -144,8 +142,9 @@ Page({
         return;
       }
 
-      if (!lastKey && lastMoveType === key.type) {
-        console.warn('出错了，违反规则“双方轮流各走一着”', lastMoveType, key.type);
+      const lastKeyType = this.data.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
+      if (!lastKey && lastKeyType === key.type) {
+        console.warn('出错了，违反规则“双方轮流各走一着”', lastKeyType, key.type);
         return;
       }
 
@@ -186,7 +185,6 @@ Page({
       this.setData({
         keyInfos: newKeyInfos,
         lastKey: null,
-        lastMoveType: lastKey.type,
       });
 
       this.updateKeyInfos(newKeyInfos);
@@ -209,7 +207,6 @@ Page({
       this.setData({
         keyInfos,
         lastKey: null,
-        lastMoveType: lastKey.type,
       });
 
       this.updateKeyInfos(keyInfos);
