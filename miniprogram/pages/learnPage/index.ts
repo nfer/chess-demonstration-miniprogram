@@ -144,12 +144,12 @@ Page({
     // 场景二：点击在棋子上
     if (key) {
       if (key.type === KeyType.BLACK && this.data.nowSteps.length === 0 && !lastKey) {
-        console.warn('first move should be red key', key, lastKey);
+        console.warn('出错了，违反规则“执红棋的一方先走”', key, lastKey);
         return;
       }
 
       if (!lastKey && lastMoveType === key.type) {
-        console.warn('bad move type', lastMoveType, key.type);
+        console.warn('出错了，违反规则“双方轮流各走一着”', lastMoveType, key.type);
         return;
       }
 
