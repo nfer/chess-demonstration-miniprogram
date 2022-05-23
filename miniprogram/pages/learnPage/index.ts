@@ -12,7 +12,6 @@ Page({
   data: {
     scale: 1,
     showSteps: false,
-    oriKeyInfos: [] as Array<KeyInfo>,
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
     lastMoveType: KeyType.NONE,
@@ -34,11 +33,9 @@ Page({
   async init() {
     const aspect = util.getAspect();
     const scale = util.getScale();
-    const oriKeyInfos = util.parseFenStr(keyMapFenStr);
     this.setData({
       showSteps: aspect > MIN_ASPECT_SHOW_STEPS,
       scale,
-      oriKeyInfos,
       keyMapFenStrs: [keyMapFenStr],
     });
     util.drawChessBackground('bgCanvas');
@@ -110,7 +107,7 @@ Page({
     })
   },
   reload() {
-    const keyInfos = this.data.oriKeyInfos.map(item => ({ ...item }));
+    const keyInfos = util.parseFenStr(keyMapFenStr);
     this.setData({
       keyInfos,
       lastKey: null,
