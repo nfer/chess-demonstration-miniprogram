@@ -10,7 +10,6 @@ const MIN_ASPECT_SHOW_STEPS = 1.9;
 
 Page({
   data: {
-    stepIdx: 1,
     scale: 1,
     showSteps: false,
     oriKeyInfos: [] as Array<KeyInfo>,

@@ -1,5 +1,3 @@
-export const STEPIDX = 'StepIdx';
-
 // 线与线之间的间距
 export const LINE_SPACE = 100;
 // 棋盘和画布之间的间距
