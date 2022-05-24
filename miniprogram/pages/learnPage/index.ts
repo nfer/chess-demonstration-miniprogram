@@ -118,7 +118,13 @@ Page({
     this.updateKeyInfos(keyInfos);
   },
   selectItem(e: any) {
-    if (this.data.success || this.data.errorIndex !== -1) {
+    // 出错时不再响应棋盘交互
+    if (this.data.errorIndex !== -1) {
+      return;
+    }
+
+    // 打谱成功时不再响应棋盘交互
+    if (this.data.success) {
       return;
     }
 
