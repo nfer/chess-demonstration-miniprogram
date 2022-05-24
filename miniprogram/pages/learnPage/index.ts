@@ -1,3 +1,4 @@
+import { ComponentWithComputed } from 'miniprogram-computed'
 import { CANVAS_MARGIN } from '../../utils/constants';
 import * as util from '../../utils/util';
 import * as step from '../../utils/step';
@@ -8,7 +9,7 @@ import { steps } from '../../data/steps';
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
 const MIN_ASPECT_SHOW_STEPS = 1.9;
 
-Component({
+ComponentWithComputed({
   data: {
     scale: 1,
     showSteps: false,
