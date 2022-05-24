@@ -17,8 +17,16 @@ ComponentWithComputed({
     lastKey: null as KeyInfo | null,
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
-    errorIndex: -1,
     keyMapFenStrs: [] as Array<string>,
+  },
+  computed: {
+    isError(data): boolean {
+      if (data.nowSteps.length === 0) {
+        return false;
+      }
+
+      return data.nowSteps.some((value, index) => value !== data.expectSteps[index]);
+    },
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
@@ -42,17 +50,15 @@ ComponentWithComputed({
       this.reload();
     },
     updateStepAndCheck(curStep: string) {
-      const curIndex = this.data.nowSteps.length;
-      const expectStep = this.data.expectSteps[curIndex];
-      const errorIndex = curStep === expectStep ? -1 : curIndex;
-      console.log(curStep, curIndex, expectStep, errorIndex);
       this.data.nowSteps.push(curStep);
       this.setData({
-        errorIndex,
         nowSteps: this.data.nowSteps, // 数组变化强制更新
       });
   
-      if (errorIndex !== -1) {
+      const curIndex = this.data.nowSteps.length - 1;
+      const expectStep = this.data.expectSteps[curIndex];
+      console.log(curIndex, curStep, expectStep);
+      if (curStep !== expectStep) {
         wx.showToast({
           title: '出错了！',
           icon: 'error',
@@ -109,19 +115,20 @@ ComponentWithComputed({
         keyInfos,
         lastKey: null,
         nowSteps: [],
-        errorIndex: -1,
         keyMapFenStrs: [],
       });
       this.updateKeyInfos(keyInfos);
     },
     selectItem(e: any) {
       // 出错时不再响应棋盘交互
-      if (this.data.errorIndex !== -1) {
+      if (this.data.isError) {
+        console.warn('出错时不再响应棋盘交互');
         return;
       }
   
       // 打谱成功时不再响应棋盘交互
       if (this.data.nowSteps.length === this.data.expectSteps.length) {
+        console.warn('打谱成功时不再响应棋盘交互');
         return;
       }
   
