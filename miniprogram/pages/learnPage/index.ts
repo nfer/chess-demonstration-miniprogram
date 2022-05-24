@@ -100,6 +100,10 @@ ComponentWithComputed({
       // 取回退后的最后一条棋局进行重新渲染
       const fenStr = this.data.keyMapFenStrs[this.data.keyMapFenStrs.length - 1];
       const keyInfos = util.parseFenStr(fenStr);
+      this.setData({
+        keyInfos,
+      });
+
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
   
