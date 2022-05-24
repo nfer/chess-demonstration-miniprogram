@@ -17,7 +17,6 @@ Page({
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
     errorIndex: -1,
-    success: false,
     keyMapFenStrs: [] as Array<string>,
   },
   onLoad(query: Record<string, string | undefined>) {
@@ -66,9 +65,6 @@ Page({
         icon: 'success',
         duration: 2000
       })
-      this.setData({
-        success: true,
-      });
     }
   },
   updateKeyInfos(keyInfos: Array<KeyInfo>) {
@@ -112,7 +108,6 @@ Page({
       lastKey: null,
       nowSteps: [],
       errorIndex: -1,
-      success: false,
       keyMapFenStrs: [],
     });
     this.updateKeyInfos(keyInfos);
@@ -124,7 +119,7 @@ Page({
     }
 
     // 打谱成功时不再响应棋盘交互
-    if (this.data.success) {
+    if (this.data.nowSteps.length === this.data.expectSteps.length) {
       return;
     }
 
