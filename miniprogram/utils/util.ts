@@ -189,8 +189,12 @@ export const drawChessBackground = async (id: string) => {
   context.fillStyle = '#000';
   context.font = '55px Georgia';
   const metrics = context.measureText('河');
-  const fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
   const fontWidth = metrics.width;
+  let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+  // XXX: 解决iOS设备上获取fontHeight失败的问题
+  if (isNaN(fontHeight)) {
+    fontHeight = fontWidth;
+  }
 
   // 位置补偿
   const compensate = fontHeight * 0.18;
