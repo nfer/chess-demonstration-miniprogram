@@ -39,10 +39,10 @@
         "userConfirmedBundleSwitch": false,
         "packNpmManually": true,
         "packNpmRelationList": [
-          {
-            "packageJsonPath": "./package.json",
-            "miniprogramNpmDistDir": "./miniprogram"
-          }
+            {
+                "packageJsonPath": "./package.json",
+                "miniprogramNpmDistDir": "./miniprogram"
+            }
         ],
         "minifyWXSS": true,
         "disableUseStrict": false,
