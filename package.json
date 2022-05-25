@@ -1,6 +1,6 @@
 {
   "name": "miniprogram-ts-less-quickstart",
-  "version": "1.0.0",
+  "version": "0.1.2",
   "description": "",
   "scripts": {
     "lint": "eslint miniprogram --ext .ts --fix"
