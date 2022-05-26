@@ -191,9 +191,9 @@ export const drawChessBackground = async (id: string) => {
   context.font = '55px Georgia';
   const metrics = context.measureText('河');
   const fontWidth = metrics.width;
-  let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
-  // XXX: 解决iOS设备上获取fontHeight失败的问题
-  if (isNaN(fontHeight)) {
+  let fontHeight = metrics.fontBoundingBoxAscent;
+  // XXX: 对于无法获取`metrics.fontBoundingBoxAscent`属性值的时候，使用`metrics.width * 1.15`做降级处理
+  if (!fontHeight) {
     fontHeight = fontWidth;
   }
 
