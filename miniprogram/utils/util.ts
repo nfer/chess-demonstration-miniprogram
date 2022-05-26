@@ -188,7 +188,7 @@ export const drawChessBackground = async (id: string) => {
   );
   context.fillStyle = '#000';
   context.textBaseline = 'bottom';
-  context.font = '55px Georgia';
+  context.font = '55px Helvetica';
   const metrics = context.measureText('河');
   const fontWidth = metrics.width;
   let fontHeight = metrics.fontBoundingBoxAscent;
@@ -207,7 +207,7 @@ export const drawChessBackground = async (id: string) => {
 export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
   const context = await createCursorContext(id) as any;
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  context.font = '40px Georgia';
+  context.font = '40px Helvetica';
 
   keyInfos.forEach(item => {
     const posX = item.x * LINE_SPACE + CANVAS_MARGIN;
