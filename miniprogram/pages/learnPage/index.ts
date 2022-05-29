@@ -1,5 +1,5 @@
 import { ComponentWithComputed } from 'miniprogram-computed'
-import { CANVAS_MARGIN } from '../../utils/constants';
+import { MARGIN_VERTICAL, MARGIN_HORIZONTAL } from '../../utils/constants';
 import * as util from '../../utils/util';
 import * as step from '../../utils/step';
 import { checkMove, checkSameCamp } from '../../utils/checkMove';
@@ -138,8 +138,8 @@ ComponentWithComputed({
       }
 
       const { scale, keyInfos, lastKey } = this.data;
-      const offsetX = Math.floor(e.detail.x / scale) - CANVAS_MARGIN;
-      const offsetY = Math.floor(e.detail.y / scale) - CANVAS_MARGIN;
+      const offsetX = Math.floor(e.detail.x / scale) - MARGIN_HORIZONTAL;
+      const offsetY = Math.floor(e.detail.y / scale) - MARGIN_VERTICAL;
       const posX = Math.round(offsetX / 100);
       const posY = Math.round(offsetY / 100);
 

@@ -3,7 +3,8 @@ import {
   LINE_SPACE,
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
-  CANVAS_MARGIN,
+  MARGIN_VERTICAL,
+  MARGIN_HORIZONTAL,
   CHESSBOARD_HEIGHT,
   CHESSBOARD_WIDTH,
 }  from './constants';
@@ -47,37 +48,37 @@ export const drawChessBackground = async (id: string) => {
   context.strokeStyle = '#000';
   context.lineWidth = lineWidth;
   for (let index = 0; index < 9; index += 1) {
-    const x = LINE_SPACE * index + CANVAS_MARGIN;
-    const y = CANVAS_MARGIN;
+    const x = LINE_SPACE * index + MARGIN_HORIZONTAL;
+    const y = MARGIN_VERTICAL;
     context.moveTo(x, y);
     context.lineTo(x, y + CHESSBOARD_HEIGHT);
   }
   for (let index = 0; index < 10; index += 1) {
-    const x = CANVAS_MARGIN;
-    const y = LINE_SPACE * index + CANVAS_MARGIN;
+    const x = MARGIN_HORIZONTAL;
+    const y = LINE_SPACE * index + MARGIN_VERTICAL;
     context.moveTo(x, y);
     context.lineTo(x + CHESSBOARD_WIDTH, y);
   }
   context.stroke();
 
   // 士斜线
-  context.moveTo(CANVAS_MARGIN + LINE_SPACE * 3, CANVAS_MARGIN + LINE_SPACE * 0);
-  context.lineTo(CANVAS_MARGIN + LINE_SPACE * 5, CANVAS_MARGIN + LINE_SPACE * 2);
-  context.moveTo(CANVAS_MARGIN + LINE_SPACE * 5, CANVAS_MARGIN + LINE_SPACE * 0);
-  context.lineTo(CANVAS_MARGIN + LINE_SPACE * 3, CANVAS_MARGIN + LINE_SPACE * 2);
+  context.moveTo(MARGIN_HORIZONTAL + LINE_SPACE * 3, MARGIN_VERTICAL + LINE_SPACE * 0);
+  context.lineTo(MARGIN_HORIZONTAL + LINE_SPACE * 5, MARGIN_VERTICAL + LINE_SPACE * 2);
+  context.moveTo(MARGIN_HORIZONTAL + LINE_SPACE * 5, MARGIN_VERTICAL + LINE_SPACE * 0);
+  context.lineTo(MARGIN_HORIZONTAL + LINE_SPACE * 3, MARGIN_VERTICAL + LINE_SPACE * 2);
 
-  context.moveTo(CANVAS_MARGIN + LINE_SPACE * 3, CANVAS_MARGIN + LINE_SPACE * 7);
-  context.lineTo(CANVAS_MARGIN + LINE_SPACE * 5, CANVAS_MARGIN + LINE_SPACE * 9);
-  context.moveTo(CANVAS_MARGIN + LINE_SPACE * 5, CANVAS_MARGIN + LINE_SPACE * 7);
-  context.lineTo(CANVAS_MARGIN + LINE_SPACE * 3, CANVAS_MARGIN + LINE_SPACE * 9);
+  context.moveTo(MARGIN_HORIZONTAL + LINE_SPACE * 3, MARGIN_VERTICAL + LINE_SPACE * 7);
+  context.lineTo(MARGIN_HORIZONTAL + LINE_SPACE * 5, MARGIN_VERTICAL + LINE_SPACE * 9);
+  context.moveTo(MARGIN_HORIZONTAL + LINE_SPACE * 5, MARGIN_VERTICAL + LINE_SPACE * 7);
+  context.lineTo(MARGIN_HORIZONTAL + LINE_SPACE * 3, MARGIN_VERTICAL + LINE_SPACE * 9);
   context.stroke();
 
   const seqWidth = lineWidth * 4;
   const seqHeight = lineWidth * 10;
   // 兵的位置
   for (let i = 0; i < 5; i += 1) {
-    const offsetX = CANVAS_MARGIN + i * 2 * LINE_SPACE;
-    const offsetY = CANVAS_MARGIN + 3 * LINE_SPACE;
+    const offsetX = MARGIN_HORIZONTAL + i * 2 * LINE_SPACE;
+    const offsetY = MARGIN_VERTICAL + 3 * LINE_SPACE;
     if (i !== 4) {
       context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
       context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
@@ -103,8 +104,8 @@ export const drawChessBackground = async (id: string) => {
     }
   }
   for (let i = 0; i < 5; i += 1) {
-    const offsetX = CANVAS_MARGIN + i * 2 * LINE_SPACE;
-    const offsetY = CANVAS_MARGIN + 6 * LINE_SPACE;
+    const offsetX = MARGIN_HORIZONTAL + i * 2 * LINE_SPACE;
+    const offsetY = MARGIN_VERTICAL + 6 * LINE_SPACE;
     if (i !== 4) {
       context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
       context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
@@ -131,8 +132,8 @@ export const drawChessBackground = async (id: string) => {
   }
   // 炮的位置
   for (let i = 0; i < 2; i += 1) {
-    const offsetX = CANVAS_MARGIN + i * 6 * LINE_SPACE + LINE_SPACE;
-    const offsetY = CANVAS_MARGIN + 2 * LINE_SPACE;
+    const offsetX = MARGIN_HORIZONTAL + i * 6 * LINE_SPACE + LINE_SPACE;
+    const offsetY = MARGIN_VERTICAL + 2 * LINE_SPACE;
     context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
     context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
     context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
@@ -154,8 +155,8 @@ export const drawChessBackground = async (id: string) => {
     context.lineTo(offsetX - seqWidth - seqHeight, offsetY + seqWidth);
   }
   for (let i = 0; i < 2; i += 1) {
-    const offsetX = CANVAS_MARGIN + i * 6 * LINE_SPACE + LINE_SPACE;
-    const offsetY = CANVAS_MARGIN + 7 * LINE_SPACE;
+    const offsetX = MARGIN_HORIZONTAL + i * 6 * LINE_SPACE + LINE_SPACE;
+    const offsetY = MARGIN_VERTICAL + 7 * LINE_SPACE;
     context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
     context.lineTo(offsetX + seqWidth, offsetY + seqWidth + seqHeight);
     context.moveTo(offsetX + seqWidth, offsetY + seqWidth);
@@ -181,8 +182,8 @@ export const drawChessBackground = async (id: string) => {
   // 楚河汉界
   context.fillStyle = '#fff';
   context.fillRect(
-    CANVAS_MARGIN + halfLineWidth,
-    CANVAS_MARGIN + 4 * LINE_SPACE + halfLineWidth,
+    MARGIN_HORIZONTAL + halfLineWidth,
+    MARGIN_VERTICAL + 4 * LINE_SPACE + halfLineWidth,
     CHESSBOARD_WIDTH - lineWidth,
     LINE_SPACE - lineWidth,
   );
@@ -197,11 +198,11 @@ export const drawChessBackground = async (id: string) => {
     fontHeight = fontWidth;
   }
 
-  const textY = 4.5 * LINE_SPACE + CANVAS_MARGIN + (fontHeight / 2);
-  context.fillText('楚', 1 * LINE_SPACE + CANVAS_MARGIN, textY);
-  context.fillText('河', 2 * LINE_SPACE + CANVAS_MARGIN, textY);
-  context.fillText('汉', 6 * LINE_SPACE + CANVAS_MARGIN - fontWidth, textY);
-  context.fillText('界', 7 * LINE_SPACE + CANVAS_MARGIN - fontWidth, textY);
+  const textY = 4.5 * LINE_SPACE + MARGIN_VERTICAL + (fontHeight / 2);
+  context.fillText('楚', 1 * LINE_SPACE + MARGIN_HORIZONTAL, textY);
+  context.fillText('河', 2 * LINE_SPACE + MARGIN_HORIZONTAL, textY);
+  context.fillText('汉', 6 * LINE_SPACE + MARGIN_HORIZONTAL - fontWidth, textY);
+  context.fillText('界', 7 * LINE_SPACE + MARGIN_HORIZONTAL - fontWidth, textY);
 };
 
 export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
@@ -210,8 +211,8 @@ export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
   context.font = '40px Helvetica';
 
   keyInfos.forEach(item => {
-    const posX = item.x * LINE_SPACE + CANVAS_MARGIN;
-    const posY = item.y * LINE_SPACE + CANVAS_MARGIN;
+    const posX = item.x * LINE_SPACE + MARGIN_HORIZONTAL;
+    const posY = item.y * LINE_SPACE + MARGIN_VERTICAL;
 
     if (item.type === KeyType.BLACK) { // 黑棋
       context.strokeStyle = '#000';
@@ -248,8 +249,8 @@ export const drawCursor = async (id: string, x: number, y: number) => {
   context.lineWidth = 2;
 
   function drewPoint(offsetX: number, offsetY: number) {
-    const pointX = CANVAS_MARGIN + LINE_SPACE * x;
-    const pointY = CANVAS_MARGIN + LINE_SPACE * y;
+    const pointX = MARGIN_HORIZONTAL + LINE_SPACE * x;
+    const pointY = MARGIN_VERTICAL + LINE_SPACE * y;
     const POINT_WIDTH = 42;
     const POINT_LENGTH = 20;
     context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH );
