@@ -379,14 +379,14 @@ export const formatTime = (date: Date) => {
   );
 };
 
-export const getScale = () => {
+export const getBaseInfo = () => {
   const info = wx.getSystemInfoSync();
-  const scale = info.screenWidth / CANVAS_WIDTH;
-  return scale;
-};
-
-export const getAspect = () => {
-  const info = wx.getSystemInfoSync();
-  const aspect = info.screenHeight / info.screenWidth;
-  return aspect;
+  const screenAspect = info.screenHeight / info.screenWidth;
+  const canvasAspect = CANVAS_HEIGHT / CANVAS_WIDTH;
+  const canvasScale = info.screenWidth / CANVAS_WIDTH;
+  return {
+    screenAspect,
+    canvasAspect,
+    canvasScale,
+  };
 };

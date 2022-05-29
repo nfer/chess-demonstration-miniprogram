@@ -12,6 +12,7 @@ const MIN_ASPECT_SHOW_STEPS = 1.9;
 ComponentWithComputed({
   data: {
     scale: 1,
+    aspect: 1,
     showSteps: false,
     keyInfos: [] as Array<KeyInfo>,
     lastKey: null as KeyInfo | null,
@@ -35,15 +36,15 @@ ComponentWithComputed({
       this.setData({
         expectSteps: step.data,
       });
-      
+
       this.init();
     },
     async init() {
-      const aspect = util.getAspect();
-      const scale = util.getScale();
+      const info = util.getBaseInfo();
       this.setData({
-        showSteps: aspect > MIN_ASPECT_SHOW_STEPS,
-        scale,
+        showSteps: info.screenAspect > MIN_ASPECT_SHOW_STEPS,
+        scale: info.canvasScale,
+        aspect: info.canvasAspect,
         keyMapFenStrs: [keyMapFenStr],
       });
       util.drawChessBackground('bgCanvas');
@@ -54,7 +55,7 @@ ComponentWithComputed({
       this.setData({
         nowSteps: this.data.nowSteps, // 数组变化强制更新
       });
-  
+
       const curIndex = this.data.nowSteps.length - 1;
       const expectStep = this.data.expectSteps[curIndex];
       console.log(curIndex, curStep, expectStep);
@@ -66,7 +67,7 @@ ComponentWithComputed({
         })
         return;
       }
-  
+
       if (this.data.nowSteps.length === this.data.expectSteps.length) {
         wx.showToast({
           title: '打谱成功',
@@ -78,7 +79,7 @@ ComponentWithComputed({
     updateKeyInfos(keyInfos: Array<KeyInfo>) {
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
-  
+
       this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
       this.setData({
         keyMapFenStrs: this.data.keyMapFenStrs,
@@ -90,13 +91,13 @@ ComponentWithComputed({
       if (this.data.keyMapFenStrs.length < 2) {
         return;
       }
-  
+
       // 去除最后一条棋局记录
       this.data.keyMapFenStrs.pop();
       this.setData({
         keyMapFenStrs: this.data.keyMapFenStrs,
       })
-  
+
       // 取回退后的最后一条棋局进行重新渲染
       const fenStr = this.data.keyMapFenStrs[this.data.keyMapFenStrs.length - 1];
       const keyInfos = util.parseFenStr(fenStr);
@@ -106,7 +107,7 @@ ComponentWithComputed({
 
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
-  
+
       // 去除最后一条棋谱记录
       this.data.nowSteps.pop();
       this.setData({
@@ -129,69 +130,69 @@ ComponentWithComputed({
         console.warn('出错时不再响应棋盘交互');
         return;
       }
-  
+
       // 打谱成功时不再响应棋盘交互
       if (this.data.nowSteps.length === this.data.expectSteps.length) {
         console.warn('打谱成功时不再响应棋盘交互');
         return;
       }
-  
+
       const { scale, keyInfos, lastKey } = this.data;
       const offsetX = Math.floor(e.detail.x / scale) - CANVAS_MARGIN;
       const offsetY = Math.floor(e.detail.y / scale) - CANVAS_MARGIN;
       const posX = Math.round(offsetX / 100);
       const posY = Math.round(offsetY / 100);
-  
+
       // 场景一：点击在空白处
       if (Math.abs(offsetX - posX * 100) > 30 || Math.abs(offsetY - posY * 100) > 30) {
         return;
       }
-  
+
       const key = keyInfos.find(item => item.x === posX && item.y === posY);
-  
+
       // 场景二：点击在棋子上
       if (key) {
         if (key.type === KeyType.BLACK && this.data.nowSteps.length === 0 && !lastKey) {
           console.warn('出错了，违反规则“执红棋的一方先走”', key, lastKey);
           return;
         }
-  
+
         const lastKeyType = this.data.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
         if (!lastKey && lastKeyType === key.type) {
           console.warn('出错了，违反规则“双方轮流各走一着”', lastKeyType, key.type);
           return;
         }
-  
+
         // 1.1 选择棋子
         if (!lastKey) {
           this.setData({ lastKey: key });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
         }
-  
+
         // 1.2 取消选择棋子
         if (lastKey.x === key.x && lastKey.y === key.y) {
           this.setData({ lastKey: null });
           util.clearCursor('cursorCanvas');
           return;
         }
-  
+
         // 1.3 同色棋子，点击后进行焦点更新
         if (checkSameCamp(lastKey, key)) {
           this.setData({ lastKey: key });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
         }
-  
+
         if (!checkMove(lastKey, keyInfos, key.x, key.y)) {
           console.warn('bad posistion for lastKey', lastKey, key.x, key.y);
           return;
         }
-  
+
         //  1.4 吃掉棋子
         const curStep = step.getStep(lastKey, keyInfos, posX, posY);
         this.updateStepAndCheck(curStep);
-  
+
         const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
@@ -200,21 +201,21 @@ ComponentWithComputed({
           keyInfos: newKeyInfos,
           lastKey: null,
         });
-  
+
         this.updateKeyInfos(newKeyInfos);
         return;
       }
-  
+
       // 场景三：点击在网格上
       if (lastKey) {
         if (!checkMove(lastKey, keyInfos, posX, posY)) {
           console.warn('bad posistion for lastKey', lastKey, posX, posY);
           return;
         }
-  
+
         const curStep = step.getStep(lastKey, keyInfos, posX, posY);
         this.updateStepAndCheck(curStep);
-  
+
         const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
@@ -222,7 +223,7 @@ ComponentWithComputed({
           keyInfos,
           lastKey: null,
         });
-  
+
         this.updateKeyInfos(keyInfos);
       }
     },
