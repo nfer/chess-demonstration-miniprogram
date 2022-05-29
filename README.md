@@ -1,6 +1,6 @@
 # 象棋打谱
 
-![](./qrcode.jpg)
+![](https://raw.githubusercontent.com/nfer/chess-demonstration-miniprogram/main/qrcode.jpg)
 
 ## 布局篇
 
