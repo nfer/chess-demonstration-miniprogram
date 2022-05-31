@@ -50,16 +50,28 @@ ComponentWithComputed({
       util.drawChessBackground('bgCanvas');
       this.reload();
     },
-    updateStepAndCheck(curStep: string) {
-      this.data.nowSteps.push(curStep);
+    updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {
       this.setData({
-        nowSteps: this.data.nowSteps, // 数组变化强制更新
+        keyInfos,
+        lastKey: null,
+      });
+      util.drawChessKeys('itemCanvas', keyInfos);
+      util.clearCursor('cursorCanvas');
+
+      this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
+      this.setData({
+        keyMapFenStrs: this.data.keyMapFenStrs,
+      })
+
+      this.setData({
+        nowSteps,
       });
 
-      const curIndex = this.data.nowSteps.length - 1;
+      const curIndex = nowSteps.length - 1;
       const expectStep = this.data.expectSteps[curIndex];
-      console.log(curIndex, curStep, expectStep);
-      if (curStep !== expectStep) {
+      const currentStep = nowSteps[curIndex];
+
+      if (currentStep !== expectStep) {
         wx.showToast({
           title: '出错了！',
           icon: 'error',
@@ -75,19 +87,6 @@ ComponentWithComputed({
           duration: 2000
         })
       }
-    },
-    updateKeyInfos(keyInfos: Array<KeyInfo>) {
-      this.setData({
-        keyInfos,
-        lastKey: null,
-      });
-      util.drawChessKeys('itemCanvas', keyInfos);
-      util.clearCursor('cursorCanvas');
-
-      this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
-      this.setData({
-        keyMapFenStrs: this.data.keyMapFenStrs,
-      })
     },
     // 事件处理函数
     revert() {
@@ -124,22 +123,22 @@ ComponentWithComputed({
         keyMapFenStrs: [],
       });
       const keyInfos = util.parseFenStr(keyMapFenStr);
-      this.updateKeyInfos(keyInfos);
+      this.updateKeyInfos(keyInfos, []);
     },
     selectItem(e: any) {
+      const { scale, keyInfos, lastKey, nowSteps, expectSteps, isError } = this.data;
       // 出错时不再响应棋盘交互
-      if (this.data.isError) {
+      if (isError) {
         console.warn('出错时不再响应棋盘交互');
         return;
       }
 
       // 打谱成功时不再响应棋盘交互
-      if (this.data.nowSteps.length === this.data.expectSteps.length) {
+      if (nowSteps.length === expectSteps.length) {
         console.warn('打谱成功时不再响应棋盘交互');
         return;
       }
 
-      const { scale, keyInfos, lastKey } = this.data;
       const offsetX = Math.floor(e.detail.x / scale) - MARGIN_HORIZONTAL;
       const offsetY = Math.floor(e.detail.y / scale) - MARGIN_VERTICAL;
       const posX = Math.round(offsetX / 100);
@@ -154,12 +153,12 @@ ComponentWithComputed({
 
       // 场景二：点击在棋子上
       if (key) {
-        if (key.type === KeyType.BLACK && this.data.nowSteps.length === 0 && !lastKey) {
+        if (key.type === KeyType.BLACK && nowSteps.length === 0 && !lastKey) {
           console.warn('出错了，违反规则“执红棋的一方先走”', key, lastKey);
           return;
         }
 
-        const lastKeyType = this.data.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
+        const lastKeyType = nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
         if (!lastKey && lastKeyType === key.type) {
           console.warn('出错了，违反规则“双方轮流各走一着”', lastKeyType, key.type);
           return;
@@ -193,14 +192,14 @@ ComponentWithComputed({
 
         //  1.4 吃掉棋子
         const curStep = step.getStep(lastKey, keyInfos, posX, posY);
-        this.updateStepAndCheck(curStep);
+        nowSteps.push(curStep);
 
         const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
         const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
 
-        this.updateKeyInfos(newKeyInfos);
+        this.updateKeyInfos(newKeyInfos, nowSteps);
         return;
       }
 
@@ -212,13 +211,13 @@ ComponentWithComputed({
         }
 
         const curStep = step.getStep(lastKey, keyInfos, posX, posY);
-        this.updateStepAndCheck(curStep);
+        nowSteps.push(curStep);
 
         const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
 
-        this.updateKeyInfos(keyInfos);
+        this.updateKeyInfos(keyInfos, nowSteps);
       }
     },
   }
