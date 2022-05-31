@@ -67,11 +67,7 @@ ComponentWithComputed({
         nowSteps,
       });
 
-      const curIndex = nowSteps.length - 1;
-      const expectStep = this.data.expectSteps[curIndex];
-      const currentStep = nowSteps[curIndex];
-
-      if (currentStep !== expectStep) {
+      if (this.data.isError) {
         wx.showToast({
           title: '出错了！',
           icon: 'error',
