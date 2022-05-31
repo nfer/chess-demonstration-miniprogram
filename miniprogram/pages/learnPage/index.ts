@@ -28,6 +28,13 @@ ComponentWithComputed({
 
       return data.nowSteps.some((value, index) => value !== data.expectSteps[index]);
     },
+    isSuccess(data): boolean {
+      if (data.nowSteps.length === 0) {
+        return false;
+      }
+
+      return data.nowSteps.length === data.expectSteps.length;
+    },
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
@@ -76,7 +83,7 @@ ComponentWithComputed({
         return;
       }
 
-      if (this.data.nowSteps.length === this.data.expectSteps.length) {
+      if (this.data.isSuccess) {
         wx.showToast({
           title: '打谱成功',
           icon: 'success',
@@ -122,7 +129,7 @@ ComponentWithComputed({
       this.updateKeyInfos(keyInfos, []);
     },
     selectItem(e: any) {
-      const { scale, keyInfos, lastKey, nowSteps, expectSteps, isError } = this.data;
+      const { scale, keyInfos, lastKey, nowSteps, isSuccess, isError } = this.data;
       // 出错时不再响应棋盘交互
       if (isError) {
         console.warn('出错时不再响应棋盘交互');
@@ -130,7 +137,7 @@ ComponentWithComputed({
       }
 
       // 打谱成功时不再响应棋盘交互
-      if (nowSteps.length === expectSteps.length) {
+      if (isSuccess) {
         console.warn('打谱成功时不再响应棋盘交互');
         return;
       }
