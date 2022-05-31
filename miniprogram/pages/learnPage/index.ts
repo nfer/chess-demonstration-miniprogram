@@ -102,6 +102,12 @@ ComponentWithComputed({
         keyMapFenStrs: this.data.keyMapFenStrs,
       })
 
+      // 去除最后一条棋谱记录
+      this.data.nowSteps.pop();
+      this.setData({
+        nowSteps: this.data.nowSteps,
+      })
+
       // 取回退后的最后一条棋局进行重新渲染
       const fenStr = this.data.keyMapFenStrs[this.data.keyMapFenStrs.length - 1];
       const keyInfos = util.parseFenStr(fenStr);
@@ -111,12 +117,6 @@ ComponentWithComputed({
 
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
-
-      // 去除最后一条棋谱记录
-      this.data.nowSteps.pop();
-      this.setData({
-        nowSteps: this.data.nowSteps,
-      })
     },
     reload() {
       this.setData({
