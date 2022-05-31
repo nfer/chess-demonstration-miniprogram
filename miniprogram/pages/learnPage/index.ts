@@ -77,6 +77,10 @@ ComponentWithComputed({
       }
     },
     updateKeyInfos(keyInfos: Array<KeyInfo>) {
+      this.setData({
+        keyInfos,
+        lastKey: null,
+      });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
 
@@ -115,13 +119,11 @@ ComponentWithComputed({
       })
     },
     reload() {
-      const keyInfos = util.parseFenStr(keyMapFenStr);
       this.setData({
-        keyInfos,
-        lastKey: null,
         nowSteps: [],
         keyMapFenStrs: [],
       });
+      const keyInfos = util.parseFenStr(keyMapFenStr);
       this.updateKeyInfos(keyInfos);
     },
     selectItem(e: any) {
@@ -197,10 +199,6 @@ ComponentWithComputed({
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
         const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
-        this.setData({
-          keyInfos: newKeyInfos,
-          lastKey: null,
-        });
 
         this.updateKeyInfos(newKeyInfos);
         return;
@@ -219,10 +217,6 @@ ComponentWithComputed({
         const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
-        this.setData({
-          keyInfos,
-          lastKey: null,
-        });
 
         this.updateKeyInfos(keyInfos);
       }
