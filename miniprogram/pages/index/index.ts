@@ -21,7 +21,7 @@ Page({
     const chapterName = event.currentTarget.dataset.name;
     const book = books.find(item => item.name === bookName) as BookInfo;
     const chapter = book.chapters.find(item => item.name === chapterName) as ChapterInfo;
-    this.goToLearnlPage(book, chapter);
+    this.goToLearnlPage(chapter);
   },
   backToBookLis() {
     this.setData({
@@ -29,7 +29,7 @@ Page({
       chapter: [],
     });
   },
-  goToLearnlPage(book: BookInfo, chapter: ChapterInfo) {
+  goToLearnlPage(chapter: ChapterInfo) {
     wx.navigateTo({
       url: '../learnPage/index?id=' + chapter.id,
     });
