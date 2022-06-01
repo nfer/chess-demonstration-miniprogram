@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { KeyInfo } from "../interface";
+import { KeyInfo } from "../interface/index";
 
 const IDX_NAME = [
   ['九', '八', '七', '六', '五', '四', '三', '二', '一'],

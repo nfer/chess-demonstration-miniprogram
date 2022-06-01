@@ -1,4 +1,4 @@
-import { BookInfo, ChapterInfo } from '../../interface';
+import { BookInfo, ChapterInfo } from '../../interface/index';
 import { books } from '../../data/books';
 
 Page({
