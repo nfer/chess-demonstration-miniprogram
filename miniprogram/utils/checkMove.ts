@@ -118,6 +118,10 @@ export const checkSameCamp = (keyInfo1: KeyInfo, keyInfo2: KeyInfo) => {
   return keyInfo1.type === keyInfo2.type;
 };
 
+export const checkSamePos = (keyInfo1: KeyInfo, keyInfo2: KeyInfo) => {
+  return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
+};
+
 // 相
 function checkBBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) {
   const keyX = (x + keyInfo.x) / 2;

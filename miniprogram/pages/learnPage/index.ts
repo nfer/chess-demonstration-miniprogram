@@ -2,7 +2,7 @@ import { ComponentWithComputed } from 'miniprogram-computed'
 import { MARGIN_VERTICAL, MARGIN_HORIZONTAL } from '../../utils/constants';
 import * as util from '../../utils/util';
 import * as step from '../../utils/step';
-import { checkMove, checkSameCamp } from '../../utils/checkMove';
+import { checkMove, checkSameCamp, checkSamePos } from '../../utils/checkMove';
 import { KeyInfo, KeyType } from '../../interface/index';
 import { steps } from '../../data/steps';
 
@@ -182,7 +182,7 @@ ComponentWithComputed({
         }
 
         // 1.2 取消选择棋子
-        if (lastKey.x === focuskey.x && lastKey.y === focuskey.y) {
+        if (checkSamePos(lastKey, focuskey)) {
           console.debug('取消选择棋子', focuskey);
           this.setData({ lastKey: BAD_LASTKEY });
           util.clearCursor('cursorCanvas');
@@ -198,7 +198,7 @@ ComponentWithComputed({
         }
 
         if (!checkMove(lastKey, keyInfos, focuskey.x, focuskey.y)) {
-          console.warn('bad posistion for lastKey', lastKey, focuskey.x, focuskey.y);
+          console.warn('无法移动到目标位置', lastKey, focuskey);
           return;
         }
 
