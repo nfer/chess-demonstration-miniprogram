@@ -8,6 +8,7 @@ import { steps } from '../../data/steps';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
 const MIN_ASPECT_SHOW_STEPS = 1.9;
+const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 }
 
 ComponentWithComputed({
   data: {
@@ -15,7 +16,7 @@ ComponentWithComputed({
     aspect: 1,
     showSteps: false,
     keyInfos: [] as Array<KeyInfo>,
-    lastKey: null as KeyInfo | null,
+    lastKey: BAD_LASTKEY,
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
     keyMapFenStrs: [] as Array<string>,
@@ -60,7 +61,7 @@ ComponentWithComputed({
     updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {
       this.setData({
         keyInfos,
-        lastKey: null,
+        lastKey: BAD_LASTKEY,
       });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
@@ -156,19 +157,19 @@ ComponentWithComputed({
 
       // 场景二：点击在棋子上
       if (key) {
-        if (key.type === KeyType.BLACK && nowSteps.length === 0 && !lastKey) {
-          console.warn('出错了，违反规则“执红棋的一方先走”', key, lastKey);
+        if (key.type === KeyType.BLACK && nowSteps.length === 0 && lastKey.type !== KeyType.NONE) {
+          console.warn('出错了，违反规则“执红棋的一方先走”');
           return;
         }
 
         const lastKeyType = nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-        if (!lastKey && lastKeyType === key.type) {
-          console.warn('出错了，违反规则“双方轮流各走一着”', lastKeyType, key.type);
+        if (lastKey.type === KeyType.NONE && lastKeyType === key.type) {
+          console.warn('出错了，违反规则“双方轮流各走一着”');
           return;
         }
 
         // 1.1 选择棋子
-        if (!lastKey) {
+        if (lastKey.type === KeyType.NONE) {
           this.setData({ lastKey: key });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
@@ -176,7 +177,7 @@ ComponentWithComputed({
 
         // 1.2 取消选择棋子
         if (lastKey.x === key.x && lastKey.y === key.y) {
-          this.setData({ lastKey: null });
+          this.setData({ lastKey: BAD_LASTKEY });
           util.clearCursor('cursorCanvas');
           return;
         }
@@ -207,7 +208,7 @@ ComponentWithComputed({
       }
 
       // 场景三：点击在网格上
-      if (lastKey) {
+      if (lastKey.type !== KeyType.NONE) {
         if (!checkMove(lastKey, keyInfos, posX, posY)) {
           console.warn('bad posistion for lastKey', lastKey, posX, posY);
           return;
