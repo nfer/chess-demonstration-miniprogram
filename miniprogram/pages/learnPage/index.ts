@@ -36,6 +36,9 @@ ComponentWithComputed({
 
       return data.nowSteps.length === data.expectSteps.length;
     },
+    hasActiveKey(data): boolean {
+        return data.lastKey.type !== KeyType.NONE;
+    },
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
@@ -130,7 +133,7 @@ ComponentWithComputed({
       this.updateKeyInfos(keyInfos, []);
     },
     selectItem(e: any) {
-      const { scale, keyInfos, lastKey, nowSteps, isSuccess, isError } = this.data;
+      const { scale, keyInfos, lastKey, nowSteps, isSuccess, isError, hasActiveKey } = this.data;
       // 出错时不再响应棋盘交互
       if (isError) {
         console.warn('出错时不再响应棋盘交互');
@@ -159,7 +162,7 @@ ComponentWithComputed({
       // 场景二：点击在棋子上
       if (focuskey) {
         console.debug('点击在棋子上', focuskey);
-        if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && lastKey.type !== KeyType.NONE) {
+        if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && !hasActiveKey) {
           console.warn('出错了，违反规则“执红棋的一方先走”');
           return;
         }
@@ -171,7 +174,8 @@ ComponentWithComputed({
         }
 
         // 1.1 选择棋子
-        if (lastKey.type === KeyType.NONE) {
+        if (!hasActiveKey) {
+          console.debug('选择棋子', focuskey);
           this.setData({ lastKey: focuskey });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
@@ -179,6 +183,7 @@ ComponentWithComputed({
 
         // 1.2 取消选择棋子
         if (lastKey.x === focuskey.x && lastKey.y === focuskey.y) {
+          console.debug('取消选择棋子', focuskey);
           this.setData({ lastKey: BAD_LASTKEY });
           util.clearCursor('cursorCanvas');
           return;
@@ -186,6 +191,7 @@ ComponentWithComputed({
 
         // 1.3 同色棋子，点击后进行焦点更新
         if (checkSameCamp(lastKey, focuskey)) {
+          console.debug('同色棋子，点击后进行焦点更新', focuskey);
           this.setData({ lastKey: focuskey });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
@@ -197,6 +203,7 @@ ComponentWithComputed({
         }
 
         //  1.4 吃掉棋子
+        console.debug('吃掉棋子', lastKey, focuskey);
         const curStep = step.getStep(lastKey, keyInfos, posX, posY);
         nowSteps.push(curStep);
 
