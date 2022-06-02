@@ -153,44 +153,46 @@ ComponentWithComputed({
         return;
       }
 
-      const key = keyInfos.find(item => item.x === posX && item.y === posY);
+      // 计算点击处是否有棋子
+      const focuskey = keyInfos.find(item => item.x === posX && item.y === posY);
 
       // 场景二：点击在棋子上
-      if (key) {
-        if (key.type === KeyType.BLACK && nowSteps.length === 0 && lastKey.type !== KeyType.NONE) {
+      if (focuskey) {
+        console.debug('点击在棋子上', focuskey);
+        if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && lastKey.type !== KeyType.NONE) {
           console.warn('出错了，违反规则“执红棋的一方先走”');
           return;
         }
 
         const lastKeyType = nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-        if (lastKey.type === KeyType.NONE && lastKeyType === key.type) {
+        if (lastKey.type === KeyType.NONE && lastKeyType === focuskey.type) {
           console.warn('出错了，违反规则“双方轮流各走一着”');
           return;
         }
 
         // 1.1 选择棋子
         if (lastKey.type === KeyType.NONE) {
-          this.setData({ lastKey: key });
+          this.setData({ lastKey: focuskey });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
         }
 
         // 1.2 取消选择棋子
-        if (lastKey.x === key.x && lastKey.y === key.y) {
+        if (lastKey.x === focuskey.x && lastKey.y === focuskey.y) {
           this.setData({ lastKey: BAD_LASTKEY });
           util.clearCursor('cursorCanvas');
           return;
         }
 
         // 1.3 同色棋子，点击后进行焦点更新
-        if (checkSameCamp(lastKey, key)) {
-          this.setData({ lastKey: key });
+        if (checkSameCamp(lastKey, focuskey)) {
+          this.setData({ lastKey: focuskey });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
         }
 
-        if (!checkMove(lastKey, keyInfos, key.x, key.y)) {
-          console.warn('bad posistion for lastKey', lastKey, key.x, key.y);
+        if (!checkMove(lastKey, keyInfos, focuskey.x, focuskey.y)) {
+          console.warn('bad posistion for lastKey', lastKey, focuskey.x, focuskey.y);
           return;
         }
 
@@ -201,13 +203,14 @@ ComponentWithComputed({
         const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
-        const newKeyInfos = keyInfos.filter(item => item.hash !== key.hash);
+        const newKeyInfos = keyInfos.filter(item => item.hash !== focuskey.hash);
 
         this.updateKeyInfos(newKeyInfos, nowSteps);
         return;
       }
 
       // 场景三：点击在网格上
+      console.debug('点击在网格上', posX, posY);
       if (lastKey.type !== KeyType.NONE) {
         if (!checkMove(lastKey, keyInfos, posX, posY)) {
           console.warn('bad posistion for lastKey', lastKey, posX, posY);
