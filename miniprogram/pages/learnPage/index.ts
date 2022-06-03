@@ -16,7 +16,7 @@ ComponentWithComputed({
     aspect: 1,
     showSteps: false,
     keyInfos: [] as Array<KeyInfo>,
-    lastKey: BAD_LASTKEY,
+    activeKey: BAD_LASTKEY, // 当前已经选中的棋子
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
     keyMapFenStrs: [] as Array<string>,
@@ -37,7 +37,7 @@ ComponentWithComputed({
       return data.nowSteps.length === data.expectSteps.length;
     },
     hasActiveKey(data): boolean {
-        return data.lastKey.type !== KeyType.NONE;
+        return data.activeKey.type !== KeyType.NONE;
     },
   },
   methods: {
@@ -64,7 +64,7 @@ ComponentWithComputed({
     updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {
       this.setData({
         keyInfos,
-        lastKey: BAD_LASTKEY,
+        activeKey: BAD_LASTKEY,
       });
       util.drawChessKeys('itemCanvas', keyInfos);
       util.clearCursor('cursorCanvas');
@@ -133,7 +133,7 @@ ComponentWithComputed({
       this.updateKeyInfos(keyInfos, []);
     },
     selectItem(e: any) {
-      const { scale, keyInfos, lastKey, nowSteps, isSuccess, isError, hasActiveKey } = this.data;
+      const { scale, keyInfos, activeKey, nowSteps, isSuccess, isError, hasActiveKey } = this.data;
       // 出错时不再响应棋盘交互
       if (isError) {
         console.warn('出错时不再响应棋盘交互');
@@ -168,7 +168,7 @@ ComponentWithComputed({
         }
 
         const lastKeyType = nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-        if (lastKey.type === KeyType.NONE && lastKeyType === focuskey.type) {
+        if (activeKey.type === KeyType.NONE && lastKeyType === focuskey.type) {
           console.warn('出错了，违反规则“双方轮流各走一着”');
           return;
         }
@@ -176,38 +176,38 @@ ComponentWithComputed({
         // 1.1 选择棋子
         if (!hasActiveKey) {
           console.debug('选择棋子', focuskey);
-          this.setData({ lastKey: focuskey });
+          this.setData({ activeKey: focuskey });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
         }
 
         // 1.2 取消选择棋子
-        if (checkSamePos(lastKey, focuskey)) {
+        if (checkSamePos(activeKey, focuskey)) {
           console.debug('取消选择棋子', focuskey);
-          this.setData({ lastKey: BAD_LASTKEY });
+          this.setData({ activeKey: BAD_LASTKEY });
           util.clearCursor('cursorCanvas');
           return;
         }
 
         // 1.3 同色棋子，点击后进行焦点更新
-        if (checkSameCamp(lastKey, focuskey)) {
+        if (checkSameCamp(activeKey, focuskey)) {
           console.debug('同色棋子，点击后进行焦点更新', focuskey);
-          this.setData({ lastKey: focuskey });
+          this.setData({ activeKey: focuskey });
           util.drawCursor('cursorCanvas', posX, posY);
           return;
         }
 
-        if (!checkMove(lastKey, keyInfos, focuskey.x, focuskey.y)) {
-          console.warn('无法移动到目标位置', lastKey, focuskey);
+        if (!checkMove(activeKey, keyInfos, focuskey.x, focuskey.y)) {
+          console.warn('无法移动到目标位置', activeKey, focuskey);
           return;
         }
 
         //  1.4 吃掉棋子
-        console.debug('吃掉棋子', lastKey, focuskey);
-        const curStep = step.getStep(lastKey, keyInfos, posX, posY);
+        console.debug('吃掉棋子', activeKey, focuskey);
+        const curStep = step.getStep(activeKey, keyInfos, posX, posY);
         nowSteps.push(curStep);
 
-        const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
+        const idx = keyInfos.findIndex(item => item.hash === activeKey.hash);
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
         const newKeyInfos = keyInfos.filter(item => item.hash !== focuskey.hash);
@@ -218,16 +218,16 @@ ComponentWithComputed({
 
       // 场景三：点击在网格上
       console.debug('点击在网格上', posX, posY);
-      if (lastKey.type !== KeyType.NONE) {
-        if (!checkMove(lastKey, keyInfos, posX, posY)) {
-          console.warn('bad posistion for lastKey', lastKey, posX, posY);
+      if (activeKey.type !== KeyType.NONE) {
+        if (!checkMove(activeKey, keyInfos, posX, posY)) {
+          console.warn('bad posistion for activeKey', activeKey, posX, posY);
           return;
         }
 
-        const curStep = step.getStep(lastKey, keyInfos, posX, posY);
+        const curStep = step.getStep(activeKey, keyInfos, posX, posY);
         nowSteps.push(curStep);
 
-        const idx = keyInfos.findIndex(item => item.hash === lastKey.hash);
+        const idx = keyInfos.findIndex(item => item.hash === activeKey.hash);
         keyInfos[idx].y = posY;
         keyInfos[idx].x = posX;
 
