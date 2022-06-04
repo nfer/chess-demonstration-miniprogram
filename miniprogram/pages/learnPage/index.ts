@@ -3,12 +3,13 @@ import { MARGIN_VERTICAL, MARGIN_HORIZONTAL } from '../../utils/constants';
 import * as util from '../../utils/util';
 import * as step from '../../utils/step';
 import { checkMove, checkSameCamp, checkSamePos } from '../../utils/checkMove';
-import { KeyInfo, KeyType } from '../../interface/index';
+import { KeyInfo, KeyType, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
 const MIN_ASPECT_SHOW_STEPS = 1.9;
 const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 }
+const NONE_KEYPOS: KeyPos = { x: -1, y: -1 };
 
 ComponentWithComputed({
   data: {
@@ -17,6 +18,7 @@ ComponentWithComputed({
     showSteps: false,
     keyInfos: [] as Array<KeyInfo>,
     activeKey: BAD_LASTKEY, // 当前已经选中的棋子
+    cursorPos: NONE_KEYPOS, // 当前的光标
     nowSteps: [] as Array<string>,
     expectSteps: [] as Array<string>,
     keyMapFenStrs: [] as Array<string>,
@@ -65,9 +67,9 @@ ComponentWithComputed({
       this.setData({
         keyInfos,
         activeKey: BAD_LASTKEY,
+        cursorPos: NONE_KEYPOS,
       });
       util.drawChessKeys('itemCanvas', keyInfos);
-      util.clearCursor('cursorCanvas');
 
       this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
       this.setData({
@@ -122,7 +124,9 @@ ComponentWithComputed({
       });
 
       util.drawChessKeys('itemCanvas', keyInfos);
-      util.clearCursor('cursorCanvas');
+      this.setData({
+        cursorPos: NONE_KEYPOS,
+      });
     },
     reload() {
       this.setData({
@@ -176,24 +180,30 @@ ComponentWithComputed({
         // 1.1 选择棋子
         if (!hasActiveKey) {
           console.debug('选择棋子', focuskey);
-          this.setData({ activeKey: focuskey });
-          util.drawCursor('cursorCanvas', posX, posY);
+          this.setData({
+            activeKey: focuskey,
+            cursorPos: { x: posX, y: posY },
+          });
           return;
         }
 
         // 1.2 取消选择棋子
         if (checkSamePos(activeKey, focuskey)) {
           console.debug('取消选择棋子', focuskey);
-          this.setData({ activeKey: BAD_LASTKEY });
-          util.clearCursor('cursorCanvas');
+          this.setData({
+            activeKey: BAD_LASTKEY,
+            cursorPos: NONE_KEYPOS,
+          });
           return;
         }
 
         // 1.3 同色棋子，点击后进行焦点更新
         if (checkSameCamp(activeKey, focuskey)) {
           console.debug('同色棋子，点击后进行焦点更新', focuskey);
-          this.setData({ activeKey: focuskey });
-          util.drawCursor('cursorCanvas', posX, posY);
+          this.setData({
+            activeKey: focuskey,
+            cursorPos: { x: posX, y: posY },
+          });
           return;
         }
 

@@ -13,6 +13,11 @@ export interface KeyInfo {
   y: number;
 }
 
+export interface KeyPos {
+    x: number;
+    y: number;
+}
+
 export interface ChapterInfo {
   id: number;
   type: string;
