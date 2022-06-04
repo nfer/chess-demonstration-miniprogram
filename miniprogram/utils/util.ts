@@ -16,7 +16,7 @@ const createCursorContext = async (id: string) => {
     query.select(`#${id}`)
       .fields({ node: true, size: true })
       .exec((res) => {
-        if (!res || !res.length || !res[0].node) {
+        if (!res || !res.length || !res[0]?.node) {
           reject(new Error('select null'));
           return;
         }
