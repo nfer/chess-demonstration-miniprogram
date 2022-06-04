@@ -1,2 +1,2 @@
 <!--components/CursorCanvas.wxml-->
-<canvas type="2d" id="cursorCanvas"></canvas>
+<canvas type="2d" id="cursorCanvas" class="container"></canvas>
