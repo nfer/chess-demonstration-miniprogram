@@ -38,8 +38,8 @@ const createCursorContext = async (id: string) => {
 export const drawChessBackground = async (id: string) => {
   const context = await createCursorContext(id) as any;
   // 底色
-  context.fillStyle = '#f1cb9d';
-  context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+//   context.fillStyle = '#f1cb9d';
+//   context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   const lineWidth = 2;
   const halfLineWidth = lineWidth / 2;
