@@ -9,6 +9,7 @@ import {
 } from '../../utils/constants';
 
 const CANVAS_ID = 'cursorCanvas';
+const NONE_POS: KeyPos = { x: -1, y: -1 };
 
 Component({
     /**
@@ -25,18 +26,25 @@ Component({
      * 组件的初始数据
      */
     data: {
-
+        lastPos: NONE_POS,
     },
 
     observers: {
         pos(newValue: Object) {
             console.log('observers', newValue);
             const pos = newValue as KeyPos;
-            if (pos.x === -1 || pos.y === -1) {
-                this.clearCursor();
-            } else {
+            if (pos.x !== -1 && pos.y !== -1) {
                 this.drawCursor(CANVAS_ID, pos.x, pos.y);
             }
+
+            const { lastPos } = this.data;
+            if (lastPos.x !== -1 && lastPos.y !== -1) {
+                this.clearCursor(CANVAS_ID, lastPos.x, lastPos.y);
+            }
+
+            this.setData({
+                lastPos: {...pos},
+            })
         }
     },
 
@@ -68,15 +76,9 @@ Component({
                     });
             });
         },
-        async clearCursor() {
-            console.log('clearCursor');
-            const context = await this.createCursorContext(CANVAS_ID) as any;
-            context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        },
         async drawCursor(id: string, x: number, y: number) {
             console.log('drawCursor', id, x, y);
             const context = await this.createCursorContext(id) as any;
-            context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
             context.strokeStyle = '#f00';
             context.lineWidth = 2;
@@ -96,6 +98,13 @@ Component({
             drewPoint(1, -1);
             drewPoint(-1, 1);
             context.stroke();
+        },
+        async clearCursor(id: string, x: number, y: number) {
+            console.log('clearCursor', id, x, y);
+            const context = await this.createCursorContext(id) as any;
+            const pointX = MARGIN_HORIZONTAL + LINE_SPACE * x;
+            const pointY = MARGIN_VERTICAL + LINE_SPACE * y;
+            context.clearRect(pointX - LINE_SPACE / 2, pointY - LINE_SPACE / 2, LINE_SPACE, LINE_SPACE);
         },
     }
 })
