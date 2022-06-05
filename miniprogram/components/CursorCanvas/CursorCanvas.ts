@@ -27,13 +27,16 @@ Component({
 
     observers: {
         pos(newValue: Object) {
-            console.log('observers', newValue);
+            const { lastPos } = this.data;
             const pos = newValue as KeyPos;
+            console.debug('pos changed', pos, lastPos);
+
+            // 绘制当前光标
             if (pos.x !== -1 && pos.y !== -1) {
                 util.drawCursor(context, pos.x, pos.y);
             }
 
-            const { lastPos } = this.data;
+            // 清除上一次光标
             if (lastPos.x !== -1 && lastPos.y !== -1) {
                 util.clearCursor(context, lastPos.x, lastPos.y);
             }
@@ -47,7 +50,7 @@ Component({
     lifetimes: {
         async ready() {
             context = await this.createCanvasContext(CANVAS_ID) as any;
-            console.log('ready', context);
+            console.debug('ready', context);
         },
     },
 
