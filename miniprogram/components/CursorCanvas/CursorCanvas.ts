@@ -35,12 +35,12 @@ Component({
             console.log('observers', newValue);
             const pos = newValue as KeyPos;
             if (pos.x !== -1 && pos.y !== -1) {
-                this.drawCursor(CANVAS_ID, pos.x, pos.y);
+                this.drawCursor(pos.x, pos.y);
             }
 
             const { lastPos } = this.data;
             if (lastPos.x !== -1 && lastPos.y !== -1) {
-                this.clearCursor(CANVAS_ID, lastPos.x, lastPos.y);
+                this.clearCursor(lastPos.x, lastPos.y);
             }
 
             this.setData({
@@ -84,8 +84,8 @@ Component({
                     });
             });
         },
-        async drawCursor(id: string, x: number, y: number) {
-            console.log('drawCursor', id, x, y);
+        async drawCursor(x: number, y: number) {
+            console.log('drawCursor', x, y);
 
             context.strokeStyle = '#f00';
             context.lineWidth = 2;
@@ -108,8 +108,8 @@ Component({
             context.closePath();
             context.stroke();
         },
-        async clearCursor(id: string, x: number, y: number) {
-            console.log('clearCursor', id, x, y);
+        async clearCursor(x: number, y: number) {
+            console.log('clearCursor', x, y);
             const pointX = MARGIN_HORIZONTAL + LINE_SPACE * x;
             const pointY = MARGIN_VERTICAL + LINE_SPACE * y;
             context.clearRect(pointX - LINE_SPACE / 2, pointY - LINE_SPACE / 2, LINE_SPACE, LINE_SPACE);
