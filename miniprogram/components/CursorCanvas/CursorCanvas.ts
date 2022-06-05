@@ -1,10 +1,8 @@
 // components/CursorCanvas.ts
 import { KeyPos } from '../../interface/index';
+import * as util from '../../utils/util';
 import {
     CANVAS_WIDTH,
-    MARGIN_HORIZONTAL,
-    MARGIN_VERTICAL,
-    LINE_SPACE,
 } from '../../utils/constants';
 
 const CANVAS_ID = 'cursorCanvas';
@@ -35,12 +33,12 @@ Component({
             console.log('observers', newValue);
             const pos = newValue as KeyPos;
             if (pos.x !== -1 && pos.y !== -1) {
-                this.drawCursor(pos.x, pos.y);
+                util.drawCursor(context, pos.x, pos.y);
             }
 
             const { lastPos } = this.data;
             if (lastPos.x !== -1 && lastPos.y !== -1) {
-                this.clearCursor(lastPos.x, lastPos.y);
+                util.clearCursor(context, lastPos.x, lastPos.y);
             }
 
             this.setData({
@@ -83,36 +81,6 @@ Component({
                         resolve(context);
                     });
             });
-        },
-        async drawCursor(x: number, y: number) {
-            console.log('drawCursor', x, y);
-
-            context.strokeStyle = '#f00';
-            context.lineWidth = 2;
-
-            function drewPoint(offsetX: number, offsetY: number) {
-                const pointX = MARGIN_HORIZONTAL + LINE_SPACE * x;
-                const pointY = MARGIN_VERTICAL + LINE_SPACE * y;
-                const POINT_WIDTH = 42;
-                const POINT_LENGTH = 20;
-                context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH);
-                context.lineTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH - offsetY * POINT_LENGTH);
-                context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH);
-                context.lineTo(pointX + offsetX * POINT_WIDTH - offsetX * POINT_LENGTH, pointY + offsetY * POINT_WIDTH);
-            }
-            context.beginPath();
-            drewPoint(1, 1);
-            drewPoint(-1, -1);
-            drewPoint(1, -1);
-            drewPoint(-1, 1);
-            context.closePath();
-            context.stroke();
-        },
-        async clearCursor(x: number, y: number) {
-            console.log('clearCursor', x, y);
-            const pointX = MARGIN_HORIZONTAL + LINE_SPACE * x;
-            const pointY = MARGIN_VERTICAL + LINE_SPACE * y;
-            context.clearRect(pointX - LINE_SPACE / 2, pointY - LINE_SPACE / 2, LINE_SPACE, LINE_SPACE);
         },
     }
 })

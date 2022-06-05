@@ -241,10 +241,7 @@ export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
     });
 };
 
-export const drawCursor = async (id: string, x: number, y: number) => {
-    const context = await createCursorContext(id) as any;
-    context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
+export const drawCursor = async (context: any, x: number, y: number) => {
     context.strokeStyle = '#f00';
     context.lineWidth = 2;
 
@@ -258,16 +255,19 @@ export const drawCursor = async (id: string, x: number, y: number) => {
         context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH);
         context.lineTo(pointX + offsetX * POINT_WIDTH - offsetX * POINT_LENGTH, pointY + offsetY * POINT_WIDTH);
     }
+    context.beginPath();
     drewPoint(1, 1);
     drewPoint(-1, -1);
     drewPoint(1, -1);
     drewPoint(-1, 1);
+    context.closePath();
     context.stroke();
 };
 
-export const clearCursor = async (id: string) => {
-    const context = await createCursorContext(id) as any;
-    context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+export const clearCursor = async (context: any, x: number, y: number) => {
+    const pointX = MARGIN_HORIZONTAL + LINE_SPACE * x;
+    const pointY = MARGIN_VERTICAL + LINE_SPACE * y;
+    context.clearRect(pointX - LINE_SPACE / 2, pointY - LINE_SPACE / 2, LINE_SPACE, LINE_SPACE);
 };
 
 export const getTextByChar = (ch: string) => {
