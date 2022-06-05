@@ -101,10 +101,12 @@ Component({
                 context.moveTo(pointX + offsetX * POINT_WIDTH, pointY + offsetY * POINT_WIDTH);
                 context.lineTo(pointX + offsetX * POINT_WIDTH - offsetX * POINT_LENGTH, pointY + offsetY * POINT_WIDTH);
             }
+            context.beginPath();
             drewPoint(1, 1);
             drewPoint(-1, -1);
             drewPoint(1, -1);
             drewPoint(-1, 1);
+            context.closePath();
             context.stroke();
         },
         async clearCursor(id: string, x: number, y: number) {
