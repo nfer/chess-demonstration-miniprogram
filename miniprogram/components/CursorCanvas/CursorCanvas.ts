@@ -11,6 +11,8 @@ import {
 const CANVAS_ID = 'cursorCanvas';
 const NONE_POS: KeyPos = { x: -1, y: -1 };
 
+let context = null as any;
+
 Component({
     /**
      * 组件的属性列表
@@ -48,6 +50,13 @@ Component({
         }
     },
 
+    lifetimes: {
+        async ready () {
+            context = await this.createCursorContext(CANVAS_ID) as any;
+            console.log('ready', context);
+        },
+    },
+
     /**
      * 组件的方法列表
      */
@@ -78,7 +87,6 @@ Component({
         },
         async drawCursor(id: string, x: number, y: number) {
             console.log('drawCursor', id, x, y);
-            const context = await this.createCursorContext(id) as any;
 
             context.strokeStyle = '#f00';
             context.lineWidth = 2;
@@ -101,7 +109,6 @@ Component({
         },
         async clearCursor(id: string, x: number, y: number) {
             console.log('clearCursor', id, x, y);
-            const context = await this.createCursorContext(id) as any;
             const pointX = MARGIN_HORIZONTAL + LINE_SPACE * x;
             const pointY = MARGIN_VERTICAL + LINE_SPACE * y;
             context.clearRect(pointX - LINE_SPACE / 2, pointY - LINE_SPACE / 2, LINE_SPACE, LINE_SPACE);
