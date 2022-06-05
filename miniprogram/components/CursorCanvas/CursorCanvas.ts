@@ -2,7 +2,6 @@
 import { KeyPos } from '../../interface/index';
 import {
     CANVAS_WIDTH,
-    CANVAS_HEIGHT,
     MARGIN_HORIZONTAL,
     MARGIN_VERTICAL,
     LINE_SPACE,
