@@ -46,7 +46,7 @@ Component({
 
     lifetimes: {
         async ready() {
-            context = await this.createCursorContext(CANVAS_ID) as any;
+            context = await this.createCanvasContext(CANVAS_ID) as any;
             console.log('ready', context);
         },
     },
@@ -55,7 +55,7 @@ Component({
      * 组件的方法列表
      */
     methods: {
-        async createCursorContext(id: string) {
+        async createCanvasContext(id: string) {
             return new Promise((resolve, reject) => {
                 const query = this.createSelectorQuery();
                 query.select(`#${id}`)
