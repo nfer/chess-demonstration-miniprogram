@@ -45,13 +45,13 @@ Component({
             }
 
             this.setData({
-                lastPos: {...pos},
+                lastPos: { ...pos },
             })
         }
     },
 
     lifetimes: {
-        async ready () {
+        async ready() {
             context = await this.createCursorContext(CANVAS_ID) as any;
             console.log('ready', context);
         },
