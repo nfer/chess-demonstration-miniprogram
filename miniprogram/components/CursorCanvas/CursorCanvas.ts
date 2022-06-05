@@ -1,9 +1,6 @@
 // components/CursorCanvas.ts
 import { KeyPos } from '../../interface/index';
 import * as util from '../../utils/util';
-import {
-    CANVAS_WIDTH,
-} from '../../utils/constants';
 
 const CANVAS_ID = 'cursorCanvas';
 const NONE_POS: KeyPos = { x: -1, y: -1 };
@@ -64,21 +61,11 @@ Component({
                 query.select(`#${id}`)
                     .fields({ node: true, size: true })
                     .exec((res) => {
-                        if (!res || !res.length || !res[0]?.node) {
-                            reject(new Error('select null'));
-                            return;
+                        try {
+                            resolve(util.getContext(res));
+                        } catch (error) {
+                            reject(error);
                         }
-
-                        const canvas = res[0].node;
-                        const context = canvas.getContext('2d');
-
-                        const info = wx.getSystemInfoSync();
-                        canvas.width = res[0].width * info.pixelRatio;
-                        canvas.height = res[0].height * info.pixelRatio;
-                        const scale = info.screenWidth / CANVAS_WIDTH * info.pixelRatio;
-                        context.scale(scale, scale);
-
-                        resolve(context);
                     });
             });
         },
