@@ -3,7 +3,8 @@
   "version": "0.1.2",
   "description": "",
   "scripts": {
-    "lint": "eslint miniprogram --ext .ts --fix"
+    "lint": "eslint miniprogram --ext .ts --fix",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
     "eslint": "^8.4.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-plugin-import": "^2.25.3",
+    "husky": "^8.0.1",
     "miniprogram-api-typings": "^3.4.4"
   },
   "dependencies": {
