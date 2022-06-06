@@ -1,7 +1,7 @@
 export const enum KeyType {
   NONE = -1,
   RED,
-  BLACK
+  BLACK,
 }
 
 export interface KeyInfo {
@@ -14,8 +14,8 @@ export interface KeyInfo {
 }
 
 export interface KeyPos {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }
 
 export interface ChapterInfo {

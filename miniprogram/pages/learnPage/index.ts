@@ -1,4 +1,4 @@
-import { ComponentWithComputed } from 'miniprogram-computed'
+import { ComponentWithComputed } from 'miniprogram-computed';
 import { MARGIN_VERTICAL, MARGIN_HORIZONTAL } from '../../utils/constants';
 import * as util from '../../utils/util';
 import * as step from '../../utils/step';
@@ -6,9 +6,9 @@ import { checkMove, checkSameCamp, checkSamePos } from '../../utils/checkMove';
 import { KeyInfo, KeyType, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
 
-const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1'
+const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
 const MIN_ASPECT_SHOW_STEPS = 1.9;
-const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 }
+const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
 const NONE_KEYPOS: KeyPos = { x: -1, y: -1 };
 
 ComponentWithComputed({
@@ -39,13 +39,13 @@ ComponentWithComputed({
       return data.nowSteps.length === data.expectSteps.length;
     },
     hasActiveKey(data): boolean {
-        return data.activeKey.type !== KeyType.NONE;
+      return data.activeKey.type !== KeyType.NONE;
     },
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
       const id = Number(query.id) || 10001;
-      const step = steps.find(item => item.id === id) || {id: -1, data: [] as Array<string>};
+      const step = steps.find(item => item.id === id) || { id: -1, data: [] as Array<string> };
       this.setData({
         expectSteps: step.data,
       });
@@ -74,7 +74,7 @@ ComponentWithComputed({
       this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
       this.setData({
         keyMapFenStrs: this.data.keyMapFenStrs,
-      })
+      });
 
       this.setData({
         nowSteps,
@@ -84,8 +84,8 @@ ComponentWithComputed({
         wx.showToast({
           title: '出错了！',
           icon: 'error',
-          duration: 2000
-        })
+          duration: 2000,
+        });
         return;
       }
 
@@ -93,8 +93,8 @@ ComponentWithComputed({
         wx.showToast({
           title: '打谱成功',
           icon: 'success',
-          duration: 2000
-        })
+          duration: 2000,
+        });
       }
     },
     // 事件处理函数
@@ -108,13 +108,13 @@ ComponentWithComputed({
       this.data.keyMapFenStrs.pop();
       this.setData({
         keyMapFenStrs: this.data.keyMapFenStrs,
-      })
+      });
 
       // 去除最后一条棋谱记录
       this.data.nowSteps.pop();
       this.setData({
         nowSteps: this.data.nowSteps,
-      })
+      });
 
       // 取回退后的最后一条棋局进行重新渲染
       const fenStr = this.data.keyMapFenStrs[this.data.keyMapFenStrs.length - 1];
@@ -244,5 +244,5 @@ ComponentWithComputed({
         this.updateKeyInfos(keyInfos, nowSteps);
       }
     },
-  }
+  },
 });
