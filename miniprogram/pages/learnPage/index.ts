@@ -1,7 +1,7 @@
 import { ComponentWithComputed } from 'miniprogram-computed';
 import { MARGIN_VERTICAL, MARGIN_HORIZONTAL } from '../../utils/constants';
 import * as util from '../../utils/util';
-import * as step from '../../utils/step';
+import * as stepUtils from '../../utils/step';
 import { checkMove, checkSameCamp, checkSamePos } from '../../utils/checkMove';
 import { KeyInfo, KeyType, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
@@ -214,7 +214,7 @@ ComponentWithComputed({
 
         //  1.4 吃掉棋子
         console.debug('吃掉棋子', activeKey, focuskey);
-        const curStep = step.getStep(activeKey, keyInfos, posX, posY);
+        const curStep = stepUtils.getStep(activeKey, keyInfos, posX, posY);
         nowSteps.push(curStep);
 
         const idx = keyInfos.findIndex(item => item.hash === activeKey.hash);
@@ -234,7 +234,7 @@ ComponentWithComputed({
           return;
         }
 
-        const curStep = step.getStep(activeKey, keyInfos, posX, posY);
+        const curStep = stepUtils.getStep(activeKey, keyInfos, posX, posY);
         nowSteps.push(curStep);
 
         const idx = keyInfos.findIndex(item => item.hash === activeKey.hash);
