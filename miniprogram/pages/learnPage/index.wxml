@@ -1,7 +1,7 @@
 <view class="section__full" style="height: {{aspect * 100}}vw;">
-  <BgCanvas class="section__image section__absolute"></BgCanvas>
-  <CursorCanvas class="section__image section__absolute" pos="{{cursorPos}}"></CursorCanvas>
-  <canvas type="2d" class="section__image section__absolute" id="itemCanvas" bindtap="selectItem"></canvas>
+  <BgCanvas class="section__image section__absolute" style="z-index: 0;"></BgCanvas>
+  <CursorCanvas class="section__image section__absolute" pos="{{cursorPos}}" style="z-index: 1;"></CursorCanvas>
+  <canvas type="2d" class="section__image section__absolute" id="itemCanvas" bindtap="selectItem" style="z-index: 2;"></canvas>
 </view>
 
 <view wx:if="{{showSteps}}" class="section__steps {{isError ? 'section__steps-error' : ''}}">
