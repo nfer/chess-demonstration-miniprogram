@@ -60,7 +60,6 @@ ComponentWithComputed({
         aspect: info.canvasAspect,
         keyMapFenStrs: [keyMapFenStr],
       });
-      util.drawChessBackground('bgCanvas');
       this.reload();
     },
     updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {

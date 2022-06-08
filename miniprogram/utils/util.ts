@@ -52,8 +52,7 @@ export const getContext = (res: any) => {
   return context;
 };
 
-export const drawChessBackground = async (id: string) => {
-  const context = await createCursorContext(id) as any;
+export const drawChessBackground = async (context: any) => {
   // 底色
   //   context.fillStyle = '#f1cb9d';
   //   context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);

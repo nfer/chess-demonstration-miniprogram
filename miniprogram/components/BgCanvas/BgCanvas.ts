@@ -22,6 +22,7 @@ Component({
     async ready() {
       context = await this.createCanvasContext(CANVAS_ID) as any;
       console.debug('ready', context);
+      util.drawChessBackground(context);
     },
   },
 
