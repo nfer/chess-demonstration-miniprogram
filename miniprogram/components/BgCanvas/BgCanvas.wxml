@@ -1,0 +1,2 @@
+<!--components/BgCanvas.wxml-->
+<canvas type="2d" id="bgCanvas" class="container"></canvas>

@@ -2,6 +2,7 @@
   "navigationBarTitleText": "象棋打谱",
   "disableScroll": true,
   "usingComponents": {
-    "CursorCanvas":"/components/CursorCanvas/CursorCanvas"
+    "CursorCanvas": "/components/CursorCanvas/CursorCanvas",
+    "BgCanvas": "/components/BgCanvas/BgCanvas"
   }
 }
