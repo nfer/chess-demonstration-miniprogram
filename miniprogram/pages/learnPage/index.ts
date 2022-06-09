@@ -7,7 +7,6 @@ import { KeyInfo, KeyType, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
-const MIN_ASPECT_SHOW_STEPS = 1.9;
 const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
 const NONE_KEYPOS: KeyPos = { x: -1, y: -1 };
 
@@ -15,7 +14,6 @@ ComponentWithComputed({
   data: {
     scale: 1,
     aspect: 1,
-    showSteps: false,
     keyInfos: [] as Array<KeyInfo>,
     activeKey: BAD_LASTKEY, // 当前已经选中的棋子
     cursorPos: NONE_KEYPOS, // 当前的光标
@@ -55,7 +53,6 @@ ComponentWithComputed({
     async init() {
       const info = util.getBaseInfo();
       this.setData({
-        showSteps: info.screenAspect > MIN_ASPECT_SHOW_STEPS,
         scale: info.canvasScale,
         aspect: info.canvasAspect,
         keyMapFenStrs: [keyMapFenStr],
