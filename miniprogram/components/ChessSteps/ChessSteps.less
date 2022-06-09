@@ -1,0 +1,34 @@
+/* components/ChessSteps.wxss */
+.section__steps {
+  height: 300rpx;
+  margin: 15px;
+  padding: 10px;
+  border: 1px solid gray;
+  font-family: monospace;
+  font-size: 1.5em;
+
+  .step-idx {
+    margin-right: 10px;
+    width: 40px;
+    display: inline-block;
+    text-align: right;
+  }
+
+  .step-normal {
+    font-weight: normal;
+    width: 25px;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .step-black {
+    font-weight: bold;
+    padding-left: 10px;
+  }
+
+  &-error {
+    .last-step {
+      color: red;
+    }
+  }
+}
