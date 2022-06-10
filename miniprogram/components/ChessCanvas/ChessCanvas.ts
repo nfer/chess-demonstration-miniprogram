@@ -73,15 +73,19 @@ Component({
       }
 
       const focuskey = keyInfos.find(item => item.x === posX && item.y === posY);
-
-      // 场景二：点击在棋子上
-      if (focuskey) {
+      if (focuskey) { // 场景二：点击在棋子上
         console.debug('点击在棋子上', focuskey);
-        return;
+      } else { // 场景三：点击在网格上
+        console.debug('点击在网格上', posX, posY);
       }
 
-      // 场景三：点击在网格上
-      console.debug('点击在网格上', posX, posY);
+      const eventDetail = {
+        focuskey,
+        posX,
+        posY,
+      };
+      const eventOption = { bubbles: true, composed: true, capturePhase: true };
+      this.triggerEvent('onChessClick', eventDetail, eventOption);
     },
   },
 });
