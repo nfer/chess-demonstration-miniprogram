@@ -35,23 +35,6 @@ export const createCanvasContext = async (component: any, id: string) => {
   });
 };
 
-export const getContext = (res: any) => {
-  if (!res[0]?.node) {
-    throw new Error('select null');
-  }
-
-  const canvas = res[0].node;
-  const context = canvas.getContext('2d');
-
-  const info = wx.getSystemInfoSync();
-  canvas.width = res[0].width * info.pixelRatio;
-  canvas.height = res[0].height * info.pixelRatio;
-  const scale = info.screenWidth / CANVAS_WIDTH * info.pixelRatio;
-  context.scale(scale, scale);
-
-  return context;
-};
-
 export const drawChessBackground = async (context: any) => {
   // 底色
   context.fillStyle = '#f1cb9d';
