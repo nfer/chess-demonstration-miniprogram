@@ -10,12 +10,12 @@ import {
 } from './constants';
 import { KeyInfo, KeyType } from '../interface/index';
 
-const createCursorContext = async (id: string) => {
+export const createCanvasContext = async (component: any, id: string) => {
   return new Promise((resolve, reject) => {
-    const query = wx.createSelectorQuery();
+    const query = component.createSelectorQuery();
     query.select(`#${id}`)
       .fields({ node: true, size: true })
-      .exec((res) => {
+      .exec((res: any) => {
         if (!res || !res.length || !res[0]?.node) {
           reject(new Error('select null'));
           return;
@@ -33,23 +33,6 @@ const createCursorContext = async (id: string) => {
         resolve(context);
       });
   });
-};
-
-export const getContext = (res: any) => {
-  if (!res[0]?.node) {
-    throw new Error('select null');
-  }
-
-  const canvas = res[0].node;
-  const context = canvas.getContext('2d');
-
-  const info = wx.getSystemInfoSync();
-  canvas.width = res[0].width * info.pixelRatio;
-  canvas.height = res[0].height * info.pixelRatio;
-  const scale = info.screenWidth / CANVAS_WIDTH * info.pixelRatio;
-  context.scale(scale, scale);
-
-  return context;
 };
 
 export const drawChessBackground = async (context: any) => {
@@ -221,8 +204,7 @@ export const drawChessBackground = async (context: any) => {
   context.fillText('界', 7 * LINE_SPACE + MARGIN_HORIZONTAL - fontWidth, textY);
 };
 
-export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
-  const context = await createCursorContext(id) as any;
+export const drawChessKeys = async (context: any, keyInfos: Array<KeyInfo>) => {
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   context.font = `${LINE_SPACE * 0.40}px Helvetica`;
 

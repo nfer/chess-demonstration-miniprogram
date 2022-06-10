@@ -1,0 +1,2 @@
+<!--components/ChessCanvas/ChessCanvas.wxml-->
+<canvas type="2d" id="chessCanvas" class="container" bindtap="selectItem"></canvas>

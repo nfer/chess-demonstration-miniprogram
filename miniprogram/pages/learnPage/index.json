@@ -4,6 +4,7 @@
   "usingComponents": {
     "CursorCanvas": "/components/CursorCanvas/CursorCanvas",
     "BgCanvas": "/components/BgCanvas/BgCanvas",
+    "ChessCanvas": "/components/ChessCanvas/ChessCanvas",
     "ChessSteps": "/components/ChessSteps/ChessSteps"
   }
 }

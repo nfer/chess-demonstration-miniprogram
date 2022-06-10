@@ -1,5 +1,4 @@
 import { ComponentWithComputed } from 'miniprogram-computed';
-import { MARGIN_VERTICAL, MARGIN_HORIZONTAL } from '../../utils/constants';
 import * as util from '../../utils/util';
 import * as stepUtils from '../../utils/step';
 import { checkMove, checkSameCamp, checkSamePos } from '../../utils/checkMove';
@@ -12,7 +11,6 @@ const NONE_KEYPOS: KeyPos = { x: -1, y: -1 };
 
 ComponentWithComputed({
   data: {
-    scale: 1,
     aspect: 1,
     keyInfos: [] as Array<KeyInfo>,
     activeKey: BAD_LASTKEY, // 当前已经选中的棋子
@@ -53,7 +51,6 @@ ComponentWithComputed({
     async init() {
       const info = util.getBaseInfo();
       this.setData({
-        scale: info.canvasScale,
         aspect: info.canvasAspect,
         keyMapFenStrs: [keyMapFenStr],
       });
@@ -65,7 +62,7 @@ ComponentWithComputed({
         activeKey: BAD_LASTKEY,
         cursorPos: NONE_KEYPOS,
       });
-      util.drawChessKeys('itemCanvas', keyInfos);
+      // util.drawChessKeys('itemCanvas', keyInfos);
 
       this.data.keyMapFenStrs.push(util.getFenStr(keyInfos));
       this.setData({
@@ -119,7 +116,7 @@ ComponentWithComputed({
         keyInfos,
       });
 
-      util.drawChessKeys('itemCanvas', keyInfos);
+      // util.drawChessKeys('itemCanvas', keyInfos);
       this.setData({
         cursorPos: NONE_KEYPOS,
       });
@@ -133,7 +130,7 @@ ComponentWithComputed({
       this.updateKeyInfos(keyInfos, []);
     },
     selectItem(e: any) {
-      const { scale, keyInfos, activeKey, nowSteps, isSuccess, isError, hasActiveKey } = this.data;
+      const { keyInfos, activeKey, nowSteps, isSuccess, isError, hasActiveKey } = this.data;
       // 出错时不再响应棋盘交互
       if (isError) {
         console.warn('出错时不再响应棋盘交互');
@@ -146,19 +143,7 @@ ComponentWithComputed({
         return;
       }
 
-      const offsetX = Math.floor(e.detail.x / scale) - MARGIN_HORIZONTAL;
-      const offsetY = Math.floor(e.detail.y / scale) - MARGIN_VERTICAL;
-      const posX = Math.round(offsetX / 100);
-      const posY = Math.round(offsetY / 100);
-
-      // 场景一：点击在空白处
-      if (Math.abs(offsetX - posX * 100) > 30 || Math.abs(offsetY - posY * 100) > 30) {
-        return;
-      }
-
-      // 计算点击处是否有棋子
-      const focuskey = keyInfos.find(item => item.x === posX && item.y === posY);
-
+      const { focuskey, posX, posY } = e.detail as any;
       // 场景二：点击在棋子上
       if (focuskey) {
         console.debug('点击在棋子上', focuskey);
