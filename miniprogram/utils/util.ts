@@ -221,8 +221,7 @@ export const drawChessBackground = async (context: any) => {
   context.fillText('界', 7 * LINE_SPACE + MARGIN_HORIZONTAL - fontWidth, textY);
 };
 
-export const drawChessKeys = async (id: string, keyInfos: Array<KeyInfo>) => {
-  const context = await createCursorContext(id) as any;
+export const drawChessKeys = async (context: any, keyInfos: Array<KeyInfo>) => {
   context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   context.font = `${LINE_SPACE * 0.40}px Helvetica`;
 
