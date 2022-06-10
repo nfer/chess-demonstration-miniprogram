@@ -1,5 +1,5 @@
 // components/ChessCanvas/ChessCanvas.ts
-import { KeyInfo } from '../../interface';
+import { KeyInfo } from '../../interface/index';
 import { MARGIN_HORIZONTAL, MARGIN_VERTICAL } from '../../utils/constants';
 import * as util from '../../utils/util';
 
