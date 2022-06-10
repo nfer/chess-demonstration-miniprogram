@@ -12,10 +12,6 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    scale: {
-      type: Number,
-      value: 1,
-    },
     keyInfos: {
       type: Array,
       value: [],
@@ -26,6 +22,7 @@ Component({
    * 组件的初始数据
    */
   data: {
+    scale: 1,
   },
 
   observers: {
@@ -39,6 +36,12 @@ Component({
   },
 
   lifetimes: {
+    attached() {
+      const info = util.getBaseInfo();
+      this.setData({
+        scale: info.canvasScale,
+      });
+    },
     async ready() {
       context = await util.createCanvasContext(this, CANVAS_ID) as any;
       console.debug('ready', context);

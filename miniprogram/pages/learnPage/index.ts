@@ -11,7 +11,6 @@ const NONE_KEYPOS: KeyPos = { x: -1, y: -1 };
 
 ComponentWithComputed({
   data: {
-    scale: 1,
     aspect: 1,
     keyInfos: [] as Array<KeyInfo>,
     activeKey: BAD_LASTKEY, // 当前已经选中的棋子
@@ -52,7 +51,6 @@ ComponentWithComputed({
     async init() {
       const info = util.getBaseInfo();
       this.setData({
-        scale: info.canvasScale,
         aspect: info.canvasAspect,
         keyMapFenStrs: [keyMapFenStr],
       });
