@@ -10,12 +10,12 @@ import {
 } from './constants';
 import { KeyInfo, KeyType } from '../interface/index';
 
-const createCursorContext = async (id: string) => {
+export const createCanvasContext = async (component: any, id: string) => {
   return new Promise((resolve, reject) => {
-    const query = wx.createSelectorQuery();
+    const query = component.createSelectorQuery();
     query.select(`#${id}`)
       .fields({ node: true, size: true })
-      .exec((res) => {
+      .exec((res: any) => {
         if (!res || !res.length || !res[0]?.node) {
           reject(new Error('select null'));
           return;

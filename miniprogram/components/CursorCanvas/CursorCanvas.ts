@@ -49,7 +49,7 @@ Component({
 
   lifetimes: {
     async ready() {
-      context = await this.createCanvasContext(CANVAS_ID) as any;
+      context = await util.createCanvasContext(this, CANVAS_ID) as any;
       console.debug('ready', context);
     },
   },
@@ -58,19 +58,5 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    async createCanvasContext(id: string) {
-      return new Promise((resolve, reject) => {
-        const query = this.createSelectorQuery();
-        query.select(`#${id}`)
-          .fields({ node: true, size: true })
-          .exec((res) => {
-            try {
-              resolve(util.getContext(res));
-            } catch (error) {
-              reject(error);
-            }
-          });
-      });
-    },
   },
 });
