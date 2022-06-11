@@ -1,12 +1,12 @@
-<view class="section__full" style="height: {{aspect * 100}}vw;">
-  <BgCanvas class="section__image section__absolute" style="z-index: 0;"></BgCanvas>
-  <CursorCanvas class="section__image section__absolute" pos="{{cursorPos}}" style="z-index: 1;"></CursorCanvas>
-  <ChessCanvas class="section__image section__absolute" keyInfos="{{keyInfos}}" style="z-index: 2;" bind:onChessClick="selectItem"></ChessCanvas>
+<view class="section-full" style="height: {{aspect * 100}}vw;">
+  <BgCanvas class="section-image section-absolute" style="z-index: 0;"></BgCanvas>
+  <CursorCanvas class="section-image section-absolute" pos="{{cursorPos}}" style="z-index: 1;"></CursorCanvas>
+  <ChessCanvas class="section-image section-absolute" keyInfos="{{keyInfos}}" style="z-index: 2;" bind:onChessClick="selectItem"></ChessCanvas>
 </view>
 
 <ChessSteps steps="{{nowSteps}}" isError="{{isError}}"></ChessSteps>
 
-<view class="section__btns">
+<view class="section-btns">
   <button class="section__btn" type="default" bindtap="revert" disabled="{{nowSteps.length === 0}}">悔棋</button>
   <button class="section__btn" type="warn" bindtap="reload">重来</button>
 </view>
