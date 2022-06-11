@@ -4,6 +4,12 @@
  */
 export const LINE_SPACE = 100;
 
+/** 棋子的有效点击范围
+ *
+ * 主要用于计算棋子点击位置
+ */
+export const CHESS_TOUCH_RANGE = 45;
+
 /** 垂直间距
  *
  * 主要用于棋盘上下的边距

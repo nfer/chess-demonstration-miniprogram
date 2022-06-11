@@ -1,6 +1,6 @@
 // components/ChessCanvas/ChessCanvas.ts
 import { KeyInfo } from '../../interface/index';
-import { MARGIN_HORIZONTAL, MARGIN_VERTICAL } from '../../utils/constants';
+import { CHESS_TOUCH_RANGE, LINE_SPACE, MARGIN_HORIZONTAL, MARGIN_VERTICAL } from '../../utils/constants';
 import * as util from '../../utils/util';
 
 const CANVAS_ID = 'chessCanvas';
@@ -61,11 +61,11 @@ Component({
 
       const offsetX = Math.floor(e.detail.x / scale) - MARGIN_HORIZONTAL;
       const offsetY = Math.floor(e.detail.y / scale) - MARGIN_VERTICAL;
-      const posX = Math.round(offsetX / 100);
-      const posY = Math.round(offsetY / 100);
+      const posX = Math.round(offsetX / LINE_SPACE);
+      const posY = Math.round(offsetY / LINE_SPACE);
 
       // 场景一：点击在空白处
-      if (Math.abs(offsetX - posX * 100) > 30 || Math.abs(offsetY - posY * 100) > 30) {
+      if (Math.abs(offsetX - posX * LINE_SPACE) > CHESS_TOUCH_RANGE || Math.abs(offsetY - posY * LINE_SPACE) > CHESS_TOUCH_RANGE) {
         return;
       }
 
