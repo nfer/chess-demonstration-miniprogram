@@ -31,7 +31,10 @@ Component({
       if (!newValue.length) {
         return;
       }
-      this.initWithRetry(newValue);
+      if (!context) {
+        return;
+      }
+      util.drawChessKeys(context, newValue);
     },
   },
 
@@ -45,6 +48,7 @@ Component({
     async ready() {
       context = await util.createCanvasContext(this, CANVAS_ID) as any;
       console.debug('ready', context);
+      util.drawChessKeys(context, this.data.keyInfos);
     },
   },
 
@@ -52,16 +56,6 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    initWithRetry(keyInfos: Array<KeyInfo>) {
-      console.debug('initWithRetry', Date.now());
-      if (context) {
-        util.drawChessKeys(context, keyInfos);
-        return;
-      }
-
-      setTimeout(() => this.initWithRetry(keyInfos), 200);
-    },
-
     selectItem(e: any) {
       const { scale, keyInfos } = this.data;
 
