@@ -7,6 +7,6 @@
 <ChessSteps steps="{{nowSteps}}" isError="{{isError}}"></ChessSteps>
 
 <view class="section-btns">
-  <button class="section__btn" type="default" bindtap="revert" disabled="{{nowSteps.length === 0}}">悔棋</button>
-  <button class="section__btn" type="warn" bindtap="reload">重来</button>
+  <button class="section-btn" type="default" bindtap="revert" disabled="{{nowSteps.length === 0}}">悔棋</button>
+  <button class="section-btn" type="warn" bindtap="reload">重来</button>
 </view>
