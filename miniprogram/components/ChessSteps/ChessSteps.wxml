@@ -1,5 +1,5 @@
 <!--components/ChessSteps.wxml-->
-<view wx:if="{{isShow}}" class="section-steps {{isError ? 'section-steps-error' : ''}}">
+<view wx:if="{{isShow}}" class="section-container {{isError ? 'section-steps-error' : ''}}">
   <scroll-view class="section-list" wx:if="{{steps.length}}" scroll-y="true" scroll-top="{{steps.length * 30}}" scroll-with-animation="true">
     <view wx:for="{{steps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx" class="step-line">
       <text class="step-idx">{{idx + 1}}.</text>
