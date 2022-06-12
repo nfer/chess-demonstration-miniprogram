@@ -22,14 +22,14 @@ Component({
    * 组件的初始数据
    */
   data: {
-    isShow: false,
+    isVertical: false,
   },
 
   lifetimes: {
     attached() {
       const info = util.getBaseInfo();
       this.setData({
-        isShow: info.screenAspect > MIN_ASPECT_SHOW_STEPS,
+        isVertical: info.screenAspect > MIN_ASPECT_SHOW_STEPS,
       });
     },
   },
