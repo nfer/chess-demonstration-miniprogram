@@ -40,6 +40,11 @@ ComponentWithComputed({
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
+      const name = query.name || '象棋打谱';
+      wx.setNavigationBarTitle({
+        title: name,
+      });
+
       const id = Number(query.id) || 10001;
       const step = steps.find(item => item.id === id) || { id: -1, data: [] as Array<string> };
       this.setData({

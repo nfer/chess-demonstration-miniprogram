@@ -31,7 +31,7 @@ Page({
   },
   goToLearnlPage(chapter: ChapterInfo) {
     wx.navigateTo({
-      url: '../learnPage/index?id=' + chapter.id,
+      url: `../learnPage/index?id=${chapter.id}&name=${chapter.name}`,
     });
   },
 });
