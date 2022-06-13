@@ -1,6 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 
 import { KeyInfo } from '../interface/index';
+import Log from './log';
+
+const TAG = 'StepUtils';
 
 const IDX_NAME = [
   ['九', '八', '七', '六', '五', '四', '三', '二', '一'],
@@ -13,7 +16,7 @@ const RANGE_NAME = [
 ];
 
 export const getStep = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) => {
-  // console.log(keyInfo.x, keyInfo.y, x, y);
+  Log.d(TAG, `getStep from(${keyInfo.x}, ${keyInfo.y}) to(${x}, ${y})`);
   let type = '';
   let from = '';
   let to = '';
@@ -46,7 +49,7 @@ export const getStep = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y
   const sameKeys = keyInfos
     .filter(item => item.key === keyInfo.key && item.x === keyInfo.x)
     .sort((a, b) => a.type ? b.y - a.y : a.y - b.y);
-    // console.log(sameKeys.length, sameKeys);
+  Log.d(TAG, 'getStep sameKeys.length:', sameKeys.length);
   if (sameKeys.length > 1) {
     if (sameKeys[0].hash === keyInfo.hash) {
       from = `前${keyInfo.name}`;
