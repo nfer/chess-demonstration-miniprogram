@@ -98,7 +98,8 @@ ComponentWithComputed({
         });
       }
     },
-    // 事件处理函数
+    // ======= 事件处理函数 =======
+    // 悔棋
     revert() {
       // 棋局记录最少2条才可以回退
       if (this.data.keyMapFenStrs.length < 2) {
@@ -137,6 +138,7 @@ ComponentWithComputed({
       const keyInfos = util.parseFenStr(keyMapFenStr);
       this.updateKeyInfos(keyInfos, []);
     },
+    // 点击
     selectItem(e: any) {
       const { keyInfos, activeKey, nowSteps, isSuccess, isError, hasActiveKey } = this.data;
       // 出错时不再响应棋盘交互
@@ -232,6 +234,18 @@ ComponentWithComputed({
 
         this.updateKeyInfos(keyInfos, nowSteps);
       }
+    },
+    // 提示
+    hint() {
+      const { nowSteps, expectSteps } = this.data;
+      const idx = nowSteps.length;
+      const content = expectSteps[idx];
+      Log.d(TAG, 'hint', idx, content);
+      wx.showModal({
+        title: '提示',
+        content: content,
+        showCancel: false,
+      });
     },
   },
 });
