@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 class Log {
   i(...args: Array<any>) {
     console.info.apply(console, Array.prototype.slice.call(args));

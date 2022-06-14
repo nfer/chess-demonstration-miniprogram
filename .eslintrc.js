@@ -18,6 +18,7 @@ module.exports = {
   ],
   rules: {
     'react/jsx-filename-extension': 'off',
+    'no-console': 'error',
   },
   globals: {
     App: true,
