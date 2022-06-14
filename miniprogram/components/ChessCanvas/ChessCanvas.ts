@@ -2,8 +2,10 @@
 import { KeyInfo } from '../../interface/index';
 import { CHESS_TOUCH_RANGE, LINE_SPACE, MARGIN_HORIZONTAL, MARGIN_VERTICAL } from '../../utils/constants';
 import * as util from '../../utils/util';
+import Log from '../../utils/log';
 
 const CANVAS_ID = 'chessCanvas';
+const TAG = 'ChessCanvas';
 
 let context = null as any;
 
@@ -27,7 +29,7 @@ Component({
 
   observers: {
     keyInfos(newValue: Array<KeyInfo>) {
-      console.debug('keyInfos changed', newValue);
+      Log.d(TAG, 'keyInfos changed', newValue);
       if (!newValue.length) {
         return;
       }
@@ -47,7 +49,7 @@ Component({
     },
     async ready() {
       context = await util.createCanvasContext(this, CANVAS_ID) as any;
-      console.debug('ready', context);
+      Log.d(TAG, 'ready', context);
       util.drawChessKeys(context, this.data.keyInfos);
     },
   },
@@ -71,9 +73,9 @@ Component({
 
       const focuskey = keyInfos.find(item => item.x === posX && item.y === posY);
       if (focuskey) { // 场景二：点击在棋子上
-        console.debug('点击在棋子上', focuskey);
+        Log.d(TAG, '点击在棋子上', focuskey);
       } else { // 场景三：点击在网格上
-        console.debug('点击在网格上', posX, posY);
+        Log.d(TAG, '点击在网格上', posX, posY);
       }
 
       const eventDetail = {

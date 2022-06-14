@@ -1,4 +1,7 @@
 import { KeyInfo } from '../interface/index';
+import Log from './log';
+
+const TAG = 'CheckMove';
 
 // 将
 function checkKMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
@@ -198,11 +201,11 @@ export const checkBlockMove = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: nu
 
 export const checkMove = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) => {
   const posCheck = checkPosMove(keyInfo, x, y);
-  // console.log('checkMove posCheck:', posCheck);
+  Log.d(TAG, 'posCheck:', posCheck);
   if (!posCheck) return false;
 
   const blockCheck = checkBlockMove(keyInfo, keyInfos, x, y);
-  // console.log('checkMove blockCheck:', blockCheck);
+  Log.d(TAG, 'blockCheck:', blockCheck);
   if (blockCheck) return false;
 
   return true;

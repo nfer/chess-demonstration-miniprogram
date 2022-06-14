@@ -1,7 +1,10 @@
 // components/BgCanvas.ts
 import * as util from '../../utils/util';
+import Log from '../../utils/log';
 
 const CANVAS_ID = 'bgCanvas';
+
+const TAG = 'BgCanvas';
 
 let context = null as any;
 
@@ -21,7 +24,7 @@ Component({
   lifetimes: {
     async ready() {
       context = await util.createCanvasContext(this, CANVAS_ID) as any;
-      console.debug('ready', context);
+      Log.d(TAG, 'ready', context);
       util.drawChessBackground(context);
     },
   },
