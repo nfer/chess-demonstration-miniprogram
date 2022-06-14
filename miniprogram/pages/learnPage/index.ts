@@ -98,8 +98,7 @@ ComponentWithComputed({
         });
       }
     },
-    // ======= 事件处理函数 =======
-    // 悔棋
+    // 按钮事件：悔棋
     revert() {
       // 棋局记录最少2条才可以回退
       if (this.data.keyMapFenStrs.length < 2) {
@@ -130,6 +129,19 @@ ComponentWithComputed({
         cursorPos: NONE_KEYPOS,
       });
     },
+    // 按钮事件：提示
+    hint() {
+      const { nowSteps, expectSteps } = this.data;
+      const idx = nowSteps.length;
+      const content = expectSteps[idx];
+      Log.d(TAG, 'hint', idx, content);
+      wx.showModal({
+        title: '提示',
+        content: content,
+        showCancel: false,
+      });
+    },
+    // 按钮事件：重来
     reload() {
       this.setData({
         nowSteps: [],
@@ -138,8 +150,8 @@ ComponentWithComputed({
       const keyInfos = util.parseFenStr(keyMapFenStr);
       this.updateKeyInfos(keyInfos, []);
     },
-    // 点击
-    selectItem(e: any) {
+    // 棋子点击事件
+    onChessClick(e: any) {
       const { keyInfos, activeKey, nowSteps, isSuccess, isError, hasActiveKey } = this.data;
       // 出错时不再响应棋盘交互
       if (isError) {
@@ -234,18 +246,6 @@ ComponentWithComputed({
 
         this.updateKeyInfos(keyInfos, nowSteps);
       }
-    },
-    // 提示
-    hint() {
-      const { nowSteps, expectSteps } = this.data;
-      const idx = nowSteps.length;
-      const content = expectSteps[idx];
-      Log.d(TAG, 'hint', idx, content);
-      wx.showModal({
-        title: '提示',
-        content: content,
-        showCancel: false,
-      });
     },
   },
 });

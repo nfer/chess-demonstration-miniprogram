@@ -1,7 +1,7 @@
 <view class="section-full" style="height: {{aspect * 100}}vw;">
   <BgCanvas class="section-image section-absolute" style="z-index: 0;"></BgCanvas>
   <CursorCanvas class="section-image section-absolute" pos="{{cursorPos}}" style="z-index: 1;"></CursorCanvas>
-  <ChessCanvas class="section-image section-absolute" keyInfos="{{keyInfos}}" style="z-index: 2;" bind:onChessClick="selectItem"></ChessCanvas>
+  <ChessCanvas class="section-image section-absolute" keyInfos="{{keyInfos}}" style="z-index: 2;" bind:onChessClick="onChessClick"></ChessCanvas>
 </view>
 
 <ChessSteps steps="{{nowSteps}}" isError="{{isError}}"></ChessSteps>
