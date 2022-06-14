@@ -1,9 +1,12 @@
 // components/CursorCanvas.ts
 import { KeyPos } from '../../interface/index';
 import * as util from '../../utils/util';
+import Log from '../../utils/log';
 
 const CANVAS_ID = 'cursorCanvas';
 const NONE_POS: KeyPos = { x: -1, y: -1 };
+
+const TAG = 'CursorCanvas';
 
 let context = null as any;
 
@@ -29,7 +32,7 @@ Component({
     pos(newValue: Object) {
       const { lastPos } = this.data;
       const pos = newValue as KeyPos;
-      console.debug('pos changed', pos, lastPos);
+      Log.d(TAG, 'pos changed', pos, lastPos);
 
       // 绘制当前光标
       if (pos.x !== -1 && pos.y !== -1) {
@@ -50,7 +53,7 @@ Component({
   lifetimes: {
     async ready() {
       context = await util.createCanvasContext(this, CANVAS_ID) as any;
-      console.debug('ready', context);
+      Log.d(TAG, 'ready', context);
     },
   },
 
