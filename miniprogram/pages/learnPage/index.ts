@@ -19,7 +19,6 @@ ComponentWithComputed({
   data: {
     aspect: 1,
     keyInfos: [] as Array<KeyInfo>,
-    cursorPos: NONE_KEYPOS, // 当前的光标
     nowSteps: [] as Array<string>,
     _activeKey: BAD_LASTKEY, // 当前已经选中的棋子
     _expectSteps: [] as Array<string>,
@@ -42,6 +41,17 @@ ComponentWithComputed({
     },
     hasActiveKey(data): boolean {
       return data._activeKey.type !== KeyType.NONE;
+    },
+    // 当前的光标
+    cursorPos(data): KeyPos {
+      if (data._activeKey.type === KeyType.NONE) {
+        return NONE_KEYPOS;
+      }
+
+      return {
+        x: data._activeKey.x,
+        y: data._activeKey.y,
+      };
     },
   },
   methods: {
@@ -71,7 +81,6 @@ ComponentWithComputed({
       this.setData({
         keyInfos,
         _activeKey: BAD_LASTKEY,
-        cursorPos: NONE_KEYPOS,
       });
 
       this.data._keyMapFenStrs.push(util.getFenStr(keyInfos));
@@ -124,10 +133,6 @@ ComponentWithComputed({
       const keyInfos = util.parseFenStr(fenStr);
       this.setData({
         keyInfos,
-      });
-
-      this.setData({
-        cursorPos: NONE_KEYPOS,
       });
     },
     // 按钮事件：提示
@@ -186,7 +191,6 @@ ComponentWithComputed({
           Log.d(TAG, '选择棋子', focuskey);
           this.setData({
             _activeKey: focuskey,
-            cursorPos: { x: posX, y: posY },
           });
           return;
         }
@@ -196,7 +200,6 @@ ComponentWithComputed({
           Log.d(TAG, '取消选择棋子', focuskey);
           this.setData({
             _activeKey: BAD_LASTKEY,
-            cursorPos: NONE_KEYPOS,
           });
           return;
         }
@@ -206,7 +209,6 @@ ComponentWithComputed({
           Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
           this.setData({
             _activeKey: focuskey,
-            cursorPos: { x: posX, y: posY },
           });
           return;
         }
