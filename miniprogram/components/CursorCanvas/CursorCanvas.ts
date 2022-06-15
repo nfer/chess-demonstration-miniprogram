@@ -30,6 +30,8 @@ Component({
 
   observers: {
     pos(newValue: Object) {
+      if (!newValue) return;
+
       const { lastPos } = this.data;
       const pos = newValue as KeyPos;
       Log.d(TAG, 'pos changed', pos, lastPos);
