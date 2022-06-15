@@ -17,6 +17,7 @@ module.exports = {
     'import',
   ],
   rules: {
+    '@typescript-eslint/naming-convention': 'off',
     'react/jsx-filename-extension': 'off',
     'no-console': 'error',
   },
