@@ -73,7 +73,6 @@ ComponentWithComputed({
         _activeKey: BAD_LASTKEY,
         cursorPos: NONE_KEYPOS,
       });
-      // util.drawChessKeys('itemCanvas', keyInfos);
 
       this.data._keyMapFenStrs.push(util.getFenStr(keyInfos));
       this.setData({
@@ -127,7 +126,6 @@ ComponentWithComputed({
         keyInfos,
       });
 
-      // util.drawChessKeys('itemCanvas', keyInfos);
       this.setData({
         cursorPos: NONE_KEYPOS,
       });
