@@ -134,6 +134,11 @@ ComponentWithComputed({
       this.setData({
         keyInfos,
       });
+
+      // 重置当前已经选中的棋子
+      this.setData({
+        _activeKey: BAD_LASTKEY,
+      });
     },
     // 按钮事件：提示
     hint() {
