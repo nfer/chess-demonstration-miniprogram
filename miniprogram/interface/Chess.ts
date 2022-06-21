@@ -126,6 +126,35 @@ class Chess {
       };
     }
 
+    // 场景三：点击在网格上
+    Log.d(TAG, '点击在网格上', x, y);
+    if (_activeKey.type !== KeyType.NONE) {
+      if (!checkMove(_activeKey, keyInfos, x, y)) {
+        Log.w(TAG, '无法移动到目标位置', _activeKey, focuskey);
+        return {
+          changed: [],
+          status: STATUS.WARN,
+          msg: '出错了，无法移动到目标位置”',
+        };
+      }
+
+      //  移动棋子
+      Log.d(TAG, '移动棋子', _activeKey, focuskey);
+      const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
+      nowSteps.push(curStep);
+
+      const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
+      keyInfos[idx].y = y;
+      keyInfos[idx].x = x;
+
+      this.updateKeyInfos(keyInfos, nowSteps);
+      return {
+        changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
+        status: STATUS.OK,
+        msg: '移动棋子',
+      };
+    }
+
     return {
       changed: [],
       status: STATUS.OK,
