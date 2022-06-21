@@ -26,6 +26,13 @@ class Chess {
 
   _activeKey = BAD_LASTKEY; // 当前已经选中的棋子
 
+  constructor() {
+    this.init = this.init.bind(this);
+    this.hasActiveKey = this.hasActiveKey.bind(this);
+    this.click = this.click.bind(this);
+    this.updateKeyInfos = this.updateKeyInfos.bind(this);
+  }
+
   init(keyMapFenStr = '') {
     let str = keyMapFenStr;
     if (!str) {
@@ -49,7 +56,7 @@ class Chess {
     // 场景二：点击在棋子上
     if (focuskey) {
       Log.d(TAG, '点击在棋子上', focuskey);
-      if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && !hasActiveKey) {
+      if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && !hasActiveKey()) {
         return {
           changed: [],
           status: STATUS.WARN,
@@ -67,7 +74,7 @@ class Chess {
       }
 
       // 1.1 选择棋子
-      if (!hasActiveKey) {
+      if (!hasActiveKey()) {
         Log.d(TAG, '选择棋子', focuskey);
         this._activeKey = { ...focuskey };
         return {
