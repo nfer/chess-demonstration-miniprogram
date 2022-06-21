@@ -6,6 +6,16 @@ import { checkMove, checkSameCamp, checkSamePos } from '../utils/checkMove';
 
 const TAG = 'ChessClass';
 const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
+enum STATUS {
+  OK = 0,
+  WARN,
+  ERROR,
+}
+enum CHANGE_TYPE {
+  KEYINFO,
+  ACTIVEKEY,
+  NOWSTEPS,
+}
 
 class Chess {
   _keyMapFenStrs = [] as Array<string>;
@@ -40,38 +50,62 @@ class Chess {
     if (focuskey) {
       Log.d(TAG, '点击在棋子上', focuskey);
       if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && !hasActiveKey) {
-        throw new Error('出错了，违反规则“执红棋的一方先走”');
+        return {
+          changed: [],
+          status: STATUS.WARN,
+          msg: '出错了，违反规则“执红棋的一方先走”',
+        };
       }
 
       const lastKeyType = nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
       if (_activeKey.type === KeyType.NONE && lastKeyType === focuskey.type) {
-        throw new Error('出错了，违反规则“双方轮流各走一着”');
+        return {
+          changed: [],
+          status: STATUS.WARN,
+          msg: '出错了，违反规则“双方轮流各走一着”',
+        };
       }
 
       // 1.1 选择棋子
       if (!hasActiveKey) {
         Log.d(TAG, '选择棋子', focuskey);
         this._activeKey = { ...focuskey };
-        return;
+        return {
+          changed: [CHANGE_TYPE.ACTIVEKEY],
+          status: STATUS.OK,
+          msg: '选择棋子',
+        };
       }
 
       // 1.2 取消选择棋子
       if (checkSamePos(_activeKey, focuskey)) {
         Log.d(TAG, '取消选择棋子', focuskey);
         this._activeKey = { ...BAD_LASTKEY };
-        return;
+        return {
+          changed: [CHANGE_TYPE.ACTIVEKEY],
+          status: STATUS.OK,
+          msg: '取消选择棋子',
+        };
       }
 
       // 1.3 同色棋子，点击后进行焦点更新
       if (checkSameCamp(_activeKey, focuskey)) {
         Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
         this._activeKey = { ...focuskey };
-        return;
+        return {
+          changed: [CHANGE_TYPE.ACTIVEKEY],
+          status: STATUS.OK,
+          msg: '同色棋子，点击后进行焦点更新',
+        };
       }
 
       if (!checkMove(_activeKey, keyInfos, focuskey.x, focuskey.y)) {
         Log.w(TAG, '无法移动到目标位置', _activeKey, focuskey);
-        return;
+        return {
+          changed: [],
+          status: STATUS.WARN,
+          msg: '出错了，无法移动到目标位置”',
+        };
       }
 
       //  1.4 吃掉棋子
@@ -85,8 +119,18 @@ class Chess {
       const newKeyInfos = keyInfos.filter(item => item.hash !== focuskey.hash);
 
       this.updateKeyInfos(newKeyInfos, nowSteps);
-      return;
+      return {
+        changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
+        status: STATUS.OK,
+        msg: '吃掉棋子',
+      };
     }
+
+    return {
+      changed: [],
+      status: STATUS.OK,
+      msg: '',
+    };
   }
 
   updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {
