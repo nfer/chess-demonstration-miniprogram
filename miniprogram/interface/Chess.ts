@@ -6,12 +6,12 @@ import { checkMove, checkSameCamp, checkSamePos } from '../utils/checkMove';
 
 const TAG = 'ChessClass';
 const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
-enum STATUS {
+export enum STATUS {
   OK = 0,
   WARN,
   ERROR,
 }
-enum CHANGE_TYPE {
+export enum CHANGE_TYPE {
   KEYINFO,
   ACTIVEKEY,
   NOWSTEPS,

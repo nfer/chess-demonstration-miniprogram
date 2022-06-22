@@ -1,11 +1,9 @@
 import { ComponentWithComputed } from 'miniprogram-computed';
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
-import * as stepUtils from '../../utils/step';
-import { checkMove, checkSameCamp, checkSamePos } from '../../utils/checkMove';
 import { KeyInfo, KeyType, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
-import Chess from '../../interface/Chess';
+import Chess, { CHANGE_TYPE, STATUS } from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
 const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
@@ -170,7 +168,7 @@ ComponentWithComputed({
     },
     // 棋子点击事件
     onChessClick(e: any) {
-      const { keyInfos, _activeKey, nowSteps, isSuccess, isError, hasActiveKey, _chess } = this.data;
+      const { isSuccess, isError, _chess } = this.data;
       // 出错时不再响应棋盘交互
       if (isError) {
         Log.w(TAG, '出错时不再响应棋盘交互');
@@ -183,87 +181,53 @@ ComponentWithComputed({
         return;
       }
 
-      const { focuskey, posX, posY } = e.detail as any;
+      const { posX, posY } = e.detail as any;
 
       const result = _chess.click(posX, posY);
-      Log.e(TAG, '_chess.click', result);
+      Log.d(TAG, '_chess.click', result);
 
-      // 场景二：点击在棋子上
-      if (focuskey) {
-        Log.d(TAG, '点击在棋子上', focuskey);
-        if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && !hasActiveKey) {
-          Log.w(TAG, '出错了，违反规则“执红棋的一方先走”');
-          return;
-        }
-
-        const lastKeyType = nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-        if (_activeKey.type === KeyType.NONE && lastKeyType === focuskey.type) {
-          Log.w(TAG, '出错了，违反规则“双方轮流各走一着”');
-          return;
-        }
-
-        // 1.1 选择棋子
-        if (!hasActiveKey) {
-          Log.d(TAG, '选择棋子', focuskey);
-          this.setData({
-            _activeKey: focuskey,
-          });
-          return;
-        }
-
-        // 1.2 取消选择棋子
-        if (checkSamePos(_activeKey, focuskey)) {
-          Log.d(TAG, '取消选择棋子', focuskey);
-          this.setData({
-            _activeKey: BAD_LASTKEY,
-          });
-          return;
-        }
-
-        // 1.3 同色棋子，点击后进行焦点更新
-        if (checkSameCamp(_activeKey, focuskey)) {
-          Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
-          this.setData({
-            _activeKey: focuskey,
-          });
-          return;
-        }
-
-        if (!checkMove(_activeKey, keyInfos, focuskey.x, focuskey.y)) {
-          Log.w(TAG, '无法移动到目标位置', _activeKey, focuskey);
-          return;
-        }
-
-        //  1.4 吃掉棋子
-        Log.d(TAG, '吃掉棋子', _activeKey, focuskey);
-        const curStep = stepUtils.getStep(_activeKey, keyInfos, posX, posY);
-        nowSteps.push(curStep);
-
-        const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
-        keyInfos[idx].y = posY;
-        keyInfos[idx].x = posX;
-        const newKeyInfos = keyInfos.filter(item => item.hash !== focuskey.hash);
-
-        this.updateKeyInfos(newKeyInfos, nowSteps);
+      // WARN级别只做日志打印，后续可以使用声音提示
+      if (result.status === STATUS.WARN) {
+        Log.w(TAG, result.msg);
         return;
       }
 
-      // 场景三：点击在网格上
-      Log.d(TAG, '点击在网格上', posX, posY);
-      if (_activeKey.type !== KeyType.NONE) {
-        if (!checkMove(_activeKey, keyInfos, posX, posY)) {
-          Log.w(TAG, 'bad posistion for _activeKey', _activeKey, posX, posY);
-          return;
-        }
+      // ERROR级别使用Toast提示用户
+      if (result.status === STATUS.ERROR) {
+        Log.e(TAG, result.msg);
+        wx.showToast({
+          title: result.msg,
+          icon: 'error',
+          duration: 2000,
+        });
+        return;
+      }
 
-        const curStep = stepUtils.getStep(_activeKey, keyInfos, posX, posY);
-        nowSteps.push(curStep);
+      // 没有改变则直接返回
+      if (result.changed.length === 0) {
+        Log.d(TAG, '没有改变');
+        return;
+      }
 
-        const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
-        keyInfos[idx].y = posY;
-        keyInfos[idx].x = posX;
+      // 当前棋子改变
+      if (result.changed.includes(CHANGE_TYPE.ACTIVEKEY)) {
+        this.setData({
+          _activeKey: _chess._activeKey,
+        });
+      }
 
-        this.updateKeyInfos(keyInfos, nowSteps);
+      // 棋谱改变
+      if (result.changed.includes(CHANGE_TYPE.NOWSTEPS)) {
+        this.setData({
+          nowSteps: [..._chess.nowSteps],
+        });
+      }
+
+      // 棋局改变
+      if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
+        this.setData({
+          keyInfos: [..._chess.keyInfos],
+        });
       }
     },
   },
