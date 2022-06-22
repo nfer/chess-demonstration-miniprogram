@@ -5,6 +5,7 @@ import * as stepUtils from '../../utils/step';
 import { checkMove, checkSameCamp, checkSamePos } from '../../utils/checkMove';
 import { KeyInfo, KeyType, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
+import Chess from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
 const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
@@ -23,6 +24,7 @@ ComponentWithComputed({
     _activeKey: BAD_LASTKEY, // 当前已经选中的棋子
     _expectSteps: [] as Array<string>,
     _keyMapFenStrs: [] as Array<string>,
+    _chess: {} as Chess,
   },
   computed: {
     isError(data): boolean {
@@ -67,6 +69,11 @@ ComponentWithComputed({
         _expectSteps: step.data,
       });
 
+      const chess = new Chess();
+      chess.init(keyMapFenStr);
+      this.setData({
+        _chess: chess,
+      });
       this.init();
     },
     async init() {
@@ -163,7 +170,7 @@ ComponentWithComputed({
     },
     // 棋子点击事件
     onChessClick(e: any) {
-      const { keyInfos, _activeKey, nowSteps, isSuccess, isError, hasActiveKey } = this.data;
+      const { keyInfos, _activeKey, nowSteps, isSuccess, isError, hasActiveKey, _chess } = this.data;
       // 出错时不再响应棋盘交互
       if (isError) {
         Log.w(TAG, '出错时不再响应棋盘交互');
@@ -177,6 +184,10 @@ ComponentWithComputed({
       }
 
       const { focuskey, posX, posY } = e.detail as any;
+
+      const result = _chess.click(posX, posY);
+      Log.e(TAG, '_chess.click', result);
+
       // 场景二：点击在棋子上
       if (focuskey) {
         Log.d(TAG, '点击在棋子上', focuskey);
