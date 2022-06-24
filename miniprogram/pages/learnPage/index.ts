@@ -56,11 +56,22 @@ ComponentWithComputed({
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
+      // UI设置相关
       const name = query.name || '象棋打谱';
       wx.setNavigationBarTitle({
         title: name,
       });
+      const info = util.getBaseInfo();
+      this.setData({
+        aspect: info.canvasAspect,
+      });
 
+      // 棋面记录
+      this.setData({
+        _keyMapFenStrs: [keyMapFenStr],
+      });
+
+      // 正确棋谱
       const id = Number(query.id) || 10001;
       const step = steps.find(item => item.id === id) || { id: -1, data: [] as Array<string> };
       this.setData({
@@ -71,14 +82,6 @@ ComponentWithComputed({
       chess.init(keyMapFenStr);
       this.setData({
         _chess: chess,
-      });
-      this.init();
-    },
-    async init() {
-      const info = util.getBaseInfo();
-      this.setData({
-        aspect: info.canvasAspect,
-        _keyMapFenStrs: [keyMapFenStr],
       });
       this.reload();
     },
