@@ -39,9 +39,6 @@ ComponentWithComputed({
 
       return data.nowSteps.length === data._expectSteps.length;
     },
-    hasActiveKey(data): boolean {
-      return data._activeKey.type !== KeyType.NONE;
-    },
     // 当前的光标
     cursorPos(data): KeyPos {
       if (data._activeKey.type === KeyType.NONE) {
@@ -84,21 +81,6 @@ ComponentWithComputed({
         _chess: chess,
       });
       this.reload();
-    },
-    updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {
-      this.setData({
-        keyInfos,
-        _activeKey: BAD_LASTKEY,
-      });
-
-      this.data._keyMapFenStrs.push(util.getFenStr(keyInfos));
-      this.setData({
-        _keyMapFenStrs: this.data._keyMapFenStrs,
-      });
-
-      this.setData({
-        nowSteps,
-      });
     },
     // 按钮事件：悔棋
     revert() {
