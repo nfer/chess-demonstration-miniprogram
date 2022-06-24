@@ -1,12 +1,11 @@
 import { ComponentWithComputed } from 'miniprogram-computed';
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
-import { KeyInfo, KeyPos } from '../../interface/index';
+import { KeyInfo, EMPTY_KEYPOS } from '../../interface/index';
 import { steps } from '../../data/steps';
 import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
-const NONE_KEYPOS: KeyPos = { x: -1, y: -1 };
 
 const TAG = 'LearnPage';
 
@@ -18,7 +17,7 @@ ComponentWithComputed({
     aspect: 1,
     keyInfos: [] as Array<KeyInfo>,
     nowSteps: [] as Array<string>,
-    cursorPos: NONE_KEYPOS, // 当前光标
+    cursorPos: EMPTY_KEYPOS, // 当前光标
     _expectSteps: [] as Array<string>,
     _keyMapFenStrs: [] as Array<string>,
     _chess: {} as Chess,

@@ -1,11 +1,10 @@
-import { KeyInfo, KeyPos, KeyType } from './index';
+import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
 import { checkMove, checkSameCamp, checkSamePos } from '../utils/checkMove';
 
 const TAG = 'ChessClass';
-const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: -1, y: -1 };
 export enum STATUS {
   OK = 0,
   WARN,
@@ -28,7 +27,7 @@ class Chess {
 
   nowSteps = [] as Array<string>;
 
-  private _activeKey = BAD_LASTKEY; // 当前已经选中的棋子
+  private _activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
 
   private _fenStr = ''; // 初始化时的棋局
 
@@ -96,7 +95,7 @@ class Chess {
       // 1.2 取消选择棋子
       if (checkSamePos(_activeKey, focuskey)) {
         Log.d(TAG, '取消选择棋子', focuskey);
-        this._activeKey = { ...BAD_LASTKEY };
+        this._activeKey = { ...EMPTY_KEYINFO };
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -182,7 +181,7 @@ class Chess {
     this._keyMapFenStrs.push(this._fenStr);
     this.keyInfos = util.parseFenStr(this._fenStr);
     this.nowSteps = [];
-    this._activeKey = BAD_LASTKEY;
+    this._activeKey = EMPTY_KEYINFO;
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -212,7 +211,7 @@ class Chess {
     this.keyInfos = util.parseFenStr(fenStr);
 
     // 重置当前已经选中的棋子
-    this._activeKey = BAD_LASTKEY;
+    this._activeKey = EMPTY_KEYINFO;
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -223,7 +222,7 @@ class Chess {
 
   updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {
     this.keyInfos = [...keyInfos];
-    this._activeKey = BAD_LASTKEY;
+    this._activeKey = EMPTY_KEYINFO;
     this._keyMapFenStrs.push(util.getFenStr(keyInfos));
     this.nowSteps = [...nowSteps];
   }
