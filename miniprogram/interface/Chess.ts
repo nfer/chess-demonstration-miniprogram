@@ -32,6 +32,8 @@ class Chess {
 
   _activeKey = BAD_LASTKEY; // 当前已经选中的棋子
 
+  private _fenStr = ''; // 初始化时的棋局
+
   constructor() {
     this.init = this.init.bind(this);
     this.hasActiveKey = this.hasActiveKey.bind(this);
@@ -40,15 +42,9 @@ class Chess {
   }
 
   init(keyMapFenStr = '') {
-    let str = keyMapFenStr;
-    if (!str) {
-      str = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
-    }
+    this._fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
 
-    this._keyMapFenStrs.push(str);
-    this.keyInfos = util.parseFenStr(str);
-    this.nowSteps = [];
-    this._activeKey = BAD_LASTKEY;
+    return this.reload();
   }
 
   // helper
@@ -172,6 +168,19 @@ class Chess {
       changed: [],
       status: STATUS.OK,
       msg: '',
+    };
+  }
+
+  reload() {
+    this._keyMapFenStrs.push(this._fenStr);
+    this.keyInfos = util.parseFenStr(this._fenStr);
+    this.nowSteps = [];
+    this._activeKey = BAD_LASTKEY;
+
+    return {
+      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
+      status: STATUS.OK,
+      msg: '初始化',
     };
   }
 

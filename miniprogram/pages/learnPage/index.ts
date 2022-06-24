@@ -159,12 +159,8 @@ ComponentWithComputed({
     },
     // 按钮事件：重来
     reload() {
-      this.setData({
-        nowSteps: [],
-        _keyMapFenStrs: [],
-      });
-      const keyInfos = util.parseFenStr(keyMapFenStr);
-      this.updateKeyInfos(keyInfos, []);
+      const result = this.data._chess.reload();
+      this.handleChessResult(this.data._chess, result);
     },
     // 棋子点击事件
     onChessClick(e: any) {
