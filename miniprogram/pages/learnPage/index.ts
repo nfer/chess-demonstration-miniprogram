@@ -99,23 +99,6 @@ ComponentWithComputed({
       this.setData({
         nowSteps,
       });
-
-      if (this.data.isError) {
-        wx.showToast({
-          title: '出错了！',
-          icon: 'error',
-          duration: 2000,
-        });
-        return;
-      }
-
-      if (this.data.isSuccess) {
-        wx.showToast({
-          title: '打谱成功',
-          icon: 'success',
-          duration: 2000,
-        });
-      }
     },
     // 按钮事件：悔棋
     revert() {
@@ -229,6 +212,23 @@ ComponentWithComputed({
       if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
         this.setData({
           keyInfos: [..._chess.keyInfos],
+        });
+      }
+
+      if (this.data.isError) {
+        wx.showToast({
+          title: '出错了！',
+          icon: 'error',
+          duration: 2000,
+        });
+        return;
+      }
+
+      if (this.data.isSuccess) {
+        wx.showToast({
+          title: '打谱成功',
+          icon: 'success',
+          duration: 2000,
         });
       }
     },
