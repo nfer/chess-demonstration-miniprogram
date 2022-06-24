@@ -24,8 +24,6 @@ export interface ChessResult {
 }
 
 class Chess {
-  _keyMapFenStrs = [] as Array<string>;
-
   keyInfos = [] as Array<KeyInfo>;
 
   nowSteps = [] as Array<string>;
@@ -33,6 +31,8 @@ class Chess {
   _activeKey = BAD_LASTKEY; // 当前已经选中的棋子
 
   private _fenStr = ''; // 初始化时的棋局
+
+  private _keyMapFenStrs = [] as Array<string>;
 
   constructor() {
     this.init = this.init.bind(this);
@@ -181,6 +181,36 @@ class Chess {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
       status: STATUS.OK,
       msg: '初始化',
+    };
+  }
+
+  revert() {
+    // 棋局记录最少2条才可以回退
+    if (this._keyMapFenStrs.length < 2) {
+      return {
+        changed: [],
+        status: STATUS.OK,
+        msg: '',
+      };
+    }
+
+    // 去除最后一条棋局记录
+    this._keyMapFenStrs.pop();
+
+    // 去除最后一条棋谱记录
+    this.nowSteps.pop();
+
+    // 取回退后的最后一条棋局进行重新渲染
+    const fenStr = this._keyMapFenStrs[this._keyMapFenStrs.length - 1];
+    this.keyInfos = util.parseFenStr(fenStr);
+
+    // 重置当前已经选中的棋子
+    this._activeKey = BAD_LASTKEY;
+
+    return {
+      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
+      status: STATUS.OK,
+      msg: '悔棋',
     };
   }
 

@@ -84,34 +84,8 @@ ComponentWithComputed({
     },
     // 按钮事件：悔棋
     revert() {
-      // 棋局记录最少2条才可以回退
-      if (this.data._keyMapFenStrs.length < 2) {
-        return;
-      }
-
-      // 去除最后一条棋局记录
-      this.data._keyMapFenStrs.pop();
-      this.setData({
-        _keyMapFenStrs: this.data._keyMapFenStrs,
-      });
-
-      // 去除最后一条棋谱记录
-      this.data.nowSteps.pop();
-      this.setData({
-        nowSteps: this.data.nowSteps,
-      });
-
-      // 取回退后的最后一条棋局进行重新渲染
-      const fenStr = this.data._keyMapFenStrs[this.data._keyMapFenStrs.length - 1];
-      const keyInfos = util.parseFenStr(fenStr);
-      this.setData({
-        keyInfos,
-      });
-
-      // 重置当前已经选中的棋子
-      this.setData({
-        _activeKey: BAD_LASTKEY,
-      });
+      const result = this.data._chess.revert();
+      this.handleChessResult(this.data._chess, result);
     },
     // 按钮事件：提示
     hint() {
