@@ -1,12 +1,11 @@
 import { ComponentWithComputed } from 'miniprogram-computed';
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
-import { KeyInfo, KeyType, KeyPos } from '../../interface/index';
+import { KeyInfo, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
 import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
-const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
 const NONE_KEYPOS: KeyPos = { x: -1, y: -1 };
 
 const TAG = 'LearnPage';
@@ -19,7 +18,7 @@ ComponentWithComputed({
     aspect: 1,
     keyInfos: [] as Array<KeyInfo>,
     nowSteps: [] as Array<string>,
-    _activeKey: BAD_LASTKEY, // 当前已经选中的棋子
+    cursorPos: NONE_KEYPOS, // 当前光标
     _expectSteps: [] as Array<string>,
     _keyMapFenStrs: [] as Array<string>,
     _chess: {} as Chess,
@@ -38,17 +37,6 @@ ComponentWithComputed({
       }
 
       return data.nowSteps.length === data._expectSteps.length;
-    },
-    // 当前的光标
-    cursorPos(data): KeyPos {
-      if (data._activeKey.type === KeyType.NONE) {
-        return NONE_KEYPOS;
-      }
-
-      return {
-        x: data._activeKey.x,
-        y: data._activeKey.y,
-      };
     },
   },
   methods: {
@@ -153,7 +141,10 @@ ComponentWithComputed({
       // 当前棋子改变
       if (result.changed.includes(CHANGE_TYPE.ACTIVEKEY)) {
         this.setData({
-          _activeKey: _chess._activeKey,
+          cursorPos: {
+            x: _chess._activeKey.x,
+            y: _chess._activeKey.y,
+          },
         });
       }
 

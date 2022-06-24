@@ -5,7 +5,7 @@ import Log from '../utils/log';
 import { checkMove, checkSameCamp, checkSamePos } from '../utils/checkMove';
 
 const TAG = 'ChessClass';
-const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
+const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: -1, y: -1 };
 export enum STATUS {
   OK = 0,
   WARN,
