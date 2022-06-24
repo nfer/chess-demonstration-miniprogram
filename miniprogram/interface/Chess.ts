@@ -17,6 +17,12 @@ export enum CHANGE_TYPE {
   NOWSTEPS,
 }
 
+export interface ChessResult {
+  changed: Array<CHANGE_TYPE>;
+  status: STATUS;
+  msg: string;
+}
+
 class Chess {
   _keyMapFenStrs = [] as Array<string>;
 

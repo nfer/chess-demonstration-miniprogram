@@ -3,7 +3,7 @@ import * as util from '../../utils/util';
 import Log from '../../utils/log';
 import { KeyInfo, KeyType, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
-import Chess, { CHANGE_TYPE, STATUS } from '../../interface/Chess';
+import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
 const BAD_LASTKEY: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: 0, y: 0 };
@@ -185,7 +185,10 @@ ComponentWithComputed({
 
       const result = _chess.click(posX, posY);
       Log.d(TAG, '_chess.click', result);
+      this.handleChessResult(_chess, result);
+    },
 
+    handleChessResult(_chess: Chess, result: ChessResult) {
       // WARN级别只做日志打印，后续可以使用声音提示
       if (result.status === STATUS.WARN) {
         Log.w(TAG, result.msg);
