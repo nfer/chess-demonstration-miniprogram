@@ -141,10 +141,7 @@ ComponentWithComputed({
       // 当前棋子改变
       if (result.changed.includes(CHANGE_TYPE.ACTIVEKEY)) {
         this.setData({
-          cursorPos: {
-            x: _chess._activeKey.x,
-            y: _chess._activeKey.y,
-          },
+          cursorPos: _chess.getCursorPos(),
         });
       }
 

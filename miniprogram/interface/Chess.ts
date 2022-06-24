@@ -1,4 +1,4 @@
-import { KeyInfo, KeyType } from './index';
+import { KeyInfo, KeyPos, KeyType } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
@@ -28,7 +28,7 @@ class Chess {
 
   nowSteps = [] as Array<string>;
 
-  _activeKey = BAD_LASTKEY; // 当前已经选中的棋子
+  private _activeKey = BAD_LASTKEY; // 当前已经选中的棋子
 
   private _fenStr = ''; // 初始化时的棋局
 
@@ -45,6 +45,13 @@ class Chess {
     this._fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
 
     return this.reload();
+  }
+
+  getCursorPos(): KeyPos {
+    return {
+      x: this._activeKey.x,
+      y: this._activeKey.y,
+    };
   }
 
   // helper
