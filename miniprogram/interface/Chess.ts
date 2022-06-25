@@ -1,4 +1,4 @@
-import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO } from './index';
+import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
@@ -25,7 +25,7 @@ export interface ChessResult {
 class Chess {
   keyInfos = [] as Array<KeyInfo>;
 
-  nowSteps = [] as Array<string>;
+  nowSteps = [] as Array<StepInfo>;
 
   private _activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
 
@@ -69,7 +69,7 @@ class Chess {
       return false;
     }
 
-    return this.nowSteps.some((value, index) => value !== this._expectSteps[index]);
+    return this.nowSteps.some((step, index) => step.name !== this._expectSteps[index]);
   }
 
   isSuccess(): boolean {
@@ -148,7 +148,7 @@ class Chess {
       //  1.4 吃掉棋子
       Log.d(TAG, '吃掉棋子', _activeKey, focuskey);
       const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
-      nowSteps.push(curStep);
+      nowSteps.push({ name: curStep, type: false });
 
       const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
       keyInfos[idx].x = x;
@@ -178,7 +178,7 @@ class Chess {
       //  移动棋子
       Log.d(TAG, '移动棋子', _activeKey, focuskey);
       const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
-      nowSteps.push(curStep);
+      nowSteps.push({ name: curStep, type: false });
 
       const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
       keyInfos[idx].y = y;
@@ -250,7 +250,7 @@ class Chess {
     return content;
   }
 
-  updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {
+  updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<StepInfo>) {
     this.keyInfos = [...keyInfos];
     this._activeKey = EMPTY_KEYINFO;
     this._keyMapFenStrs.push(util.getFenStr(keyInfos));

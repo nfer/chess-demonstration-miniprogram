@@ -18,6 +18,11 @@ export interface KeyPos {
   y: number;
 }
 
+export interface StepInfo {
+  name: string;
+  type: boolean;
+}
+
 export interface ChapterInfo {
   id: number;
   type: string;

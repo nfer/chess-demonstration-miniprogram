@@ -1,6 +1,6 @@
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
-import { KeyInfo, EMPTY_KEYPOS, KeyPos } from '../../interface/index';
+import { KeyInfo, EMPTY_KEYPOS, KeyPos, StepInfo } from '../../interface/index';
 import { steps } from '../../data/steps';
 import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
 
@@ -15,7 +15,7 @@ Component({
   data: {
     aspect: 1,
     keyInfos: [] as Array<KeyInfo>,
-    nowSteps: [] as Array<string>,
+    nowSteps: [] as Array<StepInfo>,
     cursorPos: EMPTY_KEYPOS, // 当前光标
     _chess: {} as Chess,
     isError: false,
