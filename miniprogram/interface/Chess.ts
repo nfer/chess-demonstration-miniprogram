@@ -255,6 +255,10 @@ class Chess {
     this._activeKey = EMPTY_KEYINFO;
     this._keyMapFenStrs.push(util.getFenStr(keyInfos));
     this.nowSteps = [...nowSteps];
+    if (this.isError()) {
+      const len = this.nowSteps.length;
+      this.nowSteps[len - 1].type = true;
+    }
   }
 }
 
