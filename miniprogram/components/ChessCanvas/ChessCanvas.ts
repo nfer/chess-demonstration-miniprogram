@@ -1,5 +1,5 @@
 // components/ChessCanvas/ChessCanvas.ts
-import { KeyInfo } from '../../interface/index';
+import { KeyInfo, KeyPos } from '../../interface/index';
 import { CHESS_TOUCH_RANGE, LINE_SPACE, MARGIN_HORIZONTAL, MARGIN_VERTICAL } from '../../utils/constants';
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
@@ -59,7 +59,7 @@ Component({
    */
   methods: {
     selectItem(e: any) {
-      const { scale, keyInfos } = this.data;
+      const { scale } = this.data;
 
       const offsetX = Math.floor(e.detail.x / scale) - MARGIN_HORIZONTAL;
       const offsetY = Math.floor(e.detail.y / scale) - MARGIN_VERTICAL;
@@ -71,17 +71,9 @@ Component({
         return;
       }
 
-      const focuskey = keyInfos.find(item => item.x === posX && item.y === posY);
-      if (focuskey) { // 场景二：点击在棋子上
-        Log.d(TAG, '点击在棋子上', focuskey);
-      } else { // 场景三：点击在网格上
-        Log.d(TAG, '点击在网格上', posX, posY);
-      }
-
-      const eventDetail = {
-        focuskey,
-        posX,
-        posY,
+      const eventDetail: KeyPos = {
+        x: posX,
+        y: posY,
       };
       const eventOption = { bubbles: true, composed: true, capturePhase: true };
       this.triggerEvent('onChessClick', eventDetail, eventOption);

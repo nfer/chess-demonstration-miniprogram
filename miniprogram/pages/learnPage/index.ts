@@ -1,7 +1,7 @@
 import { ComponentWithComputed } from 'miniprogram-computed';
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
-import { KeyInfo, EMPTY_KEYPOS } from '../../interface/index';
+import { KeyInfo, EMPTY_KEYPOS, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
 import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
 
@@ -100,9 +100,9 @@ ComponentWithComputed({
         return;
       }
 
-      const { posX, posY } = e.detail as any;
+      const { x, y } = e.detail as KeyPos;
 
-      const result = _chess.click(posX, posY);
+      const result = _chess.click(x, y);
       Log.d(TAG, '_chess.click', result);
       this.handleChessResult(_chess, result);
     },
