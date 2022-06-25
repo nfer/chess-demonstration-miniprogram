@@ -3,7 +3,7 @@ import * as util from '../../utils/util';
 import Log from '../../utils/log';
 import { KeyInfo, EMPTY_KEYPOS, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
-import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
+import Chess, { CHANGE_TYPE, ChessResult, STATUS, STEP_RESULT } from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
 
@@ -20,22 +20,7 @@ ComponentWithComputed({
     cursorPos: EMPTY_KEYPOS, // 当前光标
     _expectSteps: [] as Array<string>,
     _chess: {} as Chess,
-  },
-  computed: {
-    isError(data): boolean {
-      if (data.nowSteps.length === 0) {
-        return false;
-      }
-
-      return data.nowSteps.some((value, index) => value !== data._expectSteps[index]);
-    },
-    isSuccess(data): boolean {
-      if (data.nowSteps.length === 0) {
-        return false;
-      }
-
-      return data.nowSteps.length === data._expectSteps.length;
-    },
+    isError: false,
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
@@ -52,12 +37,10 @@ ComponentWithComputed({
       // 正确棋谱
       const id = Number(query.id) || 10001;
       const step = steps.find(item => item.id === id) || { id: -1, data: [] as Array<string> };
-      this.setData({
-        _expectSteps: step.data,
-      });
 
       const chess = new Chess();
       chess.init(keyMapFenStr);
+      chess.setExpectSteps(step.data);
       this.setData({
         _chess: chess,
       });
@@ -87,15 +70,15 @@ ComponentWithComputed({
     },
     // 棋子点击事件
     onChessClick(e: WechatMiniprogram.CustomEvent) {
-      const { isSuccess, isError, _chess } = this.data;
+      const { _chess } = this.data;
       // 出错时不再响应棋盘交互
-      if (isError) {
+      if (_chess.isError()) {
         Log.w(TAG, '出错时不再响应棋盘交互');
         return;
       }
 
       // 打谱成功时不再响应棋盘交互
-      if (isSuccess) {
+      if (_chess.isSuccess()) {
         Log.w(TAG, '打谱成功时不再响应棋盘交互');
         return;
       }
@@ -152,7 +135,11 @@ ComponentWithComputed({
         });
       }
 
-      if (this.data.isError) {
+      this.setData({
+        isError: result.result === STEP_RESULT.ERROR,
+      });
+
+      if (result.result === STEP_RESULT.ERROR) {
         wx.showToast({
           title: '出错了！',
           icon: 'error',
@@ -161,7 +148,7 @@ ComponentWithComputed({
         return;
       }
 
-      if (this.data.isSuccess) {
+      if (result.result === STEP_RESULT.SUCCESS) {
         wx.showToast({
           title: '打谱成功',
           icon: 'success',
