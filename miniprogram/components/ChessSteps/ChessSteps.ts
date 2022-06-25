@@ -12,10 +12,6 @@ Component({
       type: Array,
       value: [],
     },
-    isError: {
-      type: Boolean,
-      value: false,
-    },
   },
 
   /**

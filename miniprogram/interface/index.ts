@@ -18,6 +18,11 @@ export interface KeyPos {
   y: number;
 }
 
+export interface StepInfo {
+  name: string;
+  error: boolean;
+}
+
 export interface ChapterInfo {
   id: number;
   type: string;
@@ -29,3 +34,6 @@ export interface BookInfo {
   name: string;
   chapters: Array<ChapterInfo>;
 }
+
+export const EMPTY_KEYPOS: KeyPos = { x: -1, y: -1 };
+export const EMPTY_KEYINFO: KeyInfo = { hash: '', key: '', name: '', type: KeyType.NONE, x: -1, y: -1 };

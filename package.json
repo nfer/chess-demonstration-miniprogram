@@ -14,8 +14,7 @@
     "miniprogram/**/*.ts": "npm run lint"
   },
   "dependencies": {
-    "fast-deep-equal": "^3.1.3",
-    "miniprogram-computed": "^4.3.8"
+    "fast-deep-equal": "^3.1.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.27.0",
