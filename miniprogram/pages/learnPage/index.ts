@@ -1,4 +1,3 @@
-import { ComponentWithComputed } from 'miniprogram-computed';
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
 import { KeyInfo, EMPTY_KEYPOS, KeyPos } from '../../interface/index';
@@ -9,7 +8,7 @@ const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABN
 
 const TAG = 'LearnPage';
 
-ComponentWithComputed({
+Component({
   options: {
     pureDataPattern: /^_/, // 指定所有 _ 开头的数据字段为纯数据字段
   },
