@@ -86,7 +86,7 @@ ComponentWithComputed({
       this.handleChessResult(this.data._chess, result);
     },
     // 棋子点击事件
-    onChessClick(e: any) {
+    onChessClick(e: WechatMiniprogram.CustomEvent) {
       const { isSuccess, isError, _chess } = this.data;
       // 出错时不再响应棋盘交互
       if (isError) {

@@ -58,7 +58,7 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    selectItem(e: any) {
+    selectItem(e: WechatMiniprogram.TouchEvent) {
       const { scale } = this.data;
 
       const offsetX = Math.floor(e.detail.x / scale) - MARGIN_HORIZONTAL;
