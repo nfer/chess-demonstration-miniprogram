@@ -15,17 +15,11 @@ export enum CHANGE_TYPE {
   ACTIVEKEY,
   NOWSTEPS,
 }
-export enum STEP_RESULT {
-  NONE = 0,
-  SUCCESS,
-  ERROR,
-}
 
 export interface ChessResult {
   changed: Array<CHANGE_TYPE>;
   status: STATUS;
   msg: string;
-  result: STEP_RESULT;
 }
 
 class Chess {
@@ -97,7 +91,6 @@ class Chess {
           changed: [],
           status: STATUS.WARN,
           msg: '出错了，违反规则“执红棋的一方先走”',
-          result: STEP_RESULT.NONE,
         };
       }
 
@@ -107,7 +100,6 @@ class Chess {
           changed: [],
           status: STATUS.WARN,
           msg: '出错了，违反规则“双方轮流各走一着”',
-          result: STEP_RESULT.NONE,
         };
       }
 
@@ -119,7 +111,6 @@ class Chess {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
           msg: '选择棋子',
-          result: STEP_RESULT.NONE,
         };
       }
 
@@ -131,7 +122,6 @@ class Chess {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
           msg: '取消选择棋子',
-          result: STEP_RESULT.NONE,
         };
       }
 
@@ -143,7 +133,6 @@ class Chess {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
           msg: '同色棋子，点击后进行焦点更新',
-          result: STEP_RESULT.NONE,
         };
       }
 
@@ -153,7 +142,6 @@ class Chess {
           changed: [],
           status: STATUS.WARN,
           msg: '出错了，无法移动到目标位置”',
-          result: STEP_RESULT.NONE,
         };
       }
 
@@ -172,7 +160,6 @@ class Chess {
         changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
         status: STATUS.OK,
         msg: '吃掉棋子',
-        result: this.isSuccess() ? STEP_RESULT.SUCCESS : this.isError() ? STEP_RESULT.ERROR : STEP_RESULT.NONE,
       };
     }
 
@@ -185,7 +172,6 @@ class Chess {
           changed: [],
           status: STATUS.WARN,
           msg: '出错了，无法移动到目标位置”',
-          result: STEP_RESULT.NONE,
         };
       }
 
@@ -203,7 +189,6 @@ class Chess {
         changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
         status: STATUS.OK,
         msg: '移动棋子',
-        result: this.isSuccess() ? STEP_RESULT.SUCCESS : this.isError() ? STEP_RESULT.ERROR : STEP_RESULT.NONE,
       };
     }
 
@@ -211,7 +196,6 @@ class Chess {
       changed: [],
       status: STATUS.OK,
       msg: '',
-      result: STEP_RESULT.NONE,
     };
   }
 
@@ -225,7 +209,6 @@ class Chess {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
       status: STATUS.OK,
       msg: '初始化',
-      result: STEP_RESULT.NONE,
     };
   }
 
@@ -236,7 +219,6 @@ class Chess {
         changed: [],
         status: STATUS.OK,
         msg: '',
-        result: STEP_RESULT.NONE,
       };
     }
 
@@ -257,7 +239,6 @@ class Chess {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
       status: STATUS.OK,
       msg: '悔棋',
-      result: STEP_RESULT.NONE,
     };
   }
 

@@ -2,7 +2,7 @@ import * as util from '../../utils/util';
 import Log from '../../utils/log';
 import { KeyInfo, EMPTY_KEYPOS, KeyPos } from '../../interface/index';
 import { steps } from '../../data/steps';
-import Chess, { CHANGE_TYPE, ChessResult, STATUS, STEP_RESULT } from '../../interface/Chess';
+import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
 
@@ -132,10 +132,10 @@ Component({
       }
 
       this.setData({
-        isError: result.result === STEP_RESULT.ERROR,
+        isError: _chess.isError(),
       });
 
-      if (result.result === STEP_RESULT.ERROR) {
+      if (_chess.isError()) {
         wx.showToast({
           title: '出错了！',
           icon: 'error',
@@ -144,7 +144,7 @@ Component({
         return;
       }
 
-      if (result.result === STEP_RESULT.SUCCESS) {
+      if (_chess.isSuccess()) {
         wx.showToast({
           title: '打谱成功',
           icon: 'success',
