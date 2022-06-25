@@ -19,7 +19,6 @@ ComponentWithComputed({
     nowSteps: [] as Array<string>,
     cursorPos: EMPTY_KEYPOS, // 当前光标
     _expectSteps: [] as Array<string>,
-    _keyMapFenStrs: [] as Array<string>,
     _chess: {} as Chess,
   },
   computed: {
@@ -48,11 +47,6 @@ ComponentWithComputed({
       const info = util.getBaseInfo();
       this.setData({
         aspect: info.canvasAspect,
-      });
-
-      // 棋面记录
-      this.setData({
-        _keyMapFenStrs: [keyMapFenStr],
       });
 
       // 正确棋谱
