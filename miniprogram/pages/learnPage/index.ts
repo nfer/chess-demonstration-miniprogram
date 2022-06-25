@@ -18,7 +18,6 @@ Component({
     nowSteps: [] as Array<StepInfo>,
     cursorPos: EMPTY_KEYPOS, // 当前光标
     _chess: {} as Chess,
-    isError: false,
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
@@ -130,10 +129,6 @@ Component({
           keyInfos: [..._chess.keyInfos],
         });
       }
-
-      this.setData({
-        isError: _chess.isError(),
-      });
 
       if (_chess.isError()) {
         wx.showToast({
