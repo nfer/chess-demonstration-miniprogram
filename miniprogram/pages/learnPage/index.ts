@@ -18,7 +18,6 @@ ComponentWithComputed({
     keyInfos: [] as Array<KeyInfo>,
     nowSteps: [] as Array<string>,
     cursorPos: EMPTY_KEYPOS, // 当前光标
-    _expectSteps: [] as Array<string>,
     _chess: {} as Chess,
     isError: false,
   },
@@ -53,13 +52,11 @@ ComponentWithComputed({
     },
     // 按钮事件：提示
     hint() {
-      const { nowSteps, _expectSteps: expectSteps } = this.data;
-      const idx = nowSteps.length;
-      const content = expectSteps[idx];
-      Log.d(TAG, 'hint', idx, content);
+      const hint = this.data._chess.getHint();
+      Log.d(TAG, 'hint', hint);
       wx.showModal({
         title: '提示',
-        content: content,
+        content: hint,
         showCancel: false,
       });
     },

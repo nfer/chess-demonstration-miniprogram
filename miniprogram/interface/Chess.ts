@@ -261,6 +261,14 @@ class Chess {
     };
   }
 
+  getHint() {
+    const { nowSteps, _expectSteps } = this;
+    const idx = nowSteps.length;
+    const content = _expectSteps[idx];
+    Log.d(TAG, 'hint', idx, content);
+    return content;
+  }
+
   updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<string>) {
     this.keyInfos = [...keyInfos];
     this._activeKey = EMPTY_KEYINFO;
