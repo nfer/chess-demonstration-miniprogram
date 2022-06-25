@@ -1,7 +1,7 @@
 <!--components/ChessSteps.wxml-->
 <view wx:if="{{isVertical}}" class="section-container">
   <scroll-view class="section-list" wx:if="{{steps.length}}" scroll-y="true" scroll-top="{{steps.length * 30}}" scroll-with-animation="true">
-    <view wx:for="{{steps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx" class="step-line {{item.type ? 'step-line-error' : ''}}">
+    <view wx:for="{{steps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx" class="step-line {{item.error ? 'step-line-error' : ''}}">
       <text class="step-idx">{{idx + 1}}.</text>
       <text class="step-text">{{item.name[0]}}</text>
       <text class="step-text">{{item.name[1]}}</text>
@@ -13,7 +13,7 @@
 
 <view wx:if="{{!isVertical}}" class="section-container-horizontal">
   <scroll-view class="section-list" wx:if="{{steps.length}}" scroll-x="true" scroll-left="{{steps.length * 150}}" scroll-with-animation="true">
-    <view wx:for="{{steps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx" class="step-line {{item.type ? 'step-line-error' : ''}}">
+    <view wx:for="{{steps}}" wx:for-item="item" wx:key="Id" wx:for-index="idx" class="step-line {{item.error ? 'step-line-error' : ''}}">
       <text class="step-text">{{item.name[0]}}</text>
       <text class="step-text">{{item.name[1]}}</text>
       <text class="step-text">{{item.name[2]}}</text>

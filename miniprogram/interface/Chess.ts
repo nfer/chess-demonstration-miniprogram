@@ -148,7 +148,7 @@ class Chess {
       //  1.4 吃掉棋子
       Log.d(TAG, '吃掉棋子', _activeKey, focuskey);
       const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
-      nowSteps.push({ name: curStep, type: false });
+      nowSteps.push({ name: curStep, error: false });
 
       const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
       keyInfos[idx].x = x;
@@ -178,7 +178,7 @@ class Chess {
       //  移动棋子
       Log.d(TAG, '移动棋子', _activeKey, focuskey);
       const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
-      nowSteps.push({ name: curStep, type: false });
+      nowSteps.push({ name: curStep, error: false });
 
       const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
       keyInfos[idx].y = y;
@@ -257,7 +257,7 @@ class Chess {
     this.nowSteps = [...nowSteps];
     if (this.isError()) {
       const len = this.nowSteps.length;
-      this.nowSteps[len - 1].type = true;
+      this.nowSteps[len - 1].error = true;
     }
   }
 }

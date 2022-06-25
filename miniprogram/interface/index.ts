@@ -20,7 +20,7 @@ export interface KeyPos {
 
 export interface StepInfo {
   name: string;
-  type: boolean;
+  error: boolean;
 }
 
 export interface ChapterInfo {
