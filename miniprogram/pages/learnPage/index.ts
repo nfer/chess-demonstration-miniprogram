@@ -8,6 +8,8 @@ const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABN
 
 const TAG = 'LearnPage';
 
+const audioCtx = wx.createInnerAudioContext();
+
 Component({
   options: {
     pureDataPattern: /^_/, // 指定所有 _ 开头的数据字段为纯数据字段
@@ -131,6 +133,8 @@ Component({
       }
 
       if (_chess.isError()) {
+        audioCtx.src = 'pages/learnPage/warn.mp3';
+        audioCtx.play();
         wx.showToast({
           title: '出错了！',
           icon: 'error',
@@ -140,6 +144,8 @@ Component({
       }
 
       if (_chess.isSuccess()) {
+        audioCtx.src = 'pages/learnPage/success.mp3';
+        audioCtx.play();
         wx.showToast({
           title: '打谱成功',
           icon: 'success',
