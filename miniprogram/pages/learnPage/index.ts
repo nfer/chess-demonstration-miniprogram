@@ -68,18 +68,6 @@ Component({
     // 棋子点击事件
     onChessClick(e: WechatMiniprogram.CustomEvent) {
       const { _chess } = this.data;
-      // 出错时不再响应棋盘交互
-      if (_chess.isError()) {
-        Log.w(TAG, '出错时不再响应棋盘交互');
-        return;
-      }
-
-      // 打谱成功时不再响应棋盘交互
-      if (_chess.isSuccess()) {
-        Log.w(TAG, '打谱成功时不再响应棋盘交互');
-        return;
-      }
-
       const { x, y } = e.detail as KeyPos;
 
       const result = _chess.click(x, y);

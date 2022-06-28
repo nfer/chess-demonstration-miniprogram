@@ -81,6 +81,27 @@ class Chess {
   }
 
   click(x: number, y: number) {
+    Log.d(TAG, `click at (${x}, ${y})`);
+    // 出错时不再响应棋盘交互
+    if (this.isError()) {
+      Log.w(TAG, '出错时不再响应棋盘交互');
+      return {
+        changed: [],
+        status: STATUS.WARN,
+        msg: '出错时不再响应棋盘交互',
+      };
+    }
+
+    // 打谱成功时不再响应棋盘交互
+    if (this.isSuccess()) {
+      Log.w(TAG, '打谱成功时不再响应棋盘交互');
+      return {
+        changed: [],
+        status: STATUS.WARN,
+        msg: '打谱成功时不再响应棋盘交互',
+      };
+    }
+
     const { keyInfos, nowSteps, hasActiveKey, _activeKey } = this;
     const focuskey = keyInfos.find(item => item.x === x && item.y === y);
     // 场景二：点击在棋子上
