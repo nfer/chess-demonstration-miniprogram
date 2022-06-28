@@ -67,12 +67,10 @@ Component({
     },
     // 棋子点击事件
     onChessClick(e: WechatMiniprogram.CustomEvent) {
-      const { _chess } = this.data;
       const { x, y } = e.detail as KeyPos;
 
-      const result = _chess.click(x, y);
-      Log.d(TAG, '_chess.click', result);
-      this.handleChessResult(_chess, result);
+      const result = this.data._chess.click(x, y);
+      this.handleChessResult(this.data._chess, result);
     },
 
     handleChessResult(_chess: Chess, result: ChessResult) {
