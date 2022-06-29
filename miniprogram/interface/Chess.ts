@@ -179,7 +179,7 @@ class Chess {
 
     const { keyInfos, nowSteps, hasActiveKey, _activeKey } = this;
     const focuskey = keyInfos.find(item => item.x === x && item.y === y);
-    // 场景二：点击在棋子上
+    // 场景：点击在棋子上
     if (focuskey) {
       Log.d(TAG, '点击在棋子上', focuskey);
 
@@ -252,9 +252,9 @@ class Chess {
       };
     }
 
-    // 场景三：点击在网格上
+    // 场景：点击在网格上
     Log.d(TAG, '点击在网格上', x, y);
-    if (_activeKey.type !== KeyType.NONE) {
+    if (this.hasActiveKey()) {
       //  移动棋子
       Log.d(TAG, '移动棋子', _activeKey, focuskey);
       const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
