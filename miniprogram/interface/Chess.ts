@@ -122,6 +122,21 @@ class Chess {
     return focuskey.type === KeyType.RED;
   }
 
+  /**
+   * 判断规则“双方轮流各走一着”
+   *
+   * @param focuskey KeyInfo
+   */
+  checkCrossMove(focuskey: KeyInfo): boolean {
+    // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
+    if (this.hasActiveKey()) {
+      return true;
+    }
+
+    const lastKeyType = this.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
+    return focuskey.type === lastKeyType;
+  }
+
   checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
     return keyInfo1.type === keyInfo2.type;
   }
@@ -177,8 +192,8 @@ class Chess {
         };
       }
 
-      const lastKeyType = nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-      if (_activeKey.type === KeyType.NONE && lastKeyType === focuskey.type) {
+      // 判断规则“双方轮流各走一着”
+      if (!this.checkCrossMove(focuskey)) {
         return {
           changed: [],
           status: STATUS.WARN,
