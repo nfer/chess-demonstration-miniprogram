@@ -2,7 +2,7 @@ import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
-import { checkMove, checkSameCamp, checkSamePos } from '../utils/checkMove';
+import { checkPosMove, checkBlockMove, checkSameCamp, checkSamePos } from '../utils/checkMove';
 
 const TAG = 'ChessClass';
 export enum STATUS {
@@ -80,6 +80,29 @@ class Chess {
     return this.nowSteps.length === this._expectSteps.length;
   }
 
+  checkMove(x: number, y: number): boolean {
+    // 当前没有已选中棋子时，直接返回成功
+    if (!this.hasActiveKey()) {
+      return true;
+    }
+
+    // 判断是否可以移动到指定位置
+    const posCheck = checkPosMove(this._activeKey, x, y);
+    Log.d(TAG, 'posCheck:', posCheck);
+    if (!posCheck) {
+      return false;
+    }
+
+    // 判断移动到指定位置是否有阻碍，比如绊马腿、塞象眼
+    const blockCheck = checkBlockMove(this._activeKey, this.keyInfos, x, y);
+    Log.d(TAG, 'blockCheck:', blockCheck);
+    if (!posCheck) {
+      return false;
+    }
+
+    return true;
+  }
+
   click(x: number, y: number) {
     Log.d(TAG, `click at (${x}, ${y})`);
     // 出错时不再响应棋盘交互
@@ -99,6 +122,15 @@ class Chess {
         changed: [],
         status: STATUS.WARN,
         msg: '打谱成功时不再响应棋盘交互',
+      };
+    }
+
+    if (!this.checkMove(x, y)) {
+      Log.w(TAG, '无法移动到目标位置');
+      return {
+        changed: [],
+        status: STATUS.WARN,
+        msg: '出错了，无法移动到目标位置”',
       };
     }
 
@@ -157,15 +189,6 @@ class Chess {
         };
       }
 
-      if (!checkMove(_activeKey, keyInfos, focuskey.x, focuskey.y)) {
-        Log.w(TAG, '无法移动到目标位置', _activeKey, focuskey);
-        return {
-          changed: [],
-          status: STATUS.WARN,
-          msg: '出错了，无法移动到目标位置”',
-        };
-      }
-
       //  1.4 吃掉棋子
       Log.d(TAG, '吃掉棋子', _activeKey, focuskey);
       const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
@@ -187,15 +210,6 @@ class Chess {
     // 场景三：点击在网格上
     Log.d(TAG, '点击在网格上', x, y);
     if (_activeKey.type !== KeyType.NONE) {
-      if (!checkMove(_activeKey, keyInfos, x, y)) {
-        Log.w(TAG, '无法移动到目标位置', _activeKey, focuskey);
-        return {
-          changed: [],
-          status: STATUS.WARN,
-          msg: '出错了，无法移动到目标位置”',
-        };
-      }
-
       //  移动棋子
       Log.d(TAG, '移动棋子', _activeKey, focuskey);
       const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
