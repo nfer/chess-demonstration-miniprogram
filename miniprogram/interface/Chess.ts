@@ -133,6 +133,7 @@ class Chess {
       };
     }
 
+    // 判断是否可以移动到指定位置
     if (!this.checkMove(x, y)) {
       Log.w(TAG, '无法移动到目标位置');
       return {
