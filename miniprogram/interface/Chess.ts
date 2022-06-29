@@ -2,7 +2,7 @@ import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
-import { checkPosMove, checkBlockMove, checkSameCamp, checkSamePos } from '../utils/checkMove';
+import { checkPosMove, checkBlockMove } from '../utils/checkMove';
 
 const TAG = 'ChessClass';
 export enum STATUS {
@@ -103,6 +103,14 @@ class Chess {
     return true;
   }
 
+  checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
+    return keyInfo1.type === keyInfo2.type;
+  }
+
+  checkSamePos(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
+    return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
+  }
+
   click(x: number, y: number) {
     Log.d(TAG, `click at (${x}, ${y})`);
     // 出错时不再响应棋盘交互
@@ -168,7 +176,7 @@ class Chess {
       }
 
       // 1.2 取消选择棋子
-      if (checkSamePos(_activeKey, focuskey)) {
+      if (this.checkSamePos(_activeKey, focuskey)) {
         Log.d(TAG, '取消选择棋子', focuskey);
         this._activeKey = { ...EMPTY_KEYINFO };
         return {
@@ -179,7 +187,7 @@ class Chess {
       }
 
       // 1.3 同色棋子，点击后进行焦点更新
-      if (checkSameCamp(_activeKey, focuskey)) {
+      if (this.checkSameCamp(_activeKey, focuskey)) {
         Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
         this._activeKey = { ...focuskey };
         return {
