@@ -103,6 +103,25 @@ class Chess {
     return true;
   }
 
+  /**
+   * 判断规则“执红棋的一方先走”
+   *
+   * @param focuskey KeyInfo
+   */
+  checkRedFirst(focuskey: KeyInfo): boolean {
+    // 如果是不是第一步，跳过判断
+    if (this.nowSteps.length) {
+      return true;
+    }
+
+    // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
+    if (this.hasActiveKey()) {
+      return true;
+    }
+
+    return focuskey.type === KeyType.RED;
+  }
+
   checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
     return keyInfo1.type === keyInfo2.type;
   }
@@ -148,7 +167,9 @@ class Chess {
     // 场景二：点击在棋子上
     if (focuskey) {
       Log.d(TAG, '点击在棋子上', focuskey);
-      if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && !hasActiveKey()) {
+
+      // 判断规则“执红棋的一方先走”
+      if (!this.checkRedFirst(focuskey)) {
         return {
           changed: [],
           status: STATUS.WARN,
