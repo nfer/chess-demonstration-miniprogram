@@ -2,7 +2,7 @@ import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
-import { checkMove, checkSameCamp, checkSamePos } from '../utils/checkMove';
+import { checkPosMove, checkBlockMove } from '../utils/checkMove';
 
 const TAG = 'ChessClass';
 export enum STATUS {
@@ -80,6 +80,71 @@ class Chess {
     return this.nowSteps.length === this._expectSteps.length;
   }
 
+  checkMove(x: number, y: number): boolean {
+    // 当前没有已选中棋子时，直接返回成功
+    if (!this.hasActiveKey()) {
+      return true;
+    }
+
+    // 判断是否可以移动到指定位置
+    const posCheck = checkPosMove(this._activeKey, x, y);
+    Log.d(TAG, 'posCheck:', posCheck);
+    if (!posCheck) {
+      return false;
+    }
+
+    // 判断移动到指定位置是否有阻碍，比如绊马腿、塞象眼
+    const blockCheck = checkBlockMove(this._activeKey, this.keyInfos, x, y);
+    Log.d(TAG, 'blockCheck:', blockCheck);
+    if (!posCheck) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * 判断规则“执红棋的一方先走”
+   *
+   * @param focuskey KeyInfo
+   */
+  checkRedFirst(focuskey: KeyInfo): boolean {
+    // 如果是不是第一步，跳过判断
+    if (this.nowSteps.length) {
+      return true;
+    }
+
+    // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
+    if (this.hasActiveKey()) {
+      return true;
+    }
+
+    return focuskey.type === KeyType.RED;
+  }
+
+  /**
+   * 判断规则“双方轮流各走一着”
+   *
+   * @param focuskey KeyInfo
+   */
+  checkCrossMove(focuskey: KeyInfo): boolean {
+    // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
+    if (this.hasActiveKey()) {
+      return true;
+    }
+
+    const lastKeyType = this.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
+    return focuskey.type === lastKeyType;
+  }
+
+  checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
+    return keyInfo1.type === keyInfo2.type;
+  }
+
+  checkSamePos(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
+    return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
+  }
+
   click(x: number, y: number) {
     Log.d(TAG, `click at (${x}, ${y})`);
     // 出错时不再响应棋盘交互
@@ -102,12 +167,24 @@ class Chess {
       };
     }
 
+    // 判断是否可以移动到指定位置
+    if (!this.checkMove(x, y)) {
+      Log.w(TAG, '无法移动到目标位置');
+      return {
+        changed: [],
+        status: STATUS.WARN,
+        msg: '出错了，无法移动到目标位置”',
+      };
+    }
+
     const { keyInfos, nowSteps, hasActiveKey, _activeKey } = this;
     const focuskey = keyInfos.find(item => item.x === x && item.y === y);
-    // 场景二：点击在棋子上
+    // 场景：点击在棋子上
     if (focuskey) {
       Log.d(TAG, '点击在棋子上', focuskey);
-      if (focuskey.type === KeyType.BLACK && nowSteps.length === 0 && !hasActiveKey()) {
+
+      // 判断规则“执红棋的一方先走”
+      if (!this.checkRedFirst(focuskey)) {
         return {
           changed: [],
           status: STATUS.WARN,
@@ -115,8 +192,8 @@ class Chess {
         };
       }
 
-      const lastKeyType = nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-      if (_activeKey.type === KeyType.NONE && lastKeyType === focuskey.type) {
+      // 判断规则“双方轮流各走一着”
+      if (!this.checkCrossMove(focuskey)) {
         return {
           changed: [],
           status: STATUS.WARN,
@@ -136,7 +213,7 @@ class Chess {
       }
 
       // 1.2 取消选择棋子
-      if (checkSamePos(_activeKey, focuskey)) {
+      if (this.checkSamePos(_activeKey, focuskey)) {
         Log.d(TAG, '取消选择棋子', focuskey);
         this._activeKey = { ...EMPTY_KEYINFO };
         return {
@@ -147,22 +224,13 @@ class Chess {
       }
 
       // 1.3 同色棋子，点击后进行焦点更新
-      if (checkSameCamp(_activeKey, focuskey)) {
+      if (this.checkSameCamp(_activeKey, focuskey)) {
         Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
         this._activeKey = { ...focuskey };
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
           msg: '同色棋子，点击后进行焦点更新',
-        };
-      }
-
-      if (!checkMove(_activeKey, keyInfos, focuskey.x, focuskey.y)) {
-        Log.w(TAG, '无法移动到目标位置', _activeKey, focuskey);
-        return {
-          changed: [],
-          status: STATUS.WARN,
-          msg: '出错了，无法移动到目标位置”',
         };
       }
 
@@ -184,18 +252,9 @@ class Chess {
       };
     }
 
-    // 场景三：点击在网格上
+    // 场景：点击在网格上
     Log.d(TAG, '点击在网格上', x, y);
-    if (_activeKey.type !== KeyType.NONE) {
-      if (!checkMove(_activeKey, keyInfos, x, y)) {
-        Log.w(TAG, '无法移动到目标位置', _activeKey, focuskey);
-        return {
-          changed: [],
-          status: STATUS.WARN,
-          msg: '出错了，无法移动到目标位置”',
-        };
-      }
-
+    if (this.hasActiveKey()) {
       //  移动棋子
       Log.d(TAG, '移动棋子', _activeKey, focuskey);
       const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);

@@ -1,7 +1,4 @@
 import { KeyInfo } from '../interface/index';
-import Log from './log';
-
-const TAG = 'CheckMove';
 
 // 将
 function checkKMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
@@ -117,14 +114,6 @@ export const checkPosMove = (keyInfo: KeyInfo, x: number, y: number) => {
   return false;
 };
 
-export const checkSameCamp = (keyInfo1: KeyInfo, keyInfo2: KeyInfo) => {
-  return keyInfo1.type === keyInfo2.type;
-};
-
-export const checkSamePos = (keyInfo1: KeyInfo, keyInfo2: KeyInfo) => {
-  return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
-};
-
 // 相
 function checkBBlockMove(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) {
   const keyX = (x + keyInfo.x) / 2;
@@ -197,16 +186,4 @@ export const checkBlockMove = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: nu
       return checkCBlockMove(keyInfo, keyInfos, x, y);
   }
   return false;
-};
-
-export const checkMove = (keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number) => {
-  const posCheck = checkPosMove(keyInfo, x, y);
-  Log.d(TAG, 'posCheck:', posCheck);
-  if (!posCheck) return false;
-
-  const blockCheck = checkBlockMove(keyInfo, keyInfos, x, y);
-  Log.d(TAG, 'blockCheck:', blockCheck);
-  if (blockCheck) return false;
-
-  return true;
 };
