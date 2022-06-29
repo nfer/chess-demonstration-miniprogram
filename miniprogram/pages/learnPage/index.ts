@@ -42,8 +42,10 @@ Component({
       chess.setExpectSteps(step.data);
       this.setData({
         _chess: chess,
+      }, () => {
+        // 确保设置 _chess 成功后再调用 reload
+        this.reload();
       });
-      this.reload();
     },
     // 按钮事件：悔棋
     revert() {
