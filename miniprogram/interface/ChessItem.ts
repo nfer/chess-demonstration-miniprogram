@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-useless-constructor */
 import { KeyInfo, KeyType } from './index';
 import Log from '../utils/log';
 
@@ -56,10 +55,6 @@ class ChessItem {
  * 将
  */
 export class KChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
-    super(keyInfo);
-  }
-
   checkPosMove(x: number, y: number): boolean {
     Log.d(TAG, 'checkPosMove', x, y);
     if (x < 3 || x > 5) return false;
@@ -80,10 +75,6 @@ export class KChessItem extends ChessItem {
  * 士
  */
 export class AChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
-    super(keyInfo);
-  }
-
   checkPosMove(x: number, y: number): boolean {
     Log.d(TAG, 'checkPosMove', x, y);
     let arr = [];
@@ -104,10 +95,6 @@ export class AChessItem extends ChessItem {
  * 相
  */
 export class BChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
-    super(keyInfo);
-  }
-
   checkPosMove(x: number, y: number): boolean {
     Log.d(TAG, 'checkPosMove', x, y);
     let arr = [];
@@ -136,10 +123,6 @@ export class BChessItem extends ChessItem {
  * 马
  */
 export class NChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
-    super(keyInfo);
-  }
-
   checkPosMove(x: number, y: number): boolean {
     Log.d(TAG, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
@@ -169,10 +152,6 @@ export class NChessItem extends ChessItem {
  * 车
  */
 export class RChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
-    super(keyInfo);
-  }
-
   checkPosMove(x: number, y: number): boolean {
     Log.d(TAG, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
@@ -198,10 +177,6 @@ export class RChessItem extends ChessItem {
  * 炮
  */
 export class CChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
-    super(keyInfo);
-  }
-
   checkPosMove(x: number, y: number): boolean {
     Log.d(TAG, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
@@ -234,10 +209,6 @@ export class CChessItem extends ChessItem {
  * 兵
  */
 export class PChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
-    super(keyInfo);
-  }
-
   checkPosMove(x: number, y: number): boolean {
     Log.d(TAG, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
