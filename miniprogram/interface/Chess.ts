@@ -161,7 +161,7 @@ class Chess {
       return {
         changed: [],
         status: STATUS.WARN,
-        msg: '出错了，无法移动到目标位置”',
+        msg: '出错了，无法移动到目标位置',
       };
     }
 
