@@ -134,7 +134,7 @@ class Chess {
     }
 
     const lastKeyType = this.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-    return focuskey.type === lastKeyType;
+    return focuskey.type !== lastKeyType;
   }
 
   checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
