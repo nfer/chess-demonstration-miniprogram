@@ -83,6 +83,21 @@ export class AChessItem extends ChessItem {
   constructor(keyInfo: KeyInfo) {
     super(keyInfo);
   }
+
+  checkPosMove(x: number, y: number): boolean {
+    Log.d(TAG, 'checkPosMove', x, y);
+    let arr = [];
+    if (this.isRed()) {
+      arr = [[3, 7], [3, 9], [4, 8], [5, 7], [5, 9]];
+    } else {
+      arr = [[3, 0], [3, 2], [4, 1], [5, 0], [5, 2]];
+    }
+
+    const pos = arr.find(([px, py]) => px === x && py === y);
+    if (!pos) return false;
+
+    return Math.abs(this.x - x) === 1 && Math.abs(this.y - y) === 1;
+  }
 }
 
 /**
@@ -91,6 +106,21 @@ export class AChessItem extends ChessItem {
 export class BChessItem extends ChessItem {
   constructor(keyInfo: KeyInfo) {
     super(keyInfo);
+  }
+
+  checkPosMove(x: number, y: number): boolean {
+    Log.d(TAG, 'checkPosMove', x, y);
+    let arr = [];
+    if (this.isRed()) {
+      arr = [[2, 9], [6, 9], [0, 7], [4, 7], [8, 7], [2, 5], [6, 5]];
+    } else {
+      arr = [[2, 4], [6, 4], [0, 2], [4, 2], [8, 2], [2, 0], [6, 0]];
+    }
+
+    const pos = arr.find(([px, py]) => px === x && py === y);
+    if (!pos) return false;
+
+    return Math.abs(this.x - x) === 2 && Math.abs(this.y - y) === 2;
   }
 }
 
@@ -101,6 +131,15 @@ export class NChessItem extends ChessItem {
   constructor(keyInfo: KeyInfo) {
     super(keyInfo);
   }
+
+  checkPosMove(x: number, y: number): boolean {
+    Log.d(TAG, 'checkPosMove', x, y);
+    const xRange = Math.abs(this.x - x);
+    const yRange = Math.abs(this.y - y);
+    if (xRange !== 1 && xRange !== 2) return false;
+    if (yRange !== 1 && yRange !== 2) return false;
+    return xRange + yRange === 3;
+  }
 }
 
 /**
@@ -109,6 +148,13 @@ export class NChessItem extends ChessItem {
 export class RChessItem extends ChessItem {
   constructor(keyInfo: KeyInfo) {
     super(keyInfo);
+  }
+
+  checkPosMove(x: number, y: number): boolean {
+    Log.d(TAG, 'checkPosMove', x, y);
+    const xRange = Math.abs(this.x - x);
+    const yRange = Math.abs(this.y - y);
+    return xRange === 0 || yRange === 0;
   }
 }
 
@@ -119,6 +165,13 @@ export class CChessItem extends ChessItem {
   constructor(keyInfo: KeyInfo) {
     super(keyInfo);
   }
+
+  checkPosMove(x: number, y: number): boolean {
+    Log.d(TAG, 'checkPosMove', x, y);
+    const xRange = Math.abs(this.x - x);
+    const yRange = Math.abs(this.y - y);
+    return xRange === 0 || yRange === 0;
+  }
 }
 
 /**
@@ -127,6 +180,22 @@ export class CChessItem extends ChessItem {
 export class PChessItem extends ChessItem {
   constructor(keyInfo: KeyInfo) {
     super(keyInfo);
+  }
+
+  checkPosMove(x: number, y: number): boolean {
+    Log.d(TAG, 'checkPosMove', x, y);
+    const xRange = Math.abs(this.x - x);
+    const yRange = Math.abs(this.y - y);
+    if (xRange + yRange !== 1) return false;
+
+    if (this.isRed()) {
+      if (y > this.y) return false;
+      if (this.y > 4 && x !== this.x) return false;
+    } else {
+      if (y < this.y) return false;
+      if (this.y < 5 && x !== this.x) return false;
+    }
+    return true;
   }
 }
 
