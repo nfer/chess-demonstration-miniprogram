@@ -7,9 +7,9 @@ const TAG = 'ChessItem';
 class ChessItem {
   private type = KeyType.NONE;
 
-  private x = -1;
+  protected x = -1;
 
-  private y = -1;
+  protected y = -1;
 
   constructor(keyInfo: KeyInfo) {
     this.type = keyInfo.type;
@@ -58,6 +58,20 @@ class ChessItem {
 export class KChessItem extends ChessItem {
   constructor(keyInfo: KeyInfo) {
     super(keyInfo);
+  }
+
+  checkPosMove(x: number, y: number): boolean {
+    Log.d(TAG, 'checkPosMove', x, y);
+    if (x < 3 || x > 5) return false;
+
+    if (this.isRed()) {
+      if (y < 7 || y > 9) return false;
+    } else {
+      if (y < 0 || y > 3) return false;
+    }
+
+    const step = Math.abs(this.x - x) + Math.abs(this.y - y);
+    return step === 1;
   }
 }
 

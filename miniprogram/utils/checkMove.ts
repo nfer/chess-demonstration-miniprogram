@@ -1,19 +1,5 @@
 import { KeyInfo } from '../interface/index';
 
-// 将
-function checkKMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
-  if (x < 3 || x > 5) return false;
-
-  if (isRed) {
-    if (y < 7 || y > 9) return false;
-  } else {
-    if (y < 0 || y > 3) return false;
-  }
-
-  const step = Math.abs(keyInfo.x - x) + Math.abs(keyInfo.y - y);
-  return step === 1;
-}
-
 // 士
 function checkAMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
   let arr = [];
@@ -85,10 +71,6 @@ function checPMove(keyInfo: KeyInfo, x: number, y: number, isRed: boolean) {
 
 export const checkPosMove = (keyInfo: KeyInfo, x: number, y: number) => {
   switch (keyInfo.key) {
-    case 'k':
-      return checkKMove(keyInfo, x, y, false);
-    case 'K':
-      return checkKMove(keyInfo, x, y, true);
     case 'a':
       return checkAMove(keyInfo, x, y, false);
     case 'A':
