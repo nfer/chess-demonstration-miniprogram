@@ -2,7 +2,7 @@ import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
-import { getChessItem } from './ChessItem';
+import ChessItem, { getChessItem } from './ChessItem';
 
 const TAG = 'ChessClass';
 export enum STATUS {
@@ -28,6 +28,8 @@ class Chess {
   nowSteps = [] as Array<StepInfo>;
 
   private _activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
+
+  private activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
   private _fenStr = ''; // 初始化时的棋局
 
@@ -86,8 +88,7 @@ class Chess {
       return true;
     }
 
-    const chessItem = getChessItem(this._activeKey);
-    return chessItem.checkMove(x, y, this.keyInfos);
+    return this.activeKeyItem.checkMove(x, y, this.keyInfos);
   }
 
   /**
@@ -192,6 +193,7 @@ class Chess {
       if (!hasActiveKey()) {
         Log.d(TAG, '选择棋子', focuskey);
         this._activeKey = { ...focuskey };
+        this.activeKeyItem = getChessItem(this._activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -203,6 +205,7 @@ class Chess {
       if (this.checkSamePos(_activeKey, focuskey)) {
         Log.d(TAG, '取消选择棋子', focuskey);
         this._activeKey = { ...EMPTY_KEYINFO };
+        this.activeKeyItem = getChessItem(this._activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -214,6 +217,7 @@ class Chess {
       if (this.checkSameCamp(_activeKey, focuskey)) {
         Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
         this._activeKey = { ...focuskey };
+        this.activeKeyItem = getChessItem(this._activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -271,6 +275,7 @@ class Chess {
     this.keyInfos = util.parseFenStr(this._fenStr);
     this.nowSteps = [];
     this._activeKey = EMPTY_KEYINFO;
+    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -301,6 +306,7 @@ class Chess {
 
     // 重置当前已经选中的棋子
     this._activeKey = EMPTY_KEYINFO;
+    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -320,6 +326,7 @@ class Chess {
   updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<StepInfo>) {
     this.keyInfos = [...keyInfos];
     this._activeKey = EMPTY_KEYINFO;
+    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
     this._keyMapFenStrs.push(util.getFenStr(keyInfos));
     this.nowSteps = [...nowSteps];
     if (this.isError()) {
