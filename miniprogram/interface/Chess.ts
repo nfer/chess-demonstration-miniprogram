@@ -2,7 +2,7 @@ import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
-import { checkPosMove, checkBlockMove } from '../utils/checkMove';
+import { getChessItem } from './ChessItem';
 
 const TAG = 'ChessClass';
 export enum STATUS {
@@ -86,21 +86,8 @@ class Chess {
       return true;
     }
 
-    // 判断是否可以移动到指定位置
-    const posCheck = checkPosMove(this._activeKey, x, y);
-    Log.d(TAG, 'posCheck:', posCheck);
-    if (!posCheck) {
-      return false;
-    }
-
-    // 判断移动到指定位置是否有阻碍，比如绊马腿、塞象眼
-    const blockCheck = checkBlockMove(this._activeKey, this.keyInfos, x, y);
-    Log.d(TAG, 'blockCheck:', blockCheck);
-    if (!posCheck) {
-      return false;
-    }
-
-    return true;
+    const chessItem = getChessItem(this._activeKey);
+    return chessItem.checkMove(x, y, this.keyInfos);
   }
 
   /**
