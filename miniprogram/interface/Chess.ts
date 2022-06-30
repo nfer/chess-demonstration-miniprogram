@@ -2,7 +2,7 @@ import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
-import { checkPosMove, checkBlockMove } from '../utils/checkMove';
+import ChessItem, { getChessItem } from './ChessItem';
 
 const TAG = 'ChessClass';
 export enum STATUS {
@@ -28,6 +28,8 @@ class Chess {
   nowSteps = [] as Array<StepInfo>;
 
   private _activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
+
+  private activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
   private _fenStr = ''; // 初始化时的棋局
 
@@ -86,21 +88,7 @@ class Chess {
       return true;
     }
 
-    // 判断是否可以移动到指定位置
-    const posCheck = checkPosMove(this._activeKey, x, y);
-    Log.d(TAG, 'posCheck:', posCheck);
-    if (!posCheck) {
-      return false;
-    }
-
-    // 判断移动到指定位置是否有阻碍，比如绊马腿、塞象眼
-    const blockCheck = checkBlockMove(this._activeKey, this.keyInfos, x, y);
-    Log.d(TAG, 'blockCheck:', blockCheck);
-    if (!posCheck) {
-      return false;
-    }
-
-    return true;
+    return this.activeKeyItem.checkMove(x, y, this.keyInfos);
   }
 
   /**
@@ -134,7 +122,7 @@ class Chess {
     }
 
     const lastKeyType = this.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-    return focuskey.type === lastKeyType;
+    return focuskey.type !== lastKeyType;
   }
 
   checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
@@ -173,7 +161,7 @@ class Chess {
       return {
         changed: [],
         status: STATUS.WARN,
-        msg: '出错了，无法移动到目标位置”',
+        msg: '出错了，无法移动到目标位置',
       };
     }
 
@@ -205,6 +193,7 @@ class Chess {
       if (!hasActiveKey()) {
         Log.d(TAG, '选择棋子', focuskey);
         this._activeKey = { ...focuskey };
+        this.activeKeyItem = getChessItem(this._activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -216,6 +205,7 @@ class Chess {
       if (this.checkSamePos(_activeKey, focuskey)) {
         Log.d(TAG, '取消选择棋子', focuskey);
         this._activeKey = { ...EMPTY_KEYINFO };
+        this.activeKeyItem = getChessItem(this._activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -227,6 +217,7 @@ class Chess {
       if (this.checkSameCamp(_activeKey, focuskey)) {
         Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
         this._activeKey = { ...focuskey };
+        this.activeKeyItem = getChessItem(this._activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -284,6 +275,7 @@ class Chess {
     this.keyInfos = util.parseFenStr(this._fenStr);
     this.nowSteps = [];
     this._activeKey = EMPTY_KEYINFO;
+    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -314,6 +306,7 @@ class Chess {
 
     // 重置当前已经选中的棋子
     this._activeKey = EMPTY_KEYINFO;
+    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -333,6 +326,7 @@ class Chess {
   updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<StepInfo>) {
     this.keyInfos = [...keyInfos];
     this._activeKey = EMPTY_KEYINFO;
+    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
     this._keyMapFenStrs.push(util.getFenStr(keyInfos));
     this.nowSteps = [...nowSteps];
     if (this.isError()) {
