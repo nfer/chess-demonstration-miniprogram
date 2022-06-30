@@ -44,7 +44,7 @@ class ChessItem {
     // 判断移动到指定位置是否有阻碍，比如绊马腿、塞象眼
     const blockCheck = this.checkBlockMove(x, y, keyInfos);
     Log.d(TAG, 'blockCheck:', blockCheck);
-    if (!posCheck) {
+    if (!blockCheck) {
       return false;
     }
 
@@ -122,6 +122,14 @@ export class BChessItem extends ChessItem {
 
     return Math.abs(this.x - x) === 2 && Math.abs(this.y - y) === 2;
   }
+
+  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    const keyX = (x + this.x) / 2;
+    const keyY = (y + this.y) / 2;
+
+    return keyInfos.some(item => item.x === keyX && item.y === keyY);
+  }
 }
 
 /**
@@ -140,6 +148,21 @@ export class NChessItem extends ChessItem {
     if (yRange !== 1 && yRange !== 2) return false;
     return xRange + yRange === 3;
   }
+
+  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    const xRange = x - this.x;
+    let keyX = 0, keyY = 0;
+    if (Math.abs(xRange) === 2) {
+      keyY = this.y;
+      keyX = (this.x + x) / 2;
+    } else {
+      keyX = this.x;
+      keyY = (y + this.y) / 2;
+    }
+
+    return keyInfos.some(item => item.x === keyX && item.y === keyY);
+  }
 }
 
 /**
@@ -156,6 +179,19 @@ export class RChessItem extends ChessItem {
     const yRange = Math.abs(this.y - y);
     return xRange === 0 || yRange === 0;
   }
+
+  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    if (x === this.x) {
+      const minY = Math.min(this.y, y);
+      const maxY = Math.max(this.y, y);
+      return keyInfos.some(item => item.x === x && (item.y > minY && item.y < maxY));
+    } else {
+      const minX = Math.min(this.x, x);
+      const maxX = Math.max(this.x, x);
+      return keyInfos.some(item => item.y === y && (item.x > minX && item.x < maxX));
+    }
+  }
 }
 
 /**
@@ -171,6 +207,26 @@ export class CChessItem extends ChessItem {
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     return xRange === 0 || yRange === 0;
+  }
+
+  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    let innerKeys = [] as Array<KeyInfo>;
+    if (x === this.x) {
+      const minY = Math.min(this.y, y);
+      const maxY = Math.max(this.y, y);
+      innerKeys = keyInfos.filter(item => item.x === x && (item.y > minY && item.y < maxY));
+    } else {
+      const minX = Math.min(this.x, x);
+      const maxX = Math.max(this.x, x);
+      innerKeys = keyInfos.filter(item => item.y === y && (item.x > minX && item.x < maxX));
+    }
+    const targetKey = keyInfos.find(item => item.x === x && item.y === y);
+    if (targetKey) {
+      return innerKeys.length !== 1;
+    } else {
+      return !!innerKeys.length;
+    }
   }
 }
 
