@@ -41,8 +41,28 @@ class ChessMap {
     return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
   }
 
+  /**
+   * 判断是否是无效点击
+   *
+   * @param x 点击的x位置
+   * @param y 点击的y位置
+   */
+  checkEmptyClick(x: number, y: number): boolean {
+    const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
+    return !focuskey && !this.hasActiveKey();
+  }
+
   click(x: number, y: number): ChessResult {
     Log.d(TAG, `click at (${x}, ${y})`);
+
+    // 判断是否是无效点击
+    if (this.checkEmptyClick(x, y)) {
+      return {
+        changed: [],
+        status: STATUS.OK,
+        msg: '',
+      };
+    }
 
     // 判断是否可以移动到指定位置
     if (!this.checkMove(x, y)) {
