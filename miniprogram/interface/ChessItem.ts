@@ -1,14 +1,14 @@
 import { KeyInfo, KeyType } from './index';
 import Log from '../utils/log';
 
-const TAG = 'ChessItem';
-
 class ChessItem {
   private type = KeyType.NONE;
 
   protected x = -1;
 
   protected y = -1;
+
+  protected name = 'ChessItem';
 
   constructor(keyInfo: KeyInfo) {
     this.type = keyInfo.type;
@@ -21,28 +21,28 @@ class ChessItem {
   }
 
   checkPosMove(x: number, y: number): boolean {
-    Log.d(TAG, 'checkPosMove', x, y);
+    Log.d(this.name, 'checkPosMove', x, y);
     return true;
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
     return true;
   }
 
   checkMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(TAG, 'checkMove', x, y);
+    Log.d(this.name, 'checkMove', x, y);
 
     // 判断是否可以移动到指定位置
     const posCheck = this.checkPosMove(x, y);
-    Log.d(TAG, 'posCheck:', posCheck);
+    Log.d(this.name, 'posCheck:', posCheck);
     if (!posCheck) {
       return false;
     }
 
     // 判断移动到指定位置是否有阻碍，比如绊马腿、塞象眼
     const blockCheck = this.checkBlockMove(x, y, keyInfos);
-    Log.d(TAG, 'blockCheck:', blockCheck);
+    Log.d(this.name, 'blockCheck:', blockCheck);
     if (!blockCheck) {
       return false;
     }
@@ -55,8 +55,13 @@ class ChessItem {
  * 将
  */
 export class KChessItem extends ChessItem {
+  constructor(keyInfo: KeyInfo) {
+    super(keyInfo);
+    this.name = 'KChessItem';
+  }
+
   checkPosMove(x: number, y: number): boolean {
-    Log.d(TAG, 'checkPosMove', x, y);
+    Log.d(this.name, 'checkPosMove', x, y);
     if (x < 3 || x > 5) return false;
 
     if (this.isRed()) {
@@ -75,8 +80,13 @@ export class KChessItem extends ChessItem {
  * 士
  */
 export class AChessItem extends ChessItem {
+  constructor(keyInfo: KeyInfo) {
+    super(keyInfo);
+    this.name = 'AChessItem';
+  }
+
   checkPosMove(x: number, y: number): boolean {
-    Log.d(TAG, 'checkPosMove', x, y);
+    Log.d(this.name, 'checkPosMove', x, y);
     let arr = [];
     if (this.isRed()) {
       arr = [[3, 7], [3, 9], [4, 8], [5, 7], [5, 9]];
@@ -95,8 +105,13 @@ export class AChessItem extends ChessItem {
  * 相
  */
 export class BChessItem extends ChessItem {
+  constructor(keyInfo: KeyInfo) {
+    super(keyInfo);
+    this.name = 'BChessItem';
+  }
+
   checkPosMove(x: number, y: number): boolean {
-    Log.d(TAG, 'checkPosMove', x, y);
+    Log.d(this.name, 'checkPosMove', x, y);
     let arr = [];
     if (this.isRed()) {
       arr = [[2, 9], [6, 9], [0, 7], [4, 7], [8, 7], [2, 5], [6, 5]];
@@ -111,7 +126,7 @@ export class BChessItem extends ChessItem {
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
     const keyX = (x + this.x) / 2;
     const keyY = (y + this.y) / 2;
 
@@ -123,8 +138,13 @@ export class BChessItem extends ChessItem {
  * 马
  */
 export class NChessItem extends ChessItem {
+  constructor(keyInfo: KeyInfo) {
+    super(keyInfo);
+    this.name = 'NChessItem';
+  }
+
   checkPosMove(x: number, y: number): boolean {
-    Log.d(TAG, 'checkPosMove', x, y);
+    Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     if (xRange !== 1 && xRange !== 2) return false;
@@ -133,7 +153,7 @@ export class NChessItem extends ChessItem {
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
     const xRange = x - this.x;
     let keyX = 0, keyY = 0;
     if (Math.abs(xRange) === 2) {
@@ -152,15 +172,20 @@ export class NChessItem extends ChessItem {
  * 车
  */
 export class RChessItem extends ChessItem {
+  constructor(keyInfo: KeyInfo) {
+    super(keyInfo);
+    this.name = 'RChessItem';
+  }
+
   checkPosMove(x: number, y: number): boolean {
-    Log.d(TAG, 'checkPosMove', x, y);
+    Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     return xRange === 0 || yRange === 0;
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
     if (x === this.x) {
       const minY = Math.min(this.y, y);
       const maxY = Math.max(this.y, y);
@@ -177,15 +202,20 @@ export class RChessItem extends ChessItem {
  * 炮
  */
 export class CChessItem extends ChessItem {
+  constructor(keyInfo: KeyInfo) {
+    super(keyInfo);
+    this.name = 'CChessItem';
+  }
+
   checkPosMove(x: number, y: number): boolean {
-    Log.d(TAG, 'checkPosMove', x, y);
+    Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     return xRange === 0 || yRange === 0;
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(TAG, 'checkBlockMove', x, y, keyInfos);
+    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
     let innerKeys = [] as Array<KeyInfo>;
     if (x === this.x) {
       const minY = Math.min(this.y, y);
@@ -209,8 +239,13 @@ export class CChessItem extends ChessItem {
  * 兵
  */
 export class PChessItem extends ChessItem {
+  constructor(keyInfo: KeyInfo) {
+    super(keyInfo);
+    this.name = 'PChessItem';
+  }
+
   checkPosMove(x: number, y: number): boolean {
-    Log.d(TAG, 'checkPosMove', x, y);
+    Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     if (xRange + yRange !== 1) return false;
