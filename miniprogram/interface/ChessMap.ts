@@ -115,45 +115,21 @@ class ChessMap {
           msg: '同色棋子，点击后进行焦点更新',
         };
       }
-
-      //  1.4 吃掉棋子
-      Log.d(TAG, '吃掉棋子', _activeKey, focuskey);
-
-      const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
-      keyInfos[idx].x = x;
-      keyInfos[idx].y = y;
-      const newKeyInfos = keyInfos.filter(item => item.hash !== focuskey.hash);
-
-      this.updateKeyInfos(newKeyInfos);
-      return {
-        changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
-        status: STATUS.OK,
-        msg: '吃掉棋子',
-      };
     }
 
-    // 场景：点击在网格上
-    Log.d(TAG, '点击在网格上', x, y);
-    if (this.hasActiveKey()) {
-      //  移动棋子
-      Log.d(TAG, '移动棋子', _activeKey, focuskey);
+    // 移动棋子
+    Log.d(TAG, '移动棋子', _activeKey, focuskey);
 
-      const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
-      keyInfos[idx].y = y;
-      keyInfos[idx].x = x;
+    const newKeyInfos = keyInfos.filter(item => item.x !== x || item.y !== y);
+    const idx = newKeyInfos.findIndex(item => item.hash === _activeKey.hash);
+    newKeyInfos[idx].x = x;
+    newKeyInfos[idx].y = y;
 
-      this.updateKeyInfos(keyInfos);
-      return {
-        changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
-        status: STATUS.OK,
-        msg: '移动棋子',
-      };
-    }
-
+    this.updateKeyInfos(newKeyInfos);
     return {
-      changed: [],
+      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
       status: STATUS.OK,
-      msg: '',
+      msg: '移动棋子',
     };
   }
 
