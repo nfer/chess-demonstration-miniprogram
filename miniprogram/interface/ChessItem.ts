@@ -153,18 +153,22 @@ export class NChessItem extends ChessItem {
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
-    const xRange = x - this.x;
+    Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     let keyX = 0, keyY = 0;
-    if (Math.abs(xRange) === 2) {
+    const xRange = x - this.x;
+    Log.d(this.name, `checkBlockMove xRange :${xRange}`);
+    if (Math.abs(xRange) === 2) { // 判断是垂直方向的移动
       keyY = this.y;
       keyX = (this.x + x) / 2;
-    } else {
+    } else { // 判断是水平方向的移动
       keyX = this.x;
       keyY = (y + this.y) / 2;
     }
 
-    return keyInfos.some(item => item.x === keyX && item.y === keyY);
+    // 判断马脚位置是否存在棋子
+    const targetKey = keyInfos.find(item => item.x === keyX && item.y === keyY);
+    Log.d(this.name, `checkBlockMove targetKey exist: ${!!targetKey}`);
+    return !targetKey;
   }
 }
 
@@ -215,23 +219,30 @@ export class CChessItem extends ChessItem {
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
+    Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     let innerKeys = [] as Array<KeyInfo>;
-    if (x === this.x) {
+
+    if (x === this.x) { // 判断是垂直方向的移动
       const minY = Math.min(this.y, y);
       const maxY = Math.max(this.y, y);
       innerKeys = keyInfos.filter(item => item.x === x && (item.y > minY && item.y < maxY));
-    } else {
+    } else { // 判断是水平方向的移动
       const minX = Math.min(this.x, x);
       const maxX = Math.max(this.x, x);
       innerKeys = keyInfos.filter(item => item.y === y && (item.x > minX && item.x < maxX));
     }
+    Log.d(this.name, `checkBlockMove innerKeys.length: ${innerKeys.length}`);
+
     const targetKey = keyInfos.find(item => item.x === x && item.y === y);
-    if (targetKey) {
-      return innerKeys.length !== 1;
-    } else {
-      return !!innerKeys.length;
+    Log.d(this.name, `checkBlockMove targetKey exist: ${!!targetKey}`);
+
+    // 判断是非可以吃子
+    if (!!targetKey) {
+      return innerKeys.length === 1;
     }
+
+    // 判断是否可以移动到指定位置
+    return innerKeys.length === 0;
   }
 }
 
