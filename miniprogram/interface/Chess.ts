@@ -88,6 +88,7 @@ class Chess {
       return true;
     }
 
+    Log.d(TAG, 'checkMove', this.activeKeyItem);
     return this.activeKeyItem.checkMove(x, y, this.keyInfos);
   }
 
