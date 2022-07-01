@@ -126,11 +126,14 @@ export class BChessItem extends ChessItem {
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
+    Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     const keyX = (x + this.x) / 2;
     const keyY = (y + this.y) / 2;
 
-    return keyInfos.some(item => item.x === keyX && item.y === keyY);
+    // 判断象眼位置是否存在棋子
+    const targetKey = keyInfos.find(item => item.x === keyX && item.y === keyY);
+    Log.d(this.name, `checkBlockMove targetKey exist: ${!!targetKey}`);
+    return !targetKey;
   }
 }
 
@@ -189,16 +192,22 @@ export class RChessItem extends ChessItem {
   }
 
   checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
-    if (x === this.x) {
+    Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
+    let innerKeys = [] as Array<KeyInfo>;
+
+    if (x === this.x) { // 判断是垂直方向的移动
       const minY = Math.min(this.y, y);
       const maxY = Math.max(this.y, y);
-      return keyInfos.some(item => item.x === x && (item.y > minY && item.y < maxY));
-    } else {
+      innerKeys = keyInfos.filter(item => item.x === x && (item.y > minY && item.y < maxY));
+    } else { // 判断是水平方向的移动
       const minX = Math.min(this.x, x);
       const maxX = Math.max(this.x, x);
-      return keyInfos.some(item => item.y === y && (item.x > minX && item.x < maxX));
+      innerKeys = keyInfos.filter(item => item.y === y && (item.x > minX && item.x < maxX));
     }
+    Log.d(this.name, `checkBlockMove innerKeys.length: ${innerKeys.length}`);
+
+    // 判断是否可以移动到指定位置
+    return innerKeys.length === 0;
   }
 }
 
