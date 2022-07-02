@@ -1,4 +1,4 @@
-import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
+import { KeyInfo, KeyPos, KeyType, StepInfo } from './index';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
 
@@ -23,8 +23,6 @@ export interface ChessResult {
 class Chess {
   private nowSteps = [] as Array<StepInfo>;
 
-  private _activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
-
   private _fenStr = ''; // 初始化时的棋局
 
   private _keyMapFenStrs = [] as Array<string>;
@@ -35,7 +33,6 @@ class Chess {
 
   constructor() {
     this.init = this.init.bind(this);
-    this.hasActiveKey = this.hasActiveKey.bind(this);
     this.click = this.click.bind(this);
   }
 
@@ -60,11 +57,6 @@ class Chess {
 
   getKeyInfos(): Array<KeyInfo> {
     return this.chessMap.getKeyInfos();
-  }
-
-  // helper
-  hasActiveKey(): boolean {
-    return this._activeKey.type !== KeyType.NONE;
   }
 
   isError(): boolean {
@@ -100,7 +92,7 @@ class Chess {
     }
 
     // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
-    if (this.hasActiveKey()) {
+    if (this.chessMap.hasActiveKey()) {
       return true;
     }
 
@@ -119,7 +111,7 @@ class Chess {
     }
 
     // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
-    if (this.hasActiveKey()) {
+    if (this.chessMap.hasActiveKey()) {
       return true;
     }
 
@@ -181,7 +173,6 @@ class Chess {
   reload() {
     this._keyMapFenStrs.push(this._fenStr);
     this.nowSteps = [];
-    this._activeKey = EMPTY_KEYINFO;
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -205,11 +196,6 @@ class Chess {
 
     // 去除最后一条棋谱记录
     this.nowSteps.pop();
-
-    // 取回退后的最后一条棋局进行重新渲染
-
-    // 重置当前已经选中的棋子
-    this._activeKey = EMPTY_KEYINFO;
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
