@@ -1,4 +1,5 @@
 import { KeyInfo, KeyPos, KeyType, StepInfo, STATUS, CHANGE_TYPE } from './index';
+import * as util from '../utils/util';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
 
@@ -149,13 +150,21 @@ class Chess {
       };
     }
 
-    return this.chessMap.click(x, y);
+    const result = this.chessMap.click(x, y);
+    Log.d(TAG, 'click result', result);
+    if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
+      const fenStr = util.getFenStr(this.chessMap.getKeyInfos());
+      Log.d(TAG, 'new fen str', fenStr);
+      this._keyMapFenStrs.push(fenStr);
+    }
+    return result;
   }
 
   reload() {
     this._keyMapFenStrs = [this._fenStr];
     this.nowSteps = [];
-    return this.chessMap.setFenStr(this._fenStr);
+    const lastestFenStr = this._keyMapFenStrs[this._keyMapFenStrs.length - 1];
+    return this.chessMap.setFenStr(lastestFenStr);
   }
 
   revert() {
@@ -174,11 +183,8 @@ class Chess {
     // 去除最后一条棋谱记录
     this.nowSteps.pop();
 
-    return {
-      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
-      status: STATUS.OK,
-      msg: '悔棋',
-    };
+    const lastestFenStr = this._keyMapFenStrs[this._keyMapFenStrs.length - 1];
+    return this.chessMap.setFenStr(lastestFenStr);
   }
 
   getHint() {
