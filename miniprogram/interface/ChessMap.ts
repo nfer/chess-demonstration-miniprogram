@@ -23,6 +23,10 @@ class ChessMap {
     };
   }
 
+  getKeyInfos(): Array<KeyInfo> {
+    return this.keyInfos;
+  }
+
   // helper
   hasActiveKey(): boolean {
     return this.activeKey.type !== KeyType.NONE;
@@ -122,7 +126,7 @@ class ChessMap {
     }
 
     // 移动棋子
-    Log.d(TAG, '移动棋子', activeKey, focuskey);
+    Log.d(TAG, `移动棋子 "${activeKey.name}" from (${activeKey.x}, ${activeKey.y}) to (${x}, ${y})`);
 
     const newKeyInfos = keyInfos.filter(item => item.x !== x || item.y !== y);
     const idx = newKeyInfos.findIndex(item => item.hash === activeKey.hash);

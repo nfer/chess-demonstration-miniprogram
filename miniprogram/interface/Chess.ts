@@ -1,7 +1,5 @@
 import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
-import * as util from '../utils/util';
 import Log from '../utils/log';
-import ChessItem from './ChessItem';
 import ChessMap from './ChessMap';
 
 const TAG = 'ChessClass';
@@ -23,13 +21,9 @@ export interface ChessResult {
 }
 
 class Chess {
-  keyInfos = [] as Array<KeyInfo>;
-
   private nowSteps = [] as Array<StepInfo>;
 
   private _activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
-
-  private activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
   private _fenStr = ''; // 初始化时的棋局
 
@@ -43,7 +37,6 @@ class Chess {
     this.init = this.init.bind(this);
     this.hasActiveKey = this.hasActiveKey.bind(this);
     this.click = this.click.bind(this);
-    this.updateKeyInfos = this.updateKeyInfos.bind(this);
   }
 
   init(keyMapFenStr = '') {
@@ -63,6 +56,10 @@ class Chess {
 
   getNowSteps(): Array<StepInfo> {
     return this.nowSteps;
+  }
+
+  getKeyInfos(): Array<KeyInfo> {
+    return this.chessMap.getKeyInfos();
   }
 
   // helper
@@ -86,23 +83,13 @@ class Chess {
     return this.nowSteps.length === this._expectSteps.length;
   }
 
-  checkMove(x: number, y: number): boolean {
-    // 当前没有已选中棋子时，直接返回成功
-    if (!this.hasActiveKey()) {
-      return true;
-    }
-
-    Log.d(TAG, 'checkMove', this.activeKeyItem);
-    return this.activeKeyItem.checkMove(x, y, this.keyInfos);
-  }
-
   /**
    * 判断规则“执红棋的一方先走”
    *
    * @param focuskey KeyInfo
    */
   checkRedFirst(x: number, y: number): boolean {
-    const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
+    const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
     if (!focuskey) {
       return true;
     }
@@ -126,7 +113,7 @@ class Chess {
    * @param focuskey KeyInfo
    */
   checkCrossMove(x: number, y: number): boolean {
-    const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
+    const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
     if (!focuskey) {
       return true;
     }
@@ -170,16 +157,6 @@ class Chess {
       };
     }
 
-    // 判断是否可以移动到指定位置
-    if (!this.checkMove(x, y)) {
-      Log.w(TAG, '无法移动到目标位置');
-      return {
-        changed: [],
-        status: STATUS.WARN,
-        msg: '出错了，无法移动到目标位置',
-      };
-    }
-
     // 判断规则“执红棋的一方先走”
     if (!this.checkRedFirst(x, y)) {
       return {
@@ -203,10 +180,8 @@ class Chess {
 
   reload() {
     this._keyMapFenStrs.push(this._fenStr);
-    this.keyInfos = util.parseFenStr(this._fenStr);
     this.nowSteps = [];
     this._activeKey = EMPTY_KEYINFO;
-    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -232,12 +207,9 @@ class Chess {
     this.nowSteps.pop();
 
     // 取回退后的最后一条棋局进行重新渲染
-    const fenStr = this._keyMapFenStrs[this._keyMapFenStrs.length - 1];
-    this.keyInfos = util.parseFenStr(fenStr);
 
     // 重置当前已经选中的棋子
     this._activeKey = EMPTY_KEYINFO;
-    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
     return {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
@@ -252,18 +224,6 @@ class Chess {
     const content = _expectSteps[idx];
     Log.d(TAG, 'hint', idx, content);
     return content;
-  }
-
-  updateKeyInfos(keyInfos: Array<KeyInfo>, nowSteps: Array<StepInfo>) {
-    this.keyInfos = [...keyInfos];
-    this._activeKey = EMPTY_KEYINFO;
-    this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
-    this._keyMapFenStrs.push(util.getFenStr(keyInfos));
-    this.nowSteps = [...nowSteps];
-    if (this.isError()) {
-      const len = this.nowSteps.length;
-      this.nowSteps[len - 1].error = true;
-    }
   }
 }
 
