@@ -1,8 +1,8 @@
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
-import { KeyInfo, EMPTY_KEYPOS, KeyPos, StepInfo } from '../../interface/index';
+import { KeyInfo, EMPTY_KEYPOS, KeyPos, StepInfo, CHANGE_TYPE, ChessResult, STATUS } from '../../interface/index';
 import { steps } from '../../data/steps';
-import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
+import Chess from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
 
