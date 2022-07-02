@@ -65,6 +65,7 @@ Component({
     // 按钮事件：重来
     reload() {
       const result = this.data._chess.reload();
+      Log.d(TAG, 'reload result', result);
       this.handleChessResult(this.data._chess, result);
     },
     // 棋子点击事件

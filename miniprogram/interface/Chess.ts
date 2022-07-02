@@ -22,8 +22,6 @@ class Chess {
 
   init(keyMapFenStr = '') {
     this._fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
-
-    this.chessMap.setFenStr(this._fenStr);
     return this.reload();
   }
 
@@ -155,14 +153,9 @@ class Chess {
   }
 
   reload() {
-    this._keyMapFenStrs.push(this._fenStr);
+    this._keyMapFenStrs = [this._fenStr];
     this.nowSteps = [];
-
-    return {
-      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
-      status: STATUS.OK,
-      msg: '初始化',
-    };
+    return this.chessMap.setFenStr(this._fenStr);
   }
 
   revert() {
