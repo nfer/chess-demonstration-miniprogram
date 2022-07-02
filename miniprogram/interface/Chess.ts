@@ -21,28 +21,28 @@ class Chess {
     this.click = this.click.bind(this);
   }
 
-  init(keyMapFenStr = '') {
+  public init(keyMapFenStr = '') {
     this._fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
     return this.reload();
   }
 
-  setExpectSteps(expectSteps: Array<string>) {
+  public setExpectSteps(expectSteps: Array<string>) {
     this._expectSteps = [...expectSteps];
   }
 
-  getCursorPos(): KeyPos {
+  public getCursorPos(): KeyPos {
     return this.chessMap.getCursorPos();
   }
 
-  getNowSteps(): Array<StepInfo> {
+  public getNowSteps(): Array<StepInfo> {
     return this.nowSteps;
   }
 
-  getKeyInfos(): Array<KeyInfo> {
+  public getKeyInfos(): Array<KeyInfo> {
     return this.chessMap.getKeyInfos();
   }
 
-  isError(): boolean {
+  public isError(): boolean {
     if (this.nowSteps.length === 0) {
       return false;
     }
@@ -50,7 +50,7 @@ class Chess {
     return this.nowSteps.some((step, index) => step.name !== this._expectSteps[index]);
   }
 
-  isSuccess(): boolean {
+  public isSuccess(): boolean {
     if (this.nowSteps.length === 0) {
       return false;
     }
@@ -63,7 +63,7 @@ class Chess {
    *
    * @param focuskey KeyInfo
    */
-  checkRedFirst(x: number, y: number): boolean {
+  private checkRedFirst(x: number, y: number): boolean {
     const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
     if (!focuskey) {
       return true;
@@ -87,7 +87,7 @@ class Chess {
    *
    * @param focuskey KeyInfo
    */
-  checkCrossMove(x: number, y: number): boolean {
+  private checkCrossMove(x: number, y: number): boolean {
     const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
     if (!focuskey) {
       return true;
@@ -102,15 +102,7 @@ class Chess {
     return focuskey.type !== lastKeyType;
   }
 
-  checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
-    return keyInfo1.type === keyInfo2.type;
-  }
-
-  checkSamePos(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
-    return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
-  }
-
-  click(x: number, y: number) {
+  public click(x: number, y: number) {
     Log.d(TAG, `click at (${x}, ${y})`);
     // 出错时不再响应棋盘交互
     if (this.isError()) {
@@ -160,14 +152,14 @@ class Chess {
     return result;
   }
 
-  reload() {
+  public reload() {
     this._keyMapFenStrs = [this._fenStr];
     this.nowSteps = [];
     const lastestFenStr = this._keyMapFenStrs[this._keyMapFenStrs.length - 1];
     return this.chessMap.setFenStr(lastestFenStr);
   }
 
-  revert() {
+  public revert() {
     // 棋局记录最少2条才可以回退
     if (this._keyMapFenStrs.length < 2) {
       return {
@@ -187,7 +179,7 @@ class Chess {
     return this.chessMap.setFenStr(lastestFenStr);
   }
 
-  getHint() {
+  public getHint() {
     const idx = this.nowSteps.length;
     const content = this._expectSteps[idx];
     Log.d(TAG, 'hint', idx, content);
