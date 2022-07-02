@@ -8,20 +8,24 @@ const TAG = 'ChessMap';
 class ChessMap {
   private keyInfos = [] as Array<KeyInfo>;
 
-  private _activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
+  private activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
 
   private activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
+  constructor() {
+    this.hasActiveKey = this.hasActiveKey.bind(this);
+  }
+
   getCursorPos(): KeyPos {
     return {
-      x: this._activeKey.x,
-      y: this._activeKey.y,
+      x: this.activeKey.x,
+      y: this.activeKey.y,
     };
   }
 
   // helper
   hasActiveKey(): boolean {
-    return this._activeKey.type !== KeyType.NONE;
+    return this.activeKey.type !== KeyType.NONE;
   }
 
   checkMove(x: number, y: number): boolean {
@@ -74,7 +78,7 @@ class ChessMap {
       };
     }
 
-    const { keyInfos, hasActiveKey, _activeKey } = this;
+    const { keyInfos, hasActiveKey, activeKey } = this;
     const focuskey = keyInfos.find(item => item.x === x && item.y === y);
     // 场景：点击在棋子上
     if (focuskey) {
@@ -83,8 +87,8 @@ class ChessMap {
       // 1.1 选择棋子
       if (!hasActiveKey()) {
         Log.d(TAG, '选择棋子', focuskey);
-        this._activeKey = { ...focuskey };
-        this.activeKeyItem = getChessItem(this._activeKey);
+        this.activeKey = { ...focuskey };
+        this.activeKeyItem = getChessItem(this.activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -93,10 +97,10 @@ class ChessMap {
       }
 
       // 1.2 取消选择棋子
-      if (this.checkSamePos(_activeKey, focuskey)) {
+      if (this.checkSamePos(activeKey, focuskey)) {
         Log.d(TAG, '取消选择棋子', focuskey);
-        this._activeKey = { ...EMPTY_KEYINFO };
-        this.activeKeyItem = getChessItem(this._activeKey);
+        this.activeKey = { ...EMPTY_KEYINFO };
+        this.activeKeyItem = getChessItem(this.activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -105,10 +109,10 @@ class ChessMap {
       }
 
       // 1.3 同色棋子，点击后进行焦点更新
-      if (this.checkSameCamp(_activeKey, focuskey)) {
+      if (this.checkSameCamp(activeKey, focuskey)) {
         Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
-        this._activeKey = { ...focuskey };
-        this.activeKeyItem = getChessItem(this._activeKey);
+        this.activeKey = { ...focuskey };
+        this.activeKeyItem = getChessItem(this.activeKey);
         return {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
@@ -118,10 +122,10 @@ class ChessMap {
     }
 
     // 移动棋子
-    Log.d(TAG, '移动棋子', _activeKey, focuskey);
+    Log.d(TAG, '移动棋子', activeKey, focuskey);
 
     const newKeyInfos = keyInfos.filter(item => item.x !== x || item.y !== y);
-    const idx = newKeyInfos.findIndex(item => item.hash === _activeKey.hash);
+    const idx = newKeyInfos.findIndex(item => item.hash === activeKey.hash);
     newKeyInfos[idx].x = x;
     newKeyInfos[idx].y = y;
 
@@ -135,7 +139,7 @@ class ChessMap {
 
   setFenStr(fenStr: string) {
     this.keyInfos = util.parseFenStr(fenStr);
-    this._activeKey = EMPTY_KEYINFO;
+    this.activeKey = EMPTY_KEYINFO;
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
     return {
@@ -147,7 +151,7 @@ class ChessMap {
 
   updateKeyInfos(keyInfos: Array<KeyInfo>) {
     this.keyInfos = [...keyInfos];
-    this._activeKey = EMPTY_KEYINFO;
+    this.activeKey = EMPTY_KEYINFO;
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
   }
 }

@@ -1,8 +1,8 @@
 import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, StepInfo } from './index';
 import * as util from '../utils/util';
-import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
-import ChessItem, { getChessItem } from './ChessItem';
+import ChessItem from './ChessItem';
+import ChessMap from './ChessMap';
 
 const TAG = 'ChessClass';
 export enum STATUS {
@@ -25,7 +25,7 @@ export interface ChessResult {
 class Chess {
   keyInfos = [] as Array<KeyInfo>;
 
-  nowSteps = [] as Array<StepInfo>;
+  private nowSteps = [] as Array<StepInfo>;
 
   private _activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
 
@@ -37,6 +37,8 @@ class Chess {
 
   private _expectSteps = [] as Array<string>;
 
+  private chessMap = new ChessMap();
+
   constructor() {
     this.init = this.init.bind(this);
     this.hasActiveKey = this.hasActiveKey.bind(this);
@@ -47,6 +49,7 @@ class Chess {
   init(keyMapFenStr = '') {
     this._fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
 
+    this.chessMap.setFenStr(this._fenStr);
     return this.reload();
   }
 
@@ -55,10 +58,11 @@ class Chess {
   }
 
   getCursorPos(): KeyPos {
-    return {
-      x: this._activeKey.x,
-      y: this._activeKey.y,
-    };
+    return this.chessMap.getCursorPos();
+  }
+
+  getNowSteps(): Array<StepInfo> {
+    return this.nowSteps;
   }
 
   // helper
@@ -97,7 +101,12 @@ class Chess {
    *
    * @param focuskey KeyInfo
    */
-  checkRedFirst(focuskey: KeyInfo): boolean {
+  checkRedFirst(x: number, y: number): boolean {
+    const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
+    if (!focuskey) {
+      return true;
+    }
+
     // 如果是不是第一步，跳过判断
     if (this.nowSteps.length) {
       return true;
@@ -116,7 +125,12 @@ class Chess {
    *
    * @param focuskey KeyInfo
    */
-  checkCrossMove(focuskey: KeyInfo): boolean {
+  checkCrossMove(x: number, y: number): boolean {
+    const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
+    if (!focuskey) {
+      return true;
+    }
+
     // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
     if (this.hasActiveKey()) {
       return true;
@@ -166,109 +180,25 @@ class Chess {
       };
     }
 
-    const { keyInfos, nowSteps, hasActiveKey, _activeKey } = this;
-    const focuskey = keyInfos.find(item => item.x === x && item.y === y);
-    // 场景：点击在棋子上
-    if (focuskey) {
-      Log.d(TAG, '点击在棋子上', focuskey);
-
-      // 判断规则“执红棋的一方先走”
-      if (!this.checkRedFirst(focuskey)) {
-        return {
-          changed: [],
-          status: STATUS.WARN,
-          msg: '出错了，违反规则“执红棋的一方先走”',
-        };
-      }
-
-      // 判断规则“双方轮流各走一着”
-      if (!this.checkCrossMove(focuskey)) {
-        return {
-          changed: [],
-          status: STATUS.WARN,
-          msg: '出错了，违反规则“双方轮流各走一着”',
-        };
-      }
-
-      // 1.1 选择棋子
-      if (!hasActiveKey()) {
-        Log.d(TAG, '选择棋子', focuskey);
-        this._activeKey = { ...focuskey };
-        this.activeKeyItem = getChessItem(this._activeKey);
-        return {
-          changed: [CHANGE_TYPE.ACTIVEKEY],
-          status: STATUS.OK,
-          msg: '选择棋子',
-        };
-      }
-
-      // 1.2 取消选择棋子
-      if (this.checkSamePos(_activeKey, focuskey)) {
-        Log.d(TAG, '取消选择棋子', focuskey);
-        this._activeKey = { ...EMPTY_KEYINFO };
-        this.activeKeyItem = getChessItem(this._activeKey);
-        return {
-          changed: [CHANGE_TYPE.ACTIVEKEY],
-          status: STATUS.OK,
-          msg: '取消选择棋子',
-        };
-      }
-
-      // 1.3 同色棋子，点击后进行焦点更新
-      if (this.checkSameCamp(_activeKey, focuskey)) {
-        Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
-        this._activeKey = { ...focuskey };
-        this.activeKeyItem = getChessItem(this._activeKey);
-        return {
-          changed: [CHANGE_TYPE.ACTIVEKEY],
-          status: STATUS.OK,
-          msg: '同色棋子，点击后进行焦点更新',
-        };
-      }
-
-      //  1.4 吃掉棋子
-      Log.d(TAG, '吃掉棋子', _activeKey, focuskey);
-      const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
-      nowSteps.push({ name: curStep, error: false });
-
-      const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
-      keyInfos[idx].x = x;
-      keyInfos[idx].y = y;
-      const newKeyInfos = keyInfos.filter(item => item.hash !== focuskey.hash);
-
-      this.updateKeyInfos(newKeyInfos, nowSteps);
+    // 判断规则“执红棋的一方先走”
+    if (!this.checkRedFirst(x, y)) {
       return {
-        changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
-        status: STATUS.OK,
-        msg: '吃掉棋子',
+        changed: [],
+        status: STATUS.WARN,
+        msg: '出错了，违反规则“执红棋的一方先走”',
       };
     }
 
-    // 场景：点击在网格上
-    Log.d(TAG, '点击在网格上', x, y);
-    if (this.hasActiveKey()) {
-      //  移动棋子
-      Log.d(TAG, '移动棋子', _activeKey, focuskey);
-      const curStep = stepUtils.getStep(_activeKey, keyInfos, x, y);
-      nowSteps.push({ name: curStep, error: false });
-
-      const idx = keyInfos.findIndex(item => item.hash === _activeKey.hash);
-      keyInfos[idx].y = y;
-      keyInfos[idx].x = x;
-
-      this.updateKeyInfos(keyInfos, nowSteps);
+    // 判断规则“双方轮流各走一着”
+    if (!this.checkCrossMove(x, y)) {
       return {
-        changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
-        status: STATUS.OK,
-        msg: '移动棋子',
+        changed: [],
+        status: STATUS.WARN,
+        msg: '出错了，违反规则“双方轮流各走一着”',
       };
     }
 
-    return {
-      changed: [],
-      status: STATUS.OK,
-      msg: '',
-    };
+    return this.chessMap.click(x, y);
   }
 
   reload() {

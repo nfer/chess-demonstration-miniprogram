@@ -72,6 +72,7 @@ Component({
       const { x, y } = e.detail as KeyPos;
 
       const result = this.data._chess.click(x, y);
+      Log.d(TAG, 'click result', result);
       this.handleChessResult(this.data._chess, result);
     },
 
@@ -109,7 +110,7 @@ Component({
       // 棋谱改变
       if (result.changed.includes(CHANGE_TYPE.NOWSTEPS)) {
         this.setData({
-          nowSteps: [..._chess.nowSteps],
+          nowSteps: [..._chess.getNowSteps()],
         });
       }
 
