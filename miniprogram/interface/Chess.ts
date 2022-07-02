@@ -188,9 +188,8 @@ class Chess {
   }
 
   getHint() {
-    const { nowSteps, _expectSteps } = this;
-    const idx = nowSteps.length;
-    const content = _expectSteps[idx];
+    const idx = this.nowSteps.length;
+    const content = this._expectSteps[idx];
     Log.d(TAG, 'hint', idx, content);
     return content;
   }
