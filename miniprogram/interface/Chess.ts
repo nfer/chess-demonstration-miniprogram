@@ -1,5 +1,4 @@
 import { KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT, ChessResult, getChessResult } from './index';
-import * as util from '../utils/util';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
 
@@ -68,7 +67,7 @@ class Chess {
     const result = this.chessMap.click(x, y);
     Log.d(this.name, 'click result', result);
     if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
-      const fenStr = util.getFenStr(this.chessMap.getKeyInfos());
+      const fenStr = this.chessMap.getFenStr();
       Log.d(this.name, 'new fen str', fenStr);
       this.keyMapFenStrs.push(fenStr);
       this.nowSteps.push(result.step as StepInfo);

@@ -17,8 +17,9 @@ class ChessMap {
     this.hasActiveKey = this.hasActiveKey.bind(this);
   }
 
-  public getKeyInfos(): Array<KeyInfo> {
-    return this.keyInfos;
+  public getFenStr(): string {
+    const fenStr = util.getFenStr(this.keyInfos);
+    return fenStr;
   }
 
   // helper
@@ -135,6 +136,10 @@ class ChessMap {
       cursorPos: this.getCursorPos(),
       keyInfos: this.getKeyInfos(),
     };
+  }
+
+  private getKeyInfos(): Array<KeyInfo> {
+    return this.keyInfos;
   }
 
   private getCursorPos(): KeyPos {
