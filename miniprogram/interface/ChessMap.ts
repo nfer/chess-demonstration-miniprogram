@@ -78,6 +78,7 @@ class ChessMap {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
           msg: '选择棋子',
+          cursorPos: this.getCursorPos(),
         };
       }
 
@@ -90,6 +91,7 @@ class ChessMap {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
           msg: '取消选择棋子',
+          cursorPos: this.getCursorPos(),
         };
       }
 
@@ -102,6 +104,7 @@ class ChessMap {
           changed: [CHANGE_TYPE.ACTIVEKEY],
           status: STATUS.OK,
           msg: '同色棋子，点击后进行焦点更新',
+          cursorPos: this.getCursorPos(),
         };
       }
     }
@@ -122,6 +125,7 @@ class ChessMap {
       status: STATUS.OK,
       msg: '移动棋子',
       step: { name: step, error: false },
+      cursorPos: this.getCursorPos(),
     };
   }
 
@@ -134,6 +138,7 @@ class ChessMap {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO],
       status: STATUS.OK,
       msg: '初始化',
+      cursorPos: this.getCursorPos(),
     };
   }
 
