@@ -129,7 +129,7 @@ class ChessMap {
     };
   }
 
-  public updateKeyInfos(keyInfos: Array<KeyInfo>) {
+  private updateKeyInfos(keyInfos: Array<KeyInfo>) {
     this.keyInfos = [...keyInfos];
     this.activeKey = EMPTY_KEYINFO;
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
