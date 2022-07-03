@@ -1,4 +1,4 @@
-import { KeyInfo, KeyPos, KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT, ChessResult } from './index';
+import { KeyInfo, KeyPos, KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT, ChessResult, getChessResult } from './index';
 import * as util from '../utils/util';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
@@ -47,39 +47,25 @@ class Chess {
     // 出错时不再响应棋盘交互
     if (this.isError()) {
       Log.w(TAG, '出错时不再响应棋盘交互');
-      return {
-        changed: [],
-        status: STATUS.WARN,
-        msg: '出错时不再响应棋盘交互',
-      };
+      return getChessResult(STATUS.WARN, '出错时不再响应棋盘交互');
     }
 
     // 打谱成功时不再响应棋盘交互
     if (this.isSuccess()) {
       Log.w(TAG, '打谱成功时不再响应棋盘交互');
-      return {
-        changed: [],
-        status: STATUS.WARN,
-        msg: '打谱成功时不再响应棋盘交互',
-      };
+      return getChessResult(STATUS.WARN, '打谱成功时不再响应棋盘交互');
     }
 
     // 判断规则“执红棋的一方先走”
     if (!this.checkRedFirst(x, y)) {
-      return {
-        changed: [],
-        status: STATUS.WARN,
-        msg: '出错了，违反规则“执红棋的一方先走”',
-      };
+      Log.w(TAG, '出错了，违反规则“执红棋的一方先走”');
+      return getChessResult(STATUS.WARN, '出错了，违反规则“执红棋的一方先走”');
     }
 
     // 判断规则“双方轮流各走一着”
     if (!this.checkCrossMove(x, y)) {
-      return {
-        changed: [],
-        status: STATUS.WARN,
-        msg: '出错了，违反规则“双方轮流各走一着”',
-      };
+      Log.w(TAG, '出错了，违反规则“双方轮流各走一着”');
+      return getChessResult(STATUS.WARN, '出错了，违反规则“双方轮流各走一着”');
     }
 
     const result = this.chessMap.click(x, y);
@@ -111,11 +97,7 @@ class Chess {
   public revert(): ChessResult {
     // 棋局记录最少2条才可以回退
     if (this._keyMapFenStrs.length < 2) {
-      return {
-        changed: [],
-        status: STATUS.OK,
-        msg: '',
-      };
+      return getChessResult(STATUS.OK);
     }
 
     // 去除最后一条棋局记录

@@ -61,3 +61,13 @@ export interface ChessResult {
   step?: StepInfo;
   result?: DEMONSTRATION_RESULT,
 }
+
+export function getChessResult(status: STATUS, msg = ''): ChessResult {
+  return {
+    changed: [],
+    status,
+    msg,
+    step: { name: '', error: false },
+    result: DEMONSTRATION_RESULT.NORMAL,
+  };
+}

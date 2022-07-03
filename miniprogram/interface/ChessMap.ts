@@ -1,4 +1,4 @@
-import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, STATUS, CHANGE_TYPE, ChessResult } from './index';
+import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, STATUS, CHANGE_TYPE, ChessResult, getChessResult } from './index';
 import * as util from '../utils/util';
 import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
@@ -38,21 +38,13 @@ class ChessMap {
 
     // 判断是否是无效点击
     if (this.checkEmptyClick(x, y)) {
-      return {
-        changed: [],
-        status: STATUS.OK,
-        msg: '',
-      };
+      return getChessResult(STATUS.OK, '无效点击');
     }
 
     // 判断是否可以移动到指定位置
     if (!this.checkMove(x, y)) {
       Log.w(TAG, '无法移动到目标位置');
-      return {
-        changed: [],
-        status: STATUS.WARN,
-        msg: '出错了，无法移动到目标位置',
-      };
+      return getChessResult(STATUS.WARN, '出错了，无法移动到目标位置');
     }
 
     const { keyInfos, hasActiveKey, activeKey } = this;
