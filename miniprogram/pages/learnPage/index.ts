@@ -1,6 +1,6 @@
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
-import { KeyInfo, EMPTY_KEYPOS, KeyPos, StepInfo, CHANGE_TYPE, ChessResult, STATUS } from '../../interface/index';
+import { KeyInfo, EMPTY_KEYPOS, KeyPos, StepInfo, CHANGE_TYPE, ChessResult, STATUS, DEMONSTRATION_RESULT } from '../../interface/index';
 import { steps } from '../../data/steps';
 import Chess from '../../interface/Chess';
 
@@ -117,7 +117,7 @@ Component({
         });
       }
 
-      if (_chess.isError()) {
+      if (result.result === DEMONSTRATION_RESULT.ERROR) {
         audioCtx.src = 'pages/learnPage/warn.mp3';
         audioCtx.play();
         wx.showToast({
@@ -128,7 +128,7 @@ Component({
         return;
       }
 
-      if (_chess.isSuccess()) {
+      if (result.result === DEMONSTRATION_RESULT.SUCCESS) {
         audioCtx.src = 'pages/learnPage/success.mp3';
         audioCtx.play();
         wx.showToast({

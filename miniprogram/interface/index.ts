@@ -48,10 +48,16 @@ export enum CHANGE_TYPE {
   KEYINFO,
   ACTIVEKEY,
 }
+export enum DEMONSTRATION_RESULT {
+  NORMAL = 0,
+  ERROR,
+  SUCCESS,
+}
 
 export interface ChessResult {
   changed: Array<CHANGE_TYPE>;
   status: STATUS;
   msg: string;
   step?: StepInfo;
+  result?: DEMONSTRATION_RESULT,
 }

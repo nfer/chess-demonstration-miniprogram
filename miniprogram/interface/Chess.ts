@@ -1,4 +1,4 @@
-import { KeyInfo, KeyPos, KeyType, StepInfo, STATUS, CHANGE_TYPE } from './index';
+import { KeyInfo, KeyPos, KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT } from './index';
 import * as util from '../utils/util';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
@@ -40,22 +40,6 @@ class Chess {
 
   public getKeyInfos(): Array<KeyInfo> {
     return this.chessMap.getKeyInfos();
-  }
-
-  public isError(): boolean {
-    if (this.nowSteps.length === 0) {
-      return false;
-    }
-
-    return this.nowSteps.some((step, index) => step.name !== this._expectSteps[index]);
-  }
-
-  public isSuccess(): boolean {
-    if (this.nowSteps.length === 0) {
-      return false;
-    }
-
-    return this.nowSteps.length === this._expectSteps.length;
   }
 
   public click(x: number, y: number) {
@@ -107,6 +91,11 @@ class Chess {
       this.nowSteps.push(result.step as StepInfo);
       if (this.isError()) {
         this.nowSteps[this.nowSteps.length - 1].error = true;
+        result.result = DEMONSTRATION_RESULT.ERROR;
+      } else if (this.isSuccess()) {
+        result.result = DEMONSTRATION_RESULT.SUCCESS;
+      } else {
+        result.result = DEMONSTRATION_RESULT.NORMAL;
       }
     }
     return result;
@@ -144,6 +133,22 @@ class Chess {
     const content = this._expectSteps[idx];
     Log.d(TAG, 'hint', idx, content);
     return content;
+  }
+
+  private isError(): boolean {
+    if (this.nowSteps.length === 0) {
+      return false;
+    }
+
+    return this.nowSteps.some((step, index) => step.name !== this._expectSteps[index]);
+  }
+
+  private isSuccess(): boolean {
+    if (this.nowSteps.length === 0) {
+      return false;
+    }
+
+    return this.nowSteps.length === this._expectSteps.length;
   }
 
   /**
