@@ -33,10 +33,22 @@ class ChessMap {
     return this.activeKey.type !== KeyType.NONE;
   }
 
+  /**
+   * 根据坐标(x, y)判断是否有棋子
+   *
+   * @param x 坐标x的值
+   * @param y 坐标y的值
+   */
   public findFocusKey(x: number, y: number): KeyInfo | undefined {
     return this.keyInfos.find(item => item.x === x && item.y === y);
   }
 
+  /**
+   * 处理点击坐标(x, y)的事件
+   *
+   * @param x 坐标x的值
+   * @param y 坐标y的值
+   */
   public click(x: number, y: number): ChessResult {
     Log.d(this.name, `click at (${x}, ${y})`);
 
@@ -131,6 +143,12 @@ class ChessMap {
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
   }
 
+  /**
+   * 判断棋子是否可以移动到坐标(x, y)处
+   *
+   * @param x 坐标x的值
+   * @param y 坐标y的值
+   */
   private checkMove(x: number, y: number): boolean {
     // 当前没有已选中棋子时，直接返回成功
     if (!this.hasActiveKey()) {
@@ -149,10 +167,10 @@ class ChessMap {
   }
 
   /**
-   * 判断是否是无效点击
+   * 判断点击坐标(x, y)是否无效点击
    *
-   * @param x 点击的x位置
-   * @param y 点击的y位置
+   * @param x 坐标x的值
+   * @param y 坐标y的值
    */
   private checkEmptyClick(x: number, y: number): boolean {
     const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);

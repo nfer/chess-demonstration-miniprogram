@@ -37,6 +37,12 @@ class Chess {
     return this.chessMap.getKeyInfos();
   }
 
+  /**
+   * 处理点击坐标(x, y)的事件
+   *
+   * @param x 坐标x的值
+   * @param y 坐标y的值
+   */
   public click(x: number, y: number): ChessResult {
     Log.d(this.name, `click at (${x}, ${y})`);
     // 出错时不再响应棋盘交互
@@ -131,7 +137,8 @@ class Chess {
   /**
    * 判断规则“执红棋的一方先走”
    *
-   * @param focuskey KeyInfo
+   * @param x 坐标x的值
+   * @param y 坐标y的值
    */
   private checkRedFirst(x: number, y: number): boolean {
     const focuskey = this.chessMap.findFocusKey(x, y);
@@ -155,7 +162,8 @@ class Chess {
   /**
    * 判断规则“双方轮流各走一着”
    *
-   * @param focuskey KeyInfo
+   * @param x 坐标x的值
+   * @param y 坐标y的值
    */
   private checkCrossMove(x: number, y: number): boolean {
     const focuskey = this.chessMap.findFocusKey(x, y);
