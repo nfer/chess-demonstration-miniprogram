@@ -16,16 +16,16 @@ class ChessItem {
     this.y = keyInfo.y;
   }
 
-  private isRed() {
+  protected isRed() {
     return this.type === KeyType.RED;
   }
 
-  private checkPosMove(x: number, y: number): boolean {
+  protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     return true;
   }
 
-  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  protected checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
     return true;
   }
@@ -60,7 +60,7 @@ export class KChessItem extends ChessItem {
     this.name = 'KChessItem';
   }
 
-  private checkPosMove(x: number, y: number): boolean {
+  protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     if (x < 3 || x > 5) return false;
 
@@ -85,7 +85,7 @@ export class AChessItem extends ChessItem {
     this.name = 'AChessItem';
   }
 
-  private checkPosMove(x: number, y: number): boolean {
+  protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     let arr = [];
     if (this.isRed()) {
@@ -110,7 +110,7 @@ export class BChessItem extends ChessItem {
     this.name = 'BChessItem';
   }
 
-  private checkPosMove(x: number, y: number): boolean {
+  protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     let arr = [];
     if (this.isRed()) {
@@ -125,7 +125,7 @@ export class BChessItem extends ChessItem {
     return Math.abs(this.x - x) === 2 && Math.abs(this.y - y) === 2;
   }
 
-  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  protected checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     const keyX = (x + this.x) / 2;
     const keyY = (y + this.y) / 2;
@@ -146,7 +146,7 @@ export class NChessItem extends ChessItem {
     this.name = 'NChessItem';
   }
 
-  private checkPosMove(x: number, y: number): boolean {
+  protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
@@ -155,7 +155,7 @@ export class NChessItem extends ChessItem {
     return xRange + yRange === 3;
   }
 
-  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  protected checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     let keyX = 0, keyY = 0;
     const xRange = x - this.x;
@@ -184,14 +184,14 @@ export class RChessItem extends ChessItem {
     this.name = 'RChessItem';
   }
 
-  private checkPosMove(x: number, y: number): boolean {
+  protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     return xRange === 0 || yRange === 0;
   }
 
-  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  protected checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     let innerKeys = [] as Array<KeyInfo>;
 
@@ -220,14 +220,14 @@ export class CChessItem extends ChessItem {
     this.name = 'CChessItem';
   }
 
-  private checkPosMove(x: number, y: number): boolean {
+  protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     return xRange === 0 || yRange === 0;
   }
 
-  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  protected checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     let innerKeys = [] as Array<KeyInfo>;
 
@@ -264,7 +264,7 @@ export class PChessItem extends ChessItem {
     this.name = 'PChessItem';
   }
 
-  private checkPosMove(x: number, y: number): boolean {
+  protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
