@@ -33,6 +33,10 @@ class ChessMap {
     return this.activeKey.type !== KeyType.NONE;
   }
 
+  public findFocusKey(x: number, y: number): KeyInfo | undefined {
+    return this.keyInfos.find(item => item.x === x && item.y === y);
+  }
+
   public click(x: number, y: number): ChessResult {
     Log.d(this.name, `click at (${x}, ${y})`);
 

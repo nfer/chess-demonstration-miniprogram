@@ -134,7 +134,7 @@ class Chess {
    * @param focuskey KeyInfo
    */
   private checkRedFirst(x: number, y: number): boolean {
-    const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
+    const focuskey = this.chessMap.findFocusKey(x, y);
     if (!focuskey) {
       return true;
     }
@@ -158,7 +158,7 @@ class Chess {
    * @param focuskey KeyInfo
    */
   private checkCrossMove(x: number, y: number): boolean {
-    const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
+    const focuskey = this.chessMap.findFocusKey(x, y);
     if (!focuskey) {
       return true;
     }
