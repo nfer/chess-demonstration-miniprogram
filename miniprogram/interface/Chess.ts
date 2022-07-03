@@ -3,9 +3,9 @@ import * as util from '../utils/util';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
 
-const TAG = 'ChessClass';
-
 class Chess {
+  private name = 'Chess';
+
   private nowSteps = [] as Array<StepInfo>;
 
   private _fenStr = ''; // 初始化时的棋局
@@ -43,36 +43,36 @@ class Chess {
   }
 
   public click(x: number, y: number): ChessResult {
-    Log.d(TAG, `click at (${x}, ${y})`);
+    Log.d(this.name, `click at (${x}, ${y})`);
     // 出错时不再响应棋盘交互
     if (this.isError()) {
-      Log.w(TAG, '出错时不再响应棋盘交互');
+      Log.w(this.name, '出错时不再响应棋盘交互');
       return getChessResult(STATUS.WARN, '出错时不再响应棋盘交互');
     }
 
     // 打谱成功时不再响应棋盘交互
     if (this.isSuccess()) {
-      Log.w(TAG, '打谱成功时不再响应棋盘交互');
+      Log.w(this.name, '打谱成功时不再响应棋盘交互');
       return getChessResult(STATUS.WARN, '打谱成功时不再响应棋盘交互');
     }
 
     // 判断规则“执红棋的一方先走”
     if (!this.checkRedFirst(x, y)) {
-      Log.w(TAG, '出错了，违反规则“执红棋的一方先走”');
+      Log.w(this.name, '出错了，违反规则“执红棋的一方先走”');
       return getChessResult(STATUS.WARN, '出错了，违反规则“执红棋的一方先走”');
     }
 
     // 判断规则“双方轮流各走一着”
     if (!this.checkCrossMove(x, y)) {
-      Log.w(TAG, '出错了，违反规则“双方轮流各走一着”');
+      Log.w(this.name, '出错了，违反规则“双方轮流各走一着”');
       return getChessResult(STATUS.WARN, '出错了，违反规则“双方轮流各走一着”');
     }
 
     const result = this.chessMap.click(x, y);
-    Log.d(TAG, 'click result', result);
+    Log.d(this.name, 'click result', result);
     if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
       const fenStr = util.getFenStr(this.chessMap.getKeyInfos());
-      Log.d(TAG, 'new fen str', fenStr);
+      Log.d(this.name, 'new fen str', fenStr);
       this._keyMapFenStrs.push(fenStr);
       this.nowSteps.push(result.step as StepInfo);
       if (this.isError()) {
@@ -113,7 +113,7 @@ class Chess {
   public getHint(): string {
     const idx = this.nowSteps.length;
     const content = this._expectSteps[idx];
-    Log.d(TAG, 'hint', idx, content);
+    Log.d(this.name, 'hint', idx, content);
     return content;
   }
 

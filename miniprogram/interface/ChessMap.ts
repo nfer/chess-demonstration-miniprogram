@@ -4,9 +4,9 @@ import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
 import ChessItem, { getChessItem } from './ChessItem';
 
-const TAG = 'ChessMap';
-
 class ChessMap {
+  private name = 'ChessMap';
+
   private keyInfos = [] as Array<KeyInfo>;
 
   private activeKey = EMPTY_KEYINFO; // 当前已经选中的棋子
@@ -34,7 +34,7 @@ class ChessMap {
   }
 
   public click(x: number, y: number): ChessResult {
-    Log.d(TAG, `click at (${x}, ${y})`);
+    Log.d(this.name, `click at (${x}, ${y})`);
 
     // 判断是否是无效点击
     if (this.checkEmptyClick(x, y)) {
@@ -43,7 +43,7 @@ class ChessMap {
 
     // 判断是否可以移动到指定位置
     if (!this.checkMove(x, y)) {
-      Log.w(TAG, '无法移动到目标位置');
+      Log.w(this.name, '无法移动到目标位置');
       return getChessResult(STATUS.WARN, '出错了，无法移动到目标位置');
     }
 
@@ -51,11 +51,11 @@ class ChessMap {
     const focuskey = keyInfos.find(item => item.x === x && item.y === y);
     // 场景：点击在棋子上
     if (focuskey) {
-      Log.d(TAG, '点击在棋子上', focuskey);
+      Log.d(this.name, '点击在棋子上', focuskey);
 
       // 1.1 选择棋子
       if (!hasActiveKey()) {
-        Log.d(TAG, '选择棋子', focuskey);
+        Log.d(this.name, '选择棋子', focuskey);
         this.activeKey = { ...focuskey };
         this.activeKeyItem = getChessItem(this.activeKey);
         return {
@@ -67,7 +67,7 @@ class ChessMap {
 
       // 1.2 取消选择棋子
       if (this.checkSamePos(activeKey, focuskey)) {
-        Log.d(TAG, '取消选择棋子', focuskey);
+        Log.d(this.name, '取消选择棋子', focuskey);
         this.activeKey = { ...EMPTY_KEYINFO };
         this.activeKeyItem = getChessItem(this.activeKey);
         return {
@@ -79,7 +79,7 @@ class ChessMap {
 
       // 1.3 同色棋子，点击后进行焦点更新
       if (this.checkSameCamp(activeKey, focuskey)) {
-        Log.d(TAG, '同色棋子，点击后进行焦点更新', focuskey);
+        Log.d(this.name, '同色棋子，点击后进行焦点更新', focuskey);
         this.activeKey = { ...focuskey };
         this.activeKeyItem = getChessItem(this.activeKey);
         return {
@@ -91,7 +91,7 @@ class ChessMap {
     }
 
     // 移动棋子
-    Log.d(TAG, `移动棋子 "${activeKey.name}" from (${activeKey.x}, ${activeKey.y}) to (${x}, ${y})`);
+    Log.d(this.name, `移动棋子 "${activeKey.name}" from (${activeKey.x}, ${activeKey.y}) to (${x}, ${y})`);
 
     const step = stepUtils.getStep(this.activeKey, this.keyInfos, x, y);
 
