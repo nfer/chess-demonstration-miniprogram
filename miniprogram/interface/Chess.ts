@@ -141,7 +141,7 @@ class Chess {
    * @param y 坐标y的值
    */
   private checkRedFirst(x: number, y: number): boolean {
-    const focuskey = this.chessMap.findFocusKey(x, y);
+    const focuskey = this.chessMap.getKeyByPos(x, y);
     if (!focuskey) {
       return true;
     }
@@ -166,7 +166,7 @@ class Chess {
    * @param y 坐标y的值
    */
   private checkCrossMove(x: number, y: number): boolean {
-    const focuskey = this.chessMap.findFocusKey(x, y);
+    const focuskey = this.chessMap.getKeyByPos(x, y);
     if (!focuskey) {
       return true;
     }

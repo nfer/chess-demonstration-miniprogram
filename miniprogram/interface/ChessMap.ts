@@ -34,12 +34,12 @@ class ChessMap {
   }
 
   /**
-   * 根据坐标(x, y)判断是否有棋子
+   * 查找坐标(x, y)处的棋子
    *
    * @param x 坐标x的值
    * @param y 坐标y的值
    */
-  public findFocusKey(x: number, y: number): KeyInfo | undefined {
+  public getKeyByPos(x: number, y: number): KeyInfo | undefined {
     return this.keyInfos.find(item => item.x === x && item.y === y);
   }
 
