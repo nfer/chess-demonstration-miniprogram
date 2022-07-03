@@ -59,8 +59,9 @@ export interface ChessResult {
   status: STATUS;
   msg: string;
   step?: StepInfo;
-  result?: DEMONSTRATION_RESULT,
-  cursorPos?: KeyPos,
+  result?: DEMONSTRATION_RESULT;
+  cursorPos?: KeyPos;
+  keyInfos?: Array<KeyInfo>;
 }
 
 export function getChessResult(status: STATUS, msg = ''): ChessResult {

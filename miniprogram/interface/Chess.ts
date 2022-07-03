@@ -1,4 +1,4 @@
-import { KeyInfo, KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT, ChessResult, getChessResult } from './index';
+import { KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT, ChessResult, getChessResult } from './index';
 import * as util from '../utils/util';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
@@ -31,10 +31,6 @@ class Chess {
 
   public getNowSteps(): Array<StepInfo> {
     return this.nowSteps;
-  }
-
-  public getKeyInfos(): Array<KeyInfo> {
-    return this.chessMap.getKeyInfos();
   }
 
   /**

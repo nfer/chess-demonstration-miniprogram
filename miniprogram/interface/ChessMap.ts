@@ -119,6 +119,7 @@ class ChessMap {
       msg: '移动棋子',
       step: { name: step, error: false },
       cursorPos: this.getCursorPos(),
+      keyInfos: this.getKeyInfos(),
     };
   }
 
@@ -132,6 +133,7 @@ class ChessMap {
       status: STATUS.OK,
       msg: '初始化',
       cursorPos: this.getCursorPos(),
+      keyInfos: this.getKeyInfos(),
     };
   }
 
