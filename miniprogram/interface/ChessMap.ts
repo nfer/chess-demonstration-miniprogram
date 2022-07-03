@@ -17,13 +17,6 @@ class ChessMap {
     this.hasActiveKey = this.hasActiveKey.bind(this);
   }
 
-  public getCursorPos(): KeyPos {
-    return {
-      x: this.activeKey.x,
-      y: this.activeKey.y,
-    };
-  }
-
   public getKeyInfos(): Array<KeyInfo> {
     return this.keyInfos;
   }
@@ -139,6 +132,13 @@ class ChessMap {
       status: STATUS.OK,
       msg: '初始化',
       cursorPos: this.getCursorPos(),
+    };
+  }
+
+  private getCursorPos(): KeyPos {
+    return {
+      x: this.activeKey.x,
+      y: this.activeKey.y,
     };
   }
 

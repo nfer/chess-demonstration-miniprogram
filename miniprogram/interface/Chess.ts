@@ -1,4 +1,4 @@
-import { KeyInfo, KeyPos, KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT, ChessResult, getChessResult } from './index';
+import { KeyInfo, KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT, ChessResult, getChessResult } from './index';
 import * as util from '../utils/util';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
@@ -27,10 +27,6 @@ class Chess {
 
   public setExpectSteps(expectSteps: Array<string>): void {
     this.expectSteps = [...expectSteps];
-  }
-
-  public getCursorPos(): KeyPos {
-    return this.chessMap.getCursorPos();
   }
 
   public getNowSteps(): Array<StepInfo> {
