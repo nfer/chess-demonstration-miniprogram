@@ -8,11 +8,11 @@ class Chess {
 
   private nowSteps = [] as Array<StepInfo>;
 
-  private _fenStr = ''; // 初始化时的棋局
+  private fenStr = ''; // 初始化时的棋局
 
-  private _keyMapFenStrs = [] as Array<string>;
+  private keyMapFenStrs = [] as Array<string>;
 
-  private _expectSteps = [] as Array<string>;
+  private expectSteps = [] as Array<string>;
 
   private chessMap = new ChessMap();
 
@@ -22,12 +22,12 @@ class Chess {
   }
 
   public init(keyMapFenStr = ''): ChessResult {
-    this._fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
+    this.fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
     return this.reload();
   }
 
   public setExpectSteps(expectSteps: Array<string>): void {
-    this._expectSteps = [...expectSteps];
+    this.expectSteps = [...expectSteps];
   }
 
   public getCursorPos(): KeyPos {
@@ -73,7 +73,7 @@ class Chess {
     if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
       const fenStr = util.getFenStr(this.chessMap.getKeyInfos());
       Log.d(this.name, 'new fen str', fenStr);
-      this._keyMapFenStrs.push(fenStr);
+      this.keyMapFenStrs.push(fenStr);
       this.nowSteps.push(result.step as StepInfo);
       if (this.isError()) {
         this.nowSteps[this.nowSteps.length - 1].error = true;
@@ -88,31 +88,31 @@ class Chess {
   }
 
   public reload(): ChessResult {
-    this._keyMapFenStrs = [this._fenStr];
+    this.keyMapFenStrs = [this.fenStr];
     this.nowSteps = [];
-    const lastestFenStr = this._keyMapFenStrs[this._keyMapFenStrs.length - 1];
+    const lastestFenStr = this.keyMapFenStrs[this.keyMapFenStrs.length - 1];
     return this.chessMap.setFenStr(lastestFenStr);
   }
 
   public revert(): ChessResult {
     // 棋局记录最少2条才可以回退
-    if (this._keyMapFenStrs.length < 2) {
+    if (this.keyMapFenStrs.length < 2) {
       return getChessResult(STATUS.OK);
     }
 
     // 去除最后一条棋局记录
-    this._keyMapFenStrs.pop();
+    this.keyMapFenStrs.pop();
 
     // 去除最后一条棋谱记录
     this.nowSteps.pop();
 
-    const lastestFenStr = this._keyMapFenStrs[this._keyMapFenStrs.length - 1];
+    const lastestFenStr = this.keyMapFenStrs[this.keyMapFenStrs.length - 1];
     return this.chessMap.setFenStr(lastestFenStr);
   }
 
   public getHint(): string {
     const idx = this.nowSteps.length;
-    const content = this._expectSteps[idx];
+    const content = this.expectSteps[idx];
     Log.d(this.name, 'hint', idx, content);
     return content;
   }
@@ -122,7 +122,7 @@ class Chess {
       return false;
     }
 
-    return this.nowSteps.some((step, index) => step.name !== this._expectSteps[index]);
+    return this.nowSteps.some((step, index) => step.name !== this.expectSteps[index]);
   }
 
   private isSuccess(): boolean {
@@ -130,7 +130,7 @@ class Chess {
       return false;
     }
 
-    return this.nowSteps.length === this._expectSteps.length;
+    return this.nowSteps.length === this.expectSteps.length;
   }
 
   /**
