@@ -12,27 +12,27 @@ class ChessMap {
 
   private activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
-  constructor() {
+  public constructor() {
     this.hasActiveKey = this.hasActiveKey.bind(this);
   }
 
-  getCursorPos(): KeyPos {
+  public getCursorPos(): KeyPos {
     return {
       x: this.activeKey.x,
       y: this.activeKey.y,
     };
   }
 
-  getKeyInfos(): Array<KeyInfo> {
+  public getKeyInfos(): Array<KeyInfo> {
     return this.keyInfos;
   }
 
   // helper
-  hasActiveKey(): boolean {
+  public hasActiveKey(): boolean {
     return this.activeKey.type !== KeyType.NONE;
   }
 
-  checkMove(x: number, y: number): boolean {
+  private checkMove(x: number, y: number): boolean {
     // 当前没有已选中棋子时，直接返回成功
     if (!this.hasActiveKey()) {
       return true;
@@ -41,11 +41,11 @@ class ChessMap {
     return this.activeKeyItem.checkMove(x, y, this.keyInfos);
   }
 
-  checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
+  private checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
     return keyInfo1.type === keyInfo2.type;
   }
 
-  checkSamePos(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
+  private checkSamePos(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
     return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
   }
 
@@ -55,12 +55,12 @@ class ChessMap {
    * @param x 点击的x位置
    * @param y 点击的y位置
    */
-  checkEmptyClick(x: number, y: number): boolean {
+  private checkEmptyClick(x: number, y: number): boolean {
     const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
     return !focuskey && !this.hasActiveKey();
   }
 
-  click(x: number, y: number): ChessResult {
+  public click(x: number, y: number): ChessResult {
     Log.d(TAG, `click at (${x}, ${y})`);
 
     // 判断是否是无效点击
@@ -141,7 +141,7 @@ class ChessMap {
     };
   }
 
-  setFenStr(fenStr: string) {
+  public setFenStr(fenStr: string) {
     this.keyInfos = util.parseFenStr(fenStr);
     this.activeKey = EMPTY_KEYINFO;
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
@@ -153,7 +153,7 @@ class ChessMap {
     };
   }
 
-  updateKeyInfos(keyInfos: Array<KeyInfo>) {
+  public updateKeyInfos(keyInfos: Array<KeyInfo>) {
     this.keyInfos = [...keyInfos];
     this.activeKey = EMPTY_KEYINFO;
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);

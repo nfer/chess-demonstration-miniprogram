@@ -16,7 +16,7 @@ class Chess {
 
   private chessMap = new ChessMap();
 
-  constructor() {
+  public constructor() {
     this.init = this.init.bind(this);
     this.click = this.click.bind(this);
   }

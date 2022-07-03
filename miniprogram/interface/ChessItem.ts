@@ -10,27 +10,27 @@ class ChessItem {
 
   protected name = 'ChessItem';
 
-  constructor(keyInfo: KeyInfo) {
+  public constructor(keyInfo: KeyInfo) {
     this.type = keyInfo.type;
     this.x = keyInfo.x;
     this.y = keyInfo.y;
   }
 
-  isRed() {
+  private isRed() {
     return this.type === KeyType.RED;
   }
 
-  checkPosMove(x: number, y: number): boolean {
+  private checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     return true;
   }
 
-  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
     return true;
   }
 
-  checkMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  public checkMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, 'checkMove', x, y);
 
     // 判断是否可以移动到指定位置
@@ -55,12 +55,12 @@ class ChessItem {
  * 将
  */
 export class KChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
+  public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'KChessItem';
   }
 
-  checkPosMove(x: number, y: number): boolean {
+  private checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     if (x < 3 || x > 5) return false;
 
@@ -80,12 +80,12 @@ export class KChessItem extends ChessItem {
  * 士
  */
 export class AChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
+  public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'AChessItem';
   }
 
-  checkPosMove(x: number, y: number): boolean {
+  private checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     let arr = [];
     if (this.isRed()) {
@@ -105,12 +105,12 @@ export class AChessItem extends ChessItem {
  * 相
  */
 export class BChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
+  public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'BChessItem';
   }
 
-  checkPosMove(x: number, y: number): boolean {
+  private checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     let arr = [];
     if (this.isRed()) {
@@ -125,7 +125,7 @@ export class BChessItem extends ChessItem {
     return Math.abs(this.x - x) === 2 && Math.abs(this.y - y) === 2;
   }
 
-  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     const keyX = (x + this.x) / 2;
     const keyY = (y + this.y) / 2;
@@ -141,12 +141,12 @@ export class BChessItem extends ChessItem {
  * 马
  */
 export class NChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
+  public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'NChessItem';
   }
 
-  checkPosMove(x: number, y: number): boolean {
+  private checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
@@ -155,7 +155,7 @@ export class NChessItem extends ChessItem {
     return xRange + yRange === 3;
   }
 
-  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     let keyX = 0, keyY = 0;
     const xRange = x - this.x;
@@ -179,19 +179,19 @@ export class NChessItem extends ChessItem {
  * 车
  */
 export class RChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
+  public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'RChessItem';
   }
 
-  checkPosMove(x: number, y: number): boolean {
+  private checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     return xRange === 0 || yRange === 0;
   }
 
-  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     let innerKeys = [] as Array<KeyInfo>;
 
@@ -215,19 +215,19 @@ export class RChessItem extends ChessItem {
  * 炮
  */
 export class CChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
+  public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'CChessItem';
   }
 
-  checkPosMove(x: number, y: number): boolean {
+  private checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
     return xRange === 0 || yRange === 0;
   }
 
-  checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+  private checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
     Log.d(this.name, `checkBlockMove now(${this.x}, ${this.y}) to dest(${x}, ${y})`);
     let innerKeys = [] as Array<KeyInfo>;
 
@@ -259,12 +259,12 @@ export class CChessItem extends ChessItem {
  * 兵
  */
 export class PChessItem extends ChessItem {
-  constructor(keyInfo: KeyInfo) {
+  public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'PChessItem';
   }
 
-  checkPosMove(x: number, y: number): boolean {
+  private checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
     const yRange = Math.abs(this.y - y);
