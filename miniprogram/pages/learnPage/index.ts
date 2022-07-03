@@ -120,6 +120,7 @@ Component({
         Log.d(TAG, '棋局改变', _chess.getKeyInfos());
         this.setData({
           keyInfos: [..._chess.getKeyInfos()],
+          nowSteps: [..._chess.getNowSteps()],
         });
       }
 

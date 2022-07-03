@@ -54,4 +54,5 @@ export interface ChessResult {
   changed: Array<CHANGE_TYPE>;
   status: STATUS;
   msg: string;
+  step?: StepInfo;
 }

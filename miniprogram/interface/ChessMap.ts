@@ -1,5 +1,6 @@
 import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, STATUS, CHANGE_TYPE, ChessResult } from './index';
 import * as util from '../utils/util';
+import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
 import ChessItem, { getChessItem } from './ChessItem';
 
@@ -100,6 +101,8 @@ class ChessMap {
     // 移动棋子
     Log.d(TAG, `移动棋子 "${activeKey.name}" from (${activeKey.x}, ${activeKey.y}) to (${x}, ${y})`);
 
+    const step = stepUtils.getStep(this.activeKey, this.keyInfos, x, y);
+
     const newKeyInfos = keyInfos.filter(item => item.x !== x || item.y !== y);
     const idx = newKeyInfos.findIndex(item => item.hash === activeKey.hash);
     newKeyInfos[idx].x = x;
@@ -110,6 +113,7 @@ class ChessMap {
       changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
       status: STATUS.OK,
       msg: '移动棋子',
+      step: { name: step, error: false },
     };
   }
 

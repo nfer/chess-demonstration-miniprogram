@@ -104,6 +104,7 @@ class Chess {
       const fenStr = util.getFenStr(this.chessMap.getKeyInfos());
       Log.d(TAG, 'new fen str', fenStr);
       this._keyMapFenStrs.push(fenStr);
+      this.nowSteps.push(result.step as StepInfo);
     }
     return result;
   }
