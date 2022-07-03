@@ -58,50 +58,6 @@ class Chess {
     return this.nowSteps.length === this._expectSteps.length;
   }
 
-  /**
-   * 判断规则“执红棋的一方先走”
-   *
-   * @param focuskey KeyInfo
-   */
-  private checkRedFirst(x: number, y: number): boolean {
-    const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
-    if (!focuskey) {
-      return true;
-    }
-
-    // 如果是不是第一步，跳过判断
-    if (this.nowSteps.length) {
-      return true;
-    }
-
-    // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
-    if (this.chessMap.hasActiveKey()) {
-      return true;
-    }
-
-    return focuskey.type === KeyType.RED;
-  }
-
-  /**
-   * 判断规则“双方轮流各走一着”
-   *
-   * @param focuskey KeyInfo
-   */
-  private checkCrossMove(x: number, y: number): boolean {
-    const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
-    if (!focuskey) {
-      return true;
-    }
-
-    // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
-    if (this.chessMap.hasActiveKey()) {
-      return true;
-    }
-
-    const lastKeyType = this.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
-    return focuskey.type !== lastKeyType;
-  }
-
   public click(x: number, y: number) {
     Log.d(TAG, `click at (${x}, ${y})`);
     // 出错时不再响应棋盘交互
@@ -184,6 +140,50 @@ class Chess {
     const content = this._expectSteps[idx];
     Log.d(TAG, 'hint', idx, content);
     return content;
+  }
+
+  /**
+   * 判断规则“执红棋的一方先走”
+   *
+   * @param focuskey KeyInfo
+   */
+  private checkRedFirst(x: number, y: number): boolean {
+    const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
+    if (!focuskey) {
+      return true;
+    }
+
+    // 如果是不是第一步，跳过判断
+    if (this.nowSteps.length) {
+      return true;
+    }
+
+    // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
+    if (this.chessMap.hasActiveKey()) {
+      return true;
+    }
+
+    return focuskey.type === KeyType.RED;
+  }
+
+  /**
+   * 判断规则“双方轮流各走一着”
+   *
+   * @param focuskey KeyInfo
+   */
+  private checkCrossMove(x: number, y: number): boolean {
+    const focuskey = this.chessMap.getKeyInfos().find(item => item.x === x && item.y === y);
+    if (!focuskey) {
+      return true;
+    }
+
+    // 如果是已选择了棋子，则这里是吃子或移动棋子，跳过判断
+    if (this.chessMap.hasActiveKey()) {
+      return true;
+    }
+
+    const lastKeyType = this.nowSteps.length % 2 ? KeyType.RED : KeyType.BLACK;
+    return focuskey.type !== lastKeyType;
   }
 }
 

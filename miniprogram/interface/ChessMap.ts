@@ -32,34 +32,6 @@ class ChessMap {
     return this.activeKey.type !== KeyType.NONE;
   }
 
-  private checkMove(x: number, y: number): boolean {
-    // 当前没有已选中棋子时，直接返回成功
-    if (!this.hasActiveKey()) {
-      return true;
-    }
-
-    return this.activeKeyItem.checkMove(x, y, this.keyInfos);
-  }
-
-  private checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
-    return keyInfo1.type === keyInfo2.type;
-  }
-
-  private checkSamePos(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
-    return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
-  }
-
-  /**
-   * 判断是否是无效点击
-   *
-   * @param x 点击的x位置
-   * @param y 点击的y位置
-   */
-  private checkEmptyClick(x: number, y: number): boolean {
-    const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
-    return !focuskey && !this.hasActiveKey();
-  }
-
   public click(x: number, y: number): ChessResult {
     Log.d(TAG, `click at (${x}, ${y})`);
 
@@ -157,6 +129,34 @@ class ChessMap {
     this.keyInfos = [...keyInfos];
     this.activeKey = EMPTY_KEYINFO;
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
+  }
+
+  private checkMove(x: number, y: number): boolean {
+    // 当前没有已选中棋子时，直接返回成功
+    if (!this.hasActiveKey()) {
+      return true;
+    }
+
+    return this.activeKeyItem.checkMove(x, y, this.keyInfos);
+  }
+
+  private checkSameCamp(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
+    return keyInfo1.type === keyInfo2.type;
+  }
+
+  private checkSamePos(keyInfo1: KeyInfo, keyInfo2: KeyInfo): boolean {
+    return keyInfo1.x === keyInfo2.x && keyInfo1.y === keyInfo2.y;
+  }
+
+  /**
+   * 判断是否是无效点击
+   *
+   * @param x 点击的x位置
+   * @param y 点击的y位置
+   */
+  private checkEmptyClick(x: number, y: number): boolean {
+    const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
+    return !focuskey && !this.hasActiveKey();
   }
 }
 

@@ -2,32 +2,18 @@ import { KeyInfo, KeyType } from './index';
 import Log from '../utils/log';
 
 class ChessItem {
-  private type = KeyType.NONE;
-
   protected x = -1;
 
   protected y = -1;
 
   protected name = 'ChessItem';
 
+  private type = KeyType.NONE;
+
   public constructor(keyInfo: KeyInfo) {
     this.type = keyInfo.type;
     this.x = keyInfo.x;
     this.y = keyInfo.y;
-  }
-
-  protected isRed() {
-    return this.type === KeyType.RED;
-  }
-
-  protected checkPosMove(x: number, y: number): boolean {
-    Log.d(this.name, 'checkPosMove', x, y);
-    return true;
-  }
-
-  protected checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
-    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
-    return true;
   }
 
   public checkMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
@@ -47,6 +33,20 @@ class ChessItem {
       return false;
     }
 
+    return true;
+  }
+
+  protected isRed() {
+    return this.type === KeyType.RED;
+  }
+
+  protected checkPosMove(x: number, y: number): boolean {
+    Log.d(this.name, 'checkPosMove', x, y);
+    return true;
+  }
+
+  protected checkBlockMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
+    Log.d(this.name, 'checkBlockMove', x, y, keyInfos);
     return true;
   }
 }

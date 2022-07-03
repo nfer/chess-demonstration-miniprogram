@@ -19,6 +19,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/naming-convention': 'off',
     '@typescript-eslint/explicit-member-accessibility': 'error',
+    '@typescript-eslint/member-ordering': 'error',
     'react/jsx-filename-extension': 'off',
     'no-console': 'error',
   },
