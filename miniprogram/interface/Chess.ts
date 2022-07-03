@@ -16,11 +16,6 @@ class Chess {
 
   private chessMap = new ChessMap();
 
-  public constructor() {
-    this.init = this.init.bind(this);
-    this.click = this.click.bind(this);
-  }
-
   public init(keyMapFenStr = ''): ChessResult {
     this.fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
     return this.reload();
