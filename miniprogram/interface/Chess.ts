@@ -105,6 +105,9 @@ class Chess {
       Log.d(TAG, 'new fen str', fenStr);
       this._keyMapFenStrs.push(fenStr);
       this.nowSteps.push(result.step as StepInfo);
+      if (this.isError()) {
+        this.nowSteps[this.nowSteps.length - 1].error = true;
+      }
     }
     return result;
   }
