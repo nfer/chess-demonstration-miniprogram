@@ -117,7 +117,7 @@ class ChessMap {
     };
   }
 
-  public setFenStr(fenStr: string) {
+  public setFenStr(fenStr: string): ChessResult {
     this.keyInfos = util.parseFenStr(fenStr);
     this.activeKey = EMPTY_KEYINFO;
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
@@ -129,7 +129,7 @@ class ChessMap {
     };
   }
 
-  private updateKeyInfos(keyInfos: Array<KeyInfo>) {
+  private updateKeyInfos(keyInfos: Array<KeyInfo>): void {
     this.keyInfos = [...keyInfos];
     this.activeKey = EMPTY_KEYINFO;
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);

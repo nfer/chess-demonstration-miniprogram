@@ -36,7 +36,7 @@ class ChessItem {
     return true;
   }
 
-  protected isRed() {
+  protected isRed(): boolean {
     return this.type === KeyType.RED;
   }
 
@@ -281,7 +281,7 @@ export class PChessItem extends ChessItem {
   }
 }
 
-export function getChessItem(keyInfo: KeyInfo) {
+export function getChessItem(keyInfo: KeyInfo): ChessItem {
   switch (keyInfo.key) {
     case 'k':
     case 'K':

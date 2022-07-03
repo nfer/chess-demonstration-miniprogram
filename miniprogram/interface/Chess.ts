@@ -1,4 +1,4 @@
-import { KeyInfo, KeyPos, KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT } from './index';
+import { KeyInfo, KeyPos, KeyType, StepInfo, STATUS, CHANGE_TYPE, DEMONSTRATION_RESULT, ChessResult } from './index';
 import * as util from '../utils/util';
 import Log from '../utils/log';
 import ChessMap from './ChessMap';
@@ -21,12 +21,12 @@ class Chess {
     this.click = this.click.bind(this);
   }
 
-  public init(keyMapFenStr = '') {
+  public init(keyMapFenStr = ''): ChessResult {
     this._fenStr = keyMapFenStr || 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR';
     return this.reload();
   }
 
-  public setExpectSteps(expectSteps: Array<string>) {
+  public setExpectSteps(expectSteps: Array<string>): void {
     this._expectSteps = [...expectSteps];
   }
 
@@ -42,7 +42,7 @@ class Chess {
     return this.chessMap.getKeyInfos();
   }
 
-  public click(x: number, y: number) {
+  public click(x: number, y: number): ChessResult {
     Log.d(TAG, `click at (${x}, ${y})`);
     // 出错时不再响应棋盘交互
     if (this.isError()) {
@@ -101,14 +101,14 @@ class Chess {
     return result;
   }
 
-  public reload() {
+  public reload(): ChessResult {
     this._keyMapFenStrs = [this._fenStr];
     this.nowSteps = [];
     const lastestFenStr = this._keyMapFenStrs[this._keyMapFenStrs.length - 1];
     return this.chessMap.setFenStr(lastestFenStr);
   }
 
-  public revert() {
+  public revert(): ChessResult {
     // 棋局记录最少2条才可以回退
     if (this._keyMapFenStrs.length < 2) {
       return {
@@ -128,7 +128,7 @@ class Chess {
     return this.chessMap.setFenStr(lastestFenStr);
   }
 
-  public getHint() {
+  public getHint(): string {
     const idx = this.nowSteps.length;
     const content = this._expectSteps[idx];
     Log.d(TAG, 'hint', idx, content);
