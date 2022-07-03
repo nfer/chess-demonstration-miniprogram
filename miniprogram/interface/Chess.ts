@@ -6,13 +6,17 @@ import ChessMap from './ChessMap';
 class Chess {
   private name = 'Chess';
 
+  /** 棋谱记录 */
   private nowSteps = [] as Array<StepInfo>;
 
-  private fenStr = ''; // 初始化时的棋局
-
-  private keyMapFenStrs = [] as Array<string>;
-
+  /** 正确的棋谱记录（用于打谱对比） */
   private expectSteps = [] as Array<string>;
+
+  /** 初始化时的棋局 */
+  private fenStr = '';
+
+  /** 棋局记录，用于悔棋 */
+  private keyMapFenStrs = [] as Array<string>;
 
   private chessMap = new ChessMap();
 
