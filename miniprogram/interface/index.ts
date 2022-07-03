@@ -47,7 +47,6 @@ export enum STATUS {
 export enum CHANGE_TYPE {
   KEYINFO,
   ACTIVEKEY,
-  NOWSTEPS,
 }
 
 export interface ChessResult {

@@ -108,13 +108,6 @@ Component({
         });
       }
 
-      // 棋谱改变
-      if (result.changed.includes(CHANGE_TYPE.NOWSTEPS)) {
-        this.setData({
-          nowSteps: [..._chess.getNowSteps()],
-        });
-      }
-
       // 棋局改变
       if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
         Log.d(TAG, '棋局改变', _chess.getKeyInfos());

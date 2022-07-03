@@ -110,7 +110,7 @@ class ChessMap {
 
     this.updateKeyInfos(newKeyInfos);
     return {
-      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
+      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO],
       status: STATUS.OK,
       msg: '移动棋子',
       step: { name: step, error: false },
@@ -123,7 +123,7 @@ class ChessMap {
     this.activeKeyItem = new ChessItem(EMPTY_KEYINFO);
 
     return {
-      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO, CHANGE_TYPE.NOWSTEPS],
+      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO],
       status: STATUS.OK,
       msg: '初始化',
     };
