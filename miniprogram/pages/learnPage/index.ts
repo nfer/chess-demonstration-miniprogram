@@ -113,7 +113,7 @@ Component({
         Log.d(TAG, '棋局改变', result.keyInfos);
         this.setData({
           keyInfos: result.keyInfos,
-          nowSteps: [..._chess.getNowSteps()],
+          nowSteps: result.nowSteps,
         });
       }
 

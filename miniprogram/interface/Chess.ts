@@ -28,10 +28,6 @@ class Chess {
     this.expectSteps = [...expectSteps];
   }
 
-  public getNowSteps(): Array<StepInfo> {
-    return this.nowSteps;
-  }
-
   /**
    * 处理点击坐标(x, y)的事件
    *
@@ -71,6 +67,7 @@ class Chess {
       Log.d(this.name, 'new fen str', fenStr);
       this.keyMapFenStrs.push(fenStr);
       this.nowSteps.push(result.step as StepInfo);
+
       if (this.isError()) {
         this.nowSteps[this.nowSteps.length - 1].error = true;
         result.result = DEMONSTRATION_RESULT.ERROR;
@@ -79,6 +76,8 @@ class Chess {
       } else {
         result.result = DEMONSTRATION_RESULT.NORMAL;
       }
+
+      result.nowSteps = [...this.nowSteps];
     }
     return result;
   }
