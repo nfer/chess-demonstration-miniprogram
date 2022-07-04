@@ -1,8 +1,8 @@
 import * as util from '../../utils/util';
 import Log from '../../utils/log';
-import { KeyInfo, EMPTY_KEYPOS, KeyPos, StepInfo } from '../../interface/index';
+import { KeyInfo, EMPTY_KEYPOS, KeyPos, StepInfo, CHANGE_TYPE, ChessResult, STATUS, DEMONSTRATION_RESULT } from '../../interface/index';
 import { steps } from '../../data/steps';
-import Chess, { CHANGE_TYPE, ChessResult, STATUS } from '../../interface/Chess';
+import Chess from '../../interface/Chess';
 
 const keyMapFenStr = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1';
 
@@ -65,6 +65,7 @@ Component({
     // 按钮事件：重来
     reload() {
       const result = this.data._chess.reload();
+      Log.d(TAG, 'reload result', result);
       this.handleChessResult(this.data._chess, result);
     },
     // 棋子点击事件
@@ -72,6 +73,7 @@ Component({
       const { x, y } = e.detail as KeyPos;
 
       const result = this.data._chess.click(x, y);
+      Log.d(TAG, 'click result', result);
       this.handleChessResult(this.data._chess, result);
     },
 
@@ -102,25 +104,20 @@ Component({
       // 当前棋子改变
       if (result.changed.includes(CHANGE_TYPE.ACTIVEKEY)) {
         this.setData({
-          cursorPos: _chess.getCursorPos(),
-        });
-      }
-
-      // 棋谱改变
-      if (result.changed.includes(CHANGE_TYPE.NOWSTEPS)) {
-        this.setData({
-          nowSteps: [..._chess.nowSteps],
+          cursorPos: result.cursorPos,
         });
       }
 
       // 棋局改变
       if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
+        Log.d(TAG, '棋局改变', result.keyInfos);
         this.setData({
-          keyInfos: [..._chess.keyInfos],
+          keyInfos: result.keyInfos,
+          nowSteps: result.nowSteps,
         });
       }
 
-      if (_chess.isError()) {
+      if (result.result === DEMONSTRATION_RESULT.ERROR) {
         audioCtx.src = 'pages/learnPage/warn.mp3';
         audioCtx.play();
         wx.showToast({
@@ -131,7 +128,7 @@ Component({
         return;
       }
 
-      if (_chess.isSuccess()) {
+      if (result.result === DEMONSTRATION_RESULT.SUCCESS) {
         audioCtx.src = 'pages/learnPage/success.mp3';
         audioCtx.play();
         wx.showToast({
