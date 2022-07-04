@@ -110,10 +110,10 @@ Component({
 
       // 棋局改变
       if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
-        Log.d(TAG, '棋局改变', result.keyInfos);
+        Log.d(TAG, '棋局改变', result.keyInfos, result.nowSteps);
         this.setData({
           keyInfos: result.keyInfos,
-          nowSteps: result.nowSteps,
+          nowSteps: result.nowSteps || [],
         });
       }
 
