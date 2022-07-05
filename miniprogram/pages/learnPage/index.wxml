@@ -7,7 +7,8 @@
 <ChessSteps steps="{{nowSteps}}"></ChessSteps>
 
 <view class="section-btns">
+  <button class="section-btn" type="default" bindtap="load">载入</button>
   <button class="section-btn" type="default" bindtap="revert" disabled="{{nowSteps.length === 0}}">悔棋</button>
   <button class="section-btn" type="default" bindtap="hint">提示</button>
-  <button class="section-btn" type="warn" bindtap="reload">重来</button>
+  <button class="section-btn" type="default" bindtap="reload">重来</button>
 </view>

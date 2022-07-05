@@ -68,6 +68,10 @@ Component({
       Log.d(TAG, 'reload result', result);
       this.handleChessResult(this.data._chess, result);
     },
+    // 按钮事件：载入
+    load() {
+      Log.d(TAG, 'load');
+    },
     // 棋子点击事件
     onChessClick(e: WechatMiniprogram.CustomEvent) {
       const { x, y } = e.detail as KeyPos;
