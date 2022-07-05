@@ -12,3 +12,5 @@
   <button class="section-btn" type="default" bindtap="hint">提示</button>
   <button class="section-btn" type="default" bindtap="reload">重来</button>
 </view>
+
+<LoadChessDialog wx:if="{{loadDialogShow}}" bind:onDialogClosed="onLoadDialogClosed"/>

@@ -20,6 +20,7 @@ Component({
     nowSteps: [] as Array<StepInfo>,
     cursorPos: EMPTY_KEYPOS, // 当前光标
     _chess: {} as Chess,
+    loadDialogShow: false,
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
@@ -71,6 +72,16 @@ Component({
     // 按钮事件：载入
     load() {
       Log.d(TAG, 'load');
+      this.setData({
+        loadDialogShow: true,
+      });
+    },
+    // 用户点击载入-更多界面 关闭 按钮
+    onLoadDialogClosed(event: WechatMiniprogram.BaseEvent) {
+      Log.d(TAG, `onLoadDialogClosed:${JSON.stringify(event)}`);
+      this.setData({
+        loadDialogShow: false,
+      });
     },
     // 棋子点击事件
     onChessClick(e: WechatMiniprogram.CustomEvent) {
