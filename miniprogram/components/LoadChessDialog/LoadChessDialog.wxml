@@ -1,12 +1,17 @@
 <!--components/LoadChessDialog/LoadChessDialog.wxml-->
 <view class="root">
-    <view class="space" catchtap="onCloseClick"></view>
-    <view class="content-bg">
-        <view class="button-close-container" catchtap="onCloseClick">
-            <icon class="svg-icon-close"></icon>
-        </view>
-
-        <view class="content">
-        </view>
+  <view class="space" catchtap="onCloseClick"></view>
+  <view class="content-bg">
+    <view class="button-close-container" catchtap="onCloseClick">
+      <icon class="svg-icon-close"></icon>
     </view>
+
+    <view class="content">
+      <scroll-view scroll-y="true" style="height: 75vh;" wx:if="{{chapter.length}}">
+        <view class="book-item" wx:for="{{chapter}}" wx:key="id">
+          <view bindtap="selectChapter" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
 </view>

@@ -83,6 +83,25 @@ Component({
         loadDialogShow: false,
       });
     },
+    // 用户选择棋谱
+    onSelectChapterId(e: WechatMiniprogram.TouchEvent) {
+      this.setData({
+        loadDialogShow: false,
+      });
+      Log.d(TAG, `onSelectChapterId:${JSON.stringify(e)}`);
+      const { chapterId, chapterName } = e.detail;
+      Log.d(TAG, `onSelectChapterId: ${chapterId}`, chapterName);
+
+      // 设置标题
+      wx.setNavigationBarTitle({
+        title: chapterName,
+      });
+
+      // 重新加载棋谱
+      const step = steps.find(item => item.id === chapterId) || { id: -1, data: [] as Array<string> };
+      this.data._chess.setExpectSteps(step.data);
+      this.data._chess.reload();
+    },
     // 棋子点击事件
     onChessClick(e: WechatMiniprogram.CustomEvent) {
       const { x, y } = e.detail as KeyPos;
