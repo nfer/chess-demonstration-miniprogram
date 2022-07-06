@@ -1,2 +1,12 @@
 <!--components/LoadChessDialog/LoadChessDialog.wxml-->
-<text>components/LoadChessDialog/LoadChessDialog.wxml</text>
+<view class="root">
+    <view class="space" catchtap="onCloseClick"></view>
+    <view class="content-bg">
+        <view class="button-close-container" catchtap="onCloseClick">
+            <icon class="svg-icon-close"></icon>
+        </view>
+
+        <view class="content">
+        </view>
+    </view>
+</view>
