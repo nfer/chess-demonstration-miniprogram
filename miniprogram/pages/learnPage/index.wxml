@@ -17,4 +17,4 @@
   wx:if="{{loadDialogShow}}"
   class="dialog-container"
   bind:onDialogClosed="onLoadDialogClosed"
-  bind:onSelectChapterId="onSelectChapterId"/>
+  bind:onSelectChapter="onSelectChapter"/>

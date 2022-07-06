@@ -47,7 +47,7 @@ Component({
       const chapterId = Number(event.currentTarget.dataset.id);
       const chapterName = event.currentTarget.dataset.name;
       const eventOption = { bubbles: true, composed: true, capturePhase: true };
-      this.triggerEvent('onSelectChapterId', { chapterId, chapterName }, eventOption);
+      this.triggerEvent('onSelectChapter', { chapterId, chapterName }, eventOption);
     },
   },
 });

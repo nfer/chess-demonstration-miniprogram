@@ -84,13 +84,13 @@ Component({
       });
     },
     // 用户选择棋谱
-    onSelectChapterId(e: WechatMiniprogram.TouchEvent) {
+    onSelectChapter(e: WechatMiniprogram.TouchEvent) {
       this.setData({
         loadDialogShow: false,
       });
-      Log.d(TAG, `onSelectChapterId:${JSON.stringify(e)}`);
+      Log.d(TAG, `onSelectChapter:${JSON.stringify(e)}`);
       const { chapterId, chapterName } = e.detail;
-      Log.d(TAG, `onSelectChapterId: ${chapterId}`, chapterName);
+      Log.d(TAG, `onSelectChapter: ${chapterId}`, chapterName);
 
       // 设置标题
       wx.setNavigationBarTitle({
