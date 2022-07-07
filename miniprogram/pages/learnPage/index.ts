@@ -24,23 +24,24 @@ Component({
   },
   methods: {
     onLoad(query: Record<string, string | undefined>) {
-      // UI设置相关
-      const name = query.name || '象棋打谱';
-      wx.setNavigationBarTitle({
-        title: name,
-      });
+      Log.d(TAG, `onLoad:${JSON.stringify(query)}`);
+      // // UI设置相关
+      // const name = query.name || '象棋打谱';
+      // wx.setNavigationBarTitle({
+      //   title: name,
+      // });
       const info = util.getBaseInfo();
       this.setData({
         aspect: info.canvasAspect,
       });
 
-      // 正确棋谱
-      const id = Number(query.id) || 10001;
-      const step = steps.find(item => item.id === id) || { id: -1, data: [] as Array<string> };
+      // // 正确棋谱
+      // const id = Number(query.id) || 10001;
+      // const step = steps.find(item => item.id === id) || { id: -1, data: [] as Array<string> };
 
       const chess = new Chess();
       chess.init(keyMapFenStr);
-      chess.setExpectSteps(step.data);
+      // chess.setExpectSteps(step.data);
       this.setData({
         _chess: chess,
       }, () => {
