@@ -13,7 +13,7 @@
         scroll-with-animation="true"
         scroll-into-view="{{scrollIntoView}}"
         style="height: 75vh;">
-        <view class="book-item" wx:for="{{chapter}}" wx:key="id">
+        <view class="book-item {{item.id === chapterId ? 'book-item-active' : ''}}" wx:for="{{chapter}}" wx:key="id">
           <view id='id_{{item.id}}' bindtap="selectChapter" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
         </view>
       </scroll-view>
