@@ -10,7 +10,10 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    chapterId: {
+      type: Number,
+      default: 0,
+    },
   },
 
   /**
@@ -29,6 +32,10 @@ Component({
       const book = books.find(item => item.name === bookName) as BookInfo;
       this.setData({
         chapter: book.chapters,
+      });
+      Log.d(TAG, `chapterId:${JSON.stringify(this.data.chapterId)}`);
+      this.setData({
+        scrollIntoView: `id_${this.data.chapterId}`,
       });
     },
   },

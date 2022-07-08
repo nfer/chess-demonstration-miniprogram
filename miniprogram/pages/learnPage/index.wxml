@@ -16,5 +16,6 @@
 <LoadChessDialog
   wx:if="{{loadDialogShow}}"
   class="dialog-container"
+  chapterId="{{chapterId}}"
   bind:onDialogClosed="onLoadDialogClosed"
   bind:onSelectChapter="onSelectChapter"/>

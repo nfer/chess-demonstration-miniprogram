@@ -16,6 +16,7 @@ Component({
   },
   data: {
     aspect: 1,
+    chapterId: 0,
     keyInfos: [] as Array<KeyInfo>,
     nowSteps: [] as Array<StepInfo>,
     cursorPos: EMPTY_KEYPOS, // 当前光标
@@ -92,6 +93,10 @@ Component({
       Log.d(TAG, `onSelectChapter:${JSON.stringify(e)}`);
       const { chapterId, chapterName } = e.detail;
       Log.d(TAG, `onSelectChapter: ${chapterId}`, chapterName);
+
+      this.setData({
+        chapterId,
+      });
 
       // 设置标题
       wx.setNavigationBarTitle({
