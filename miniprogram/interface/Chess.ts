@@ -113,7 +113,7 @@ class Chess {
   }
 
   private isError(): boolean {
-    if (this.nowSteps.length === 0) {
+    if (this.nowSteps.length === 0 || this.expectSteps.length === 0) {
       return false;
     }
 
