@@ -26,29 +26,31 @@ Component({
   methods: {
     onLoad(query: Record<string, string | undefined>) {
       Log.d(TAG, `onLoad:${JSON.stringify(query)}`);
-      // // UI设置相关
-      // const name = query.name || '象棋打谱';
-      // wx.setNavigationBarTitle({
-      //   title: name,
-      // });
+      // UI设置相关
+      const chapterName = wx.getStorageSync('chapterName');
+      if (chapterName) {
+        wx.setNavigationBarTitle({
+          title: chapterName,
+        });
+      }
       const info = util.getBaseInfo();
       this.setData({
         aspect: info.canvasAspect,
       });
 
-      // // 正确棋谱
-      // const id = Number(query.id) || 10001;
-      // const step = steps.find(item => item.id === id) || { id: -1, data: [] as Array<string> };
-
       const chess = new Chess();
       chess.init(keyMapFenStr);
-      // chess.setExpectSteps(step.data);
       this.setData({
         _chess: chess,
       }, () => {
         // 确保设置 _chess 成功后再调用 reload
         this.reload();
       });
+
+      // 正确棋谱
+      const chapterId = wx.getStorageSync('chapterId');
+      const step = steps.find(item => item.id === Number(chapterId)) || { id: -1, data: [] as Array<string> };
+      chess.setExpectSteps(step.data);
     },
     // 按钮事件：悔棋
     revert() {
@@ -93,6 +95,9 @@ Component({
       Log.d(TAG, `onSelectChapter:${JSON.stringify(e)}`);
       const { chapterId, chapterName } = e.detail;
       Log.d(TAG, `onSelectChapter: ${chapterId}`, chapterName);
+
+      wx.setStorageSync('chapterId', chapterId);
+      wx.setStorageSync('chapterName', chapterName);
 
       this.setData({
         chapterId,
