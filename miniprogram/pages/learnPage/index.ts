@@ -50,7 +50,15 @@ Component({
       // 正确棋谱
       const chapterId = wx.getStorageSync('chapterId');
       const step = steps.find(item => item.id === Number(chapterId)) || { id: -1, data: [] as Array<string> };
-      chess.setExpectSteps(step.data);
+      if (step.data.length) {
+        chess.setExpectSteps(step.data);
+      } else {
+        wx.showToast({
+          title: '未加载棋谱，当前为自由模式。',
+          icon: 'none',
+          duration: 2000,
+        });
+      }
     },
     // 按钮事件：悔棋
     revert() {
