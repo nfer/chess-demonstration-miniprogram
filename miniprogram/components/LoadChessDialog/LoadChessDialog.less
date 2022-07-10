@@ -1,0 +1,50 @@
+/* components/LoadChessDialog/LoadChessDialog.wxss */
+.root {
+  width: 100%;
+  height: 100%;
+}
+
+.space {
+  width: 100%;
+  height: 10vh;
+}
+
+.content-bg {
+  height: 90vh;
+  border-radius: 48rpx 48rpx 0rpx 0rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.68) 0%, #FFFFFF 44.35%);
+  box-shadow: 0px 10px 20px rgba(112, 189, 233, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.button-close-container {
+  width: 100%;
+  height: 60rpx;
+  position: relative;
+}
+
+.svg-icon-close {
+  position: absolute;
+  top: 58rpx;
+  right: 52rpx;
+  width: 32rpx;
+  height: 32rpx;
+  background: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.466 8l6.23-6.23A1.035 1.035 0 1 0 14.23.304L8 6.534 1.77.304A1.036 1.036 0 1 0 .304 1.77L6.534 8l-6.23 6.23a1.035 1.035 0 1 0 1.466 1.466L8 9.466l6.23 6.23a1.034 1.034 0 0 0 1.466 0 1.035 1.035 0 0 0 0-1.466L9.466 8z' fill='%23fff'/%3E%3C/svg%3E") no-repeat center/100%;
+}
+
+.content {
+  height: 75vh;
+  margin: 52rpx;
+  overflow: scroll;
+}
+
+.book-item {
+  height: 80rpx;
+  line-height: 80rpx;
+  border-bottom: 1px solid #ccc;
+  padding: 0 20rpx;
+}
+
+.book-item-active {
+  background: rgb(128, 128, 128);
+}

@@ -5,6 +5,7 @@
     "CursorCanvas": "/components/CursorCanvas/CursorCanvas",
     "BgCanvas": "/components/BgCanvas/BgCanvas",
     "ChessCanvas": "/components/ChessCanvas/ChessCanvas",
-    "ChessSteps": "/components/ChessSteps/ChessSteps"
+    "ChessSteps": "/components/ChessSteps/ChessSteps",
+    "LoadChessDialog": "/components/LoadChessDialog/LoadChessDialog"
   }
 }
