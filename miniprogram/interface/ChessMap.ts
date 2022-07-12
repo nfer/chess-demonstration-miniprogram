@@ -51,12 +51,6 @@ class ChessMap {
       return getChessResult(STATUS.OK, '无效点击');
     }
 
-    // 判断是否可以移动到指定位置
-    if (!this.checkMove(x, y)) {
-      Log.w(this.name, '无法移动到目标位置');
-      return getChessResult(STATUS.WARN, '出错了，无法移动到目标位置');
-    }
-
     const { keyInfos, hasActiveKey, activeKey } = this;
     const focuskey = keyInfos.find(item => item.x === x && item.y === y);
     // 场景：点击在棋子上
@@ -101,6 +95,12 @@ class ChessMap {
           cursorPos: this.getCursorPos(),
         };
       }
+    }
+
+    // 判断是否可以移动到指定位置
+    if (!this.checkMove(x, y)) {
+      Log.w(this.name, '无法移动到目标位置');
+      return getChessResult(STATUS.WARN, '出错了，无法移动到目标位置');
     }
 
     // 移动棋子
