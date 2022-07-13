@@ -1,8 +1,17 @@
 import { KeyInfo, KeyPos, KeyType, EMPTY_KEYINFO, STATUS, CHANGE_TYPE, ChessResult, getChessResult } from './index';
 import * as util from '../utils/util';
-import * as stepUtils from '../utils/step';
 import Log from '../utils/log';
 import ChessItem, { getChessItem } from './ChessItem';
+
+const IDX_NAME = [
+  ['九', '八', '七', '六', '五', '四', '三', '二', '一'],
+  ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+];
+
+const RANGE_NAME = [
+  ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'],
+  ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+];
 
 class ChessMap {
   private name = 'ChessMap';
@@ -106,7 +115,7 @@ class ChessMap {
     // 移动棋子
     Log.d(this.name, `移动棋子 "${activeKey.name}" from (${activeKey.x}, ${activeKey.y}) to (${x}, ${y})`);
 
-    const step = stepUtils.getStep(this.activeKey, this.keyInfos, x, y);
+    const step = this.getStep(this.activeKey, this.keyInfos, x, y);
 
     const newKeyInfos = keyInfos.filter(item => item.x !== x || item.y !== y);
     const idx = newKeyInfos.findIndex(item => item.hash === activeKey.hash);
@@ -187,6 +196,53 @@ class ChessMap {
   private checkEmptyClick(x: number, y: number): boolean {
     const focuskey = this.keyInfos.find(item => item.x === x && item.y === y);
     return !focuskey && !this.hasActiveKey();
+  }
+
+  private getStep(keyInfo: KeyInfo, keyInfos: Array<KeyInfo>, x: number, y: number): string {
+    Log.d(this.name, `getStep from(${keyInfo.x}, ${keyInfo.y}) to(${x}, ${y})`);
+    let type = '';
+    let from = '';
+    let to = '';
+    const idxNames = IDX_NAME[keyInfo.type];
+    const rangeNames = RANGE_NAME[keyInfo.type];
+
+    if (y === keyInfo.y) {
+      type = '平';
+      from = `${keyInfo.name}${idxNames[keyInfo.x]}`;
+      to = idxNames[x];
+    } else if (['r', 'R', 'c', 'C', 'p', 'P', 'k', 'K'].includes(keyInfo.key)) {
+      from = `${keyInfo.name}${idxNames[keyInfo.x]}`;
+      if (keyInfo.type) {
+        type = y < keyInfo.y ? '退' : '进';
+      } else {
+        type = y < keyInfo.y ? '进' : '退';
+      }
+      const range = Math.abs(y - keyInfo.y);
+      to = rangeNames[range];
+    } else {
+      from = `${keyInfo.name}${idxNames[keyInfo.x]}`;
+      if (keyInfo.type) {
+        type = y < keyInfo.y ? '退' : '进';
+      } else {
+        type = y < keyInfo.y ? '进' : '退';
+      }
+      to = idxNames[x];
+    }
+
+    const sameKeys = keyInfos
+      .filter(item => item.key === keyInfo.key && item.x === keyInfo.x)
+      .sort((a, b) => a.type ? b.y - a.y : a.y - b.y);
+    Log.d(this.name, 'getStep sameKeys.length:', sameKeys.length);
+    if (sameKeys.length > 1) {
+      if (sameKeys[0].hash === keyInfo.hash) {
+        from = `前${keyInfo.name}`;
+      } else if (sameKeys[sameKeys.length - 1].hash === keyInfo.hash) {
+        from = `后${keyInfo.name}`;
+      } else {
+        from = `中${keyInfo.name}`;
+      }
+    }
+    return `${from}${type}${to}`;
   }
 }
 
