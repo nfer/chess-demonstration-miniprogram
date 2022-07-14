@@ -102,7 +102,9 @@ class Chess {
     this.nowSteps.pop();
 
     const lastestFenStr = this.keyMapFenStrs[this.keyMapFenStrs.length - 1];
-    return this.chessMap.setFenStr(lastestFenStr);
+    const result = this.chessMap.setFenStr(lastestFenStr);
+    result.nowSteps = [...this.nowSteps];
+    return result;
   }
 
   public getHint(): string {
