@@ -111,6 +111,7 @@ class Chess {
     const idx = this.nowSteps.length;
     const content = this.expectSteps[idx];
     Log.d(this.name, 'hint', idx, content);
+    this.chessMap.run(content);
     return content;
   }
 

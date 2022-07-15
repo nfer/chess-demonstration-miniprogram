@@ -133,6 +133,45 @@ class ChessMap {
     };
   }
 
+  public run(step: string) {
+    const arr = step.split('');
+    Log.d(this.name, 'run', step, arr);
+    if (arr.length !== 4) {
+      throw new Error('棋谱格式错误');
+    }
+
+    let key = '';
+    let index = -1;
+    const type = arr[2];
+    let range = -1;
+
+    let keyType = KeyType.NONE;
+    if (RANGE_NAME[0].includes(arr[3])) {
+      keyType = KeyType.RED;
+      range = RANGE_NAME[0].indexOf(arr[3]);
+    } else {
+      keyType = KeyType.BLACK;
+      range = RANGE_NAME[1].indexOf(arr[3]);
+    }
+
+    if (['前', '中', '后'].includes(arr[0])) {
+      key = arr[1];
+    } else {
+      key = arr[0];
+      if (keyType === KeyType.RED) {
+        index = 9 - IDX_NAME[0].indexOf(arr[1]);
+      } else {
+        index = 1 + IDX_NAME[1].indexOf(arr[1]);
+      }
+    }
+    Log.d(this.name, 'keyType', keyType);
+    Log.d(this.name, 'key', key);
+    Log.d(this.name, 'index', index);
+    Log.d(this.name, 'type', type);
+    Log.d(this.name, 'range', range);
+    this.move(keyType, key, index, type, range);
+  }
+
   public setFenStr(fenStr: string): ChessResult {
     this.keyInfos = util.parseFenStr(fenStr);
     this.activeKey = EMPTY_KEYINFO;
@@ -145,6 +184,10 @@ class ChessMap {
       cursorPos: this.getCursorPos(),
       keyInfos: this.getKeyInfos(),
     };
+  }
+
+  private move(keyType: KeyType, key: string, index: number, type: string, range: number) {
+    Log.d(this.name, keyType, key, index, type, range);
   }
 
   private getKeyInfos(): Array<KeyInfo> {
