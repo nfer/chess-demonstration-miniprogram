@@ -1,8 +1,10 @@
-import { KeyInfo, KeyType } from './index';
+import { EMPTY_KEYPOS, KeyInfo, KeyPos, KeyType } from './index';
 import Log from '../utils/log';
 
 class ChessItem {
   protected x = -1;
+
+  protected pronounceX = -1;
 
   protected y = -1;
 
@@ -14,6 +16,16 @@ class ChessItem {
     this.type = keyInfo.type;
     this.x = keyInfo.x;
     this.y = keyInfo.y;
+    if (this.type === KeyType.RED) {
+      this.pronounceX = 9 - this.x;
+    } else {
+      this.pronounceX = 1 + this.x;
+    }
+  }
+
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range);
+    return EMPTY_KEYPOS;
   }
 
   public checkMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
@@ -218,6 +230,18 @@ export class CChessItem extends ChessItem {
   public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'CChessItem';
+  }
+
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '平':
+        return { x: this.x + (this.pronounceX - range), y: this.y };
+      case '进':
+        return { x: this.x, y: this.y + range };
+      default:
+        return EMPTY_KEYPOS;
+    }
   }
 
   protected checkPosMove(x: number, y: number): boolean {

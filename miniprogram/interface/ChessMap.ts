@@ -133,7 +133,7 @@ class ChessMap {
     };
   }
 
-  public run(step: string) {
+  public run(step: string): ChessResult {
     const arr = step.split('');
     Log.d(this.name, 'run', step, arr);
     if (arr.length !== 4) {
@@ -159,9 +159,9 @@ class ChessMap {
     } else {
       key = arr[0];
       if (keyType === KeyType.RED) {
-        index = 9 - IDX_NAME[0].indexOf(arr[1]);
+        index = IDX_NAME[0].indexOf(arr[1]);
       } else {
-        index = 1 + IDX_NAME[1].indexOf(arr[1]);
+        index = IDX_NAME[1].indexOf(arr[1]);
       }
     }
     Log.d(this.name, 'keyType', keyType);
@@ -169,7 +169,7 @@ class ChessMap {
     Log.d(this.name, 'index', index);
     Log.d(this.name, 'type', type);
     Log.d(this.name, 'range', range);
-    this.move(keyType, key, index, type, range);
+    return this.move(keyType, key, index, type, range);
   }
 
   public setFenStr(fenStr: string): ChessResult {
@@ -186,8 +186,41 @@ class ChessMap {
     };
   }
 
-  private move(keyType: KeyType, key: string, index: number, type: string, range: number) {
+  private move(keyType: KeyType, key: string, index: number, type: string, range: number): ChessResult {
     Log.d(this.name, keyType, key, index, type, range);
+    const keyInfo = this.keyInfos.find(item => item.type === keyType && item.name === key && item.x === index);
+    Log.d(this.name, keyInfo, this.keyInfos);
+    if (!keyInfo) {
+      throw new Error('棋谱格式错误');
+    }
+    return this.moveKey(keyInfo, type, range);
+  }
+
+  private moveKey(keyInfo: KeyInfo, type: string, range: number): ChessResult {
+    const chessItem = getChessItem(keyInfo);
+    const pos = chessItem.getDestPos(type, range);
+    Log.d(this.name, 'moveKey1', chessItem, type, range, pos);
+    const { x, y } = pos;
+
+    // 移动棋子
+    Log.d(this.name, `移动棋子 "${keyInfo.name}" from (${keyInfo.x}, ${keyInfo.y}) to (${x}, ${y})`);
+
+    const step = this.getStep(keyInfo, this.keyInfos, x, y);
+
+    const newKeyInfos = this.keyInfos.filter(item => item.x !== x || item.y !== y);
+    const idx = newKeyInfos.findIndex(item => item.hash === keyInfo.hash);
+    newKeyInfos[idx].x = x;
+    newKeyInfos[idx].y = y;
+
+    this.updateKeyInfos(newKeyInfos);
+    return {
+      changed: [CHANGE_TYPE.ACTIVEKEY, CHANGE_TYPE.KEYINFO],
+      status: STATUS.OK,
+      msg: '移动棋子',
+      step: { name: step, error: false },
+      cursorPos: this.getCursorPos(),
+      keyInfos: this.getKeyInfos(),
+    };
   }
 
   private getKeyInfos(): Array<KeyInfo> {

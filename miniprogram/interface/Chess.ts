@@ -107,12 +107,11 @@ class Chess {
     return result;
   }
 
-  public getHint(): string {
+  public getHint(): ChessResult {
     const idx = this.nowSteps.length;
     const content = this.expectSteps[idx];
     Log.d(this.name, 'hint', idx, content);
-    this.chessMap.run(content);
-    return content;
+    return this.chessMap.run(content);
   }
 
   private isError(): boolean {
