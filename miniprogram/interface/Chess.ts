@@ -111,7 +111,27 @@ class Chess {
     const idx = this.nowSteps.length;
     const content = this.expectSteps[idx];
     Log.d(this.name, 'hint', idx, content);
-    return this.chessMap.run(content);
+
+    const result = this.chessMap.run(content);
+    Log.d(this.name, 'click result', result);
+    if (result.changed.includes(CHANGE_TYPE.KEYINFO)) {
+      const fenStr = this.chessMap.getFenStr();
+      Log.d(this.name, 'new fen str', fenStr);
+      this.keyMapFenStrs.push(fenStr);
+      this.nowSteps.push(result.step as StepInfo);
+
+      if (this.isError()) {
+        this.nowSteps[this.nowSteps.length - 1].error = true;
+        result.result = DEMONSTRATION_RESULT.ERROR;
+      } else if (this.isSuccess()) {
+        result.result = DEMONSTRATION_RESULT.SUCCESS;
+      } else {
+        result.result = DEMONSTRATION_RESULT.NORMAL;
+      }
+
+      result.nowSteps = [...this.nowSteps];
+    }
+    return result;
   }
 
   private isError(): boolean {
