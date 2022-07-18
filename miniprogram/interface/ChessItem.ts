@@ -213,6 +213,24 @@ export class RChessItem extends ChessItem {
     this.name = 'RChessItem';
   }
 
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '平':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y,
+        };
+      case '进':
+        return {
+          x: this.x,
+          y: this.y - range * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
+  }
+
   protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
@@ -258,7 +276,10 @@ export class CChessItem extends ChessItem {
           y: this.y,
         };
       case '进':
-        return { x: this.x, y: this.y + range };
+        return {
+          x: this.x,
+          y: this.y - range * this.direction,
+        };
       default:
         return EMPTY_KEYPOS;
     }
