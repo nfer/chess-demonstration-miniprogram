@@ -10,6 +10,8 @@ class ChessItem {
 
   protected name = 'ChessItem';
 
+  protected direction = 0;
+
   private type = KeyType.NONE;
 
   public constructor(keyInfo: KeyInfo) {
@@ -18,8 +20,10 @@ class ChessItem {
     this.y = keyInfo.y;
     if (this.type === KeyType.RED) {
       this.pronounceX = 9 - this.x;
+      this.direction = 1;
     } else {
       this.pronounceX = 1 + this.x;
+      this.direction = -1;
     }
   }
 
@@ -234,11 +238,10 @@ export class CChessItem extends ChessItem {
 
   public getDestPos(type: string, range: number): KeyPos {
     Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
-    const direction = this.isRed() ? 1 : -1;
     switch (type) {
       case '平':
         return {
-          x: this.x + (this.pronounceX - range) * direction,
+          x: this.x + (this.pronounceX - range) * this.direction,
           y: this.y,
         };
       case '进':
