@@ -234,9 +234,13 @@ export class CChessItem extends ChessItem {
 
   public getDestPos(type: string, range: number): KeyPos {
     Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    const direction = this.isRed() ? 1 : -1;
     switch (type) {
       case '平':
-        return { x: this.x + (this.pronounceX - range), y: this.y };
+        return {
+          x: this.x + (this.pronounceX - range) * direction,
+          y: this.y,
+        };
       case '进':
         return { x: this.x, y: this.y + range };
       default:
