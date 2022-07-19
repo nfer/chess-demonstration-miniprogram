@@ -89,6 +89,11 @@ export class KChessItem extends ChessItem {
           x: this.x,
           y: this.y - range * this.direction,
         };
+      case '退':
+        return {
+          x: this.x,
+          y: this.y + range * this.direction,
+        };
       default:
         return EMPTY_KEYPOS;
     }
@@ -267,6 +272,11 @@ export class RChessItem extends ChessItem {
           x: this.x,
           y: this.y - range * this.direction,
         };
+      case '退':
+        return {
+          x: this.x,
+          y: this.y + range * this.direction,
+        };
       default:
         return EMPTY_KEYPOS;
     }
@@ -320,6 +330,11 @@ export class CChessItem extends ChessItem {
         return {
           x: this.x,
           y: this.y - range * this.direction,
+        };
+      case '退':
+        return {
+          x: this.x,
+          y: this.y + range * this.direction,
         };
       default:
         return EMPTY_KEYPOS;
