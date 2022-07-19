@@ -76,6 +76,24 @@ export class KChessItem extends ChessItem {
     this.name = 'KChessItem';
   }
 
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '平':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y,
+        };
+      case '进':
+        return {
+          x: this.x,
+          y: this.y - range * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
+  }
+
   protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     if (x < 3 || x > 5) return false;
