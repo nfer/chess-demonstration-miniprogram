@@ -188,6 +188,11 @@ export class NChessItem extends ChessItem {
           x: this.x + (this.pronounceX - range) * this.direction,
           y: this.y - (3 - Math.abs(this.pronounceX - range)) * this.direction,
         };
+      case '退':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y + (3 - Math.abs(this.pronounceX - range)) * this.direction,
+        };
       default:
         return EMPTY_KEYPOS;
     }
