@@ -107,12 +107,12 @@ export class AChessItem extends ChessItem {
       case '进':
         return {
           x: this.x + (this.pronounceX - range) * this.direction,
-          y: this.y - (2 - Math.abs(this.pronounceX - range)) * this.direction,
+          y: this.y - Math.abs(this.pronounceX - range) * this.direction,
         };
       case '退':
         return {
-          x: this.x - (this.pronounceX - range) * this.direction,
-          y: this.y + (2 - Math.abs(this.pronounceX - range)) * this.direction,
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y + Math.abs(this.pronounceX - range) * this.direction,
         };
       default:
         return EMPTY_KEYPOS;
