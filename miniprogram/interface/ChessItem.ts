@@ -167,6 +167,24 @@ export class BChessItem extends ChessItem {
     this.name = 'BChessItem';
   }
 
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '进':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y - Math.abs(this.pronounceX - range) * this.direction,
+        };
+      case '退':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y + Math.abs(this.pronounceX - range) * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
+  }
+
   protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     let arr = [];
