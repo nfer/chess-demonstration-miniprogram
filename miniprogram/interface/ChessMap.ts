@@ -225,7 +225,7 @@ class ChessMap {
     });
     Log.d(this.name, keyInfo, this.keyInfos);
     if (!keyInfo) {
-      throw new Error('棋谱格式错误');
+      throw new Error('棋谱数据错误');
     }
 
     return this.moveKey(keyInfo, type, range);
