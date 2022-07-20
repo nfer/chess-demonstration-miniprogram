@@ -144,18 +144,25 @@ class ChessMap {
     let index = -1;
     const type = arr[2];
     let range = -1;
+    let indexStr = '';
 
     let keyType = KeyType.NONE;
     if (RANGE_NAME[0].includes(arr[3])) {
+      Log.d(this.name, 'keyType', keyType, 'KeyType.RED');
       keyType = KeyType.RED;
       range = RANGE_NAME[0].indexOf(arr[3]);
     } else {
+      Log.d(this.name, 'keyType', keyType, 'KeyType.BLACK');
       keyType = KeyType.BLACK;
       range = RANGE_NAME[1].indexOf(arr[3]);
     }
 
     if (['前', '中', '后'].includes(arr[0])) {
       key = arr[1];
+      indexStr = arr[0];
+      const matchKeyInfos = this.keyInfos.filter(item => item.name === key && item.type === keyType);
+      Log.d(this.name, matchKeyInfos);
+      index = matchKeyInfos[0].x;
     } else {
       key = arr[0];
       if (keyType === KeyType.RED) {
@@ -164,12 +171,11 @@ class ChessMap {
         index = IDX_NAME[1].indexOf(arr[1]);
       }
     }
-    Log.d(this.name, 'keyType', keyType);
     Log.d(this.name, 'key', key);
     Log.d(this.name, 'index', index);
     Log.d(this.name, 'type', type);
     Log.d(this.name, 'range', range);
-    return this.move(keyType, key, index, type, range);
+    return this.move(keyType, key, index, type, range, indexStr);
   }
 
   public setFenStr(fenStr: string): ChessResult {
@@ -186,14 +192,27 @@ class ChessMap {
     };
   }
 
-  private move(keyType: KeyType, key: string, index: number, type: string, range: number): ChessResult {
+  private move(keyType: KeyType, key: string, index: number, type: string, range: number, indexStr: string): ChessResult {
     Log.d(this.name, keyType, key, index, type, range);
-    const keyInfo = this.keyInfos.find(item => item.type === keyType && item.name === key && item.x === index);
-    Log.d(this.name, keyInfo, this.keyInfos);
-    if (!keyInfo) {
+    const keyInfos = this.keyInfos.filter(item => item.type === keyType && item.name === key && item.x === index);
+    Log.d(this.name, keyInfos, this.keyInfos);
+    if (!keyInfos.length) {
       throw new Error('棋谱格式错误');
     }
-    return this.moveKey(keyInfo, type, range);
+
+    if (indexStr) {
+      let idx = 0;
+      if (indexStr === '前') {
+        idx = keyInfos[0].type === KeyType.BLACK ? keyInfos.length - 1 : 0;
+      } else if (indexStr === '中') {
+        idx = keyInfos[0].type === KeyType.BLACK ? 1 : keyInfos.length - 2;
+      } else {
+        idx = keyInfos[0].type === KeyType.BLACK ? 0 : keyInfos.length - 1;
+      }
+      return this.moveKey(keyInfos[idx], type, range);
+    }
+
+    return this.moveKey(keyInfos[0], type, range);
   }
 
   private moveKey(keyInfo: KeyInfo, type: string, range: number): ChessResult {
