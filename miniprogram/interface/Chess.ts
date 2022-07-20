@@ -108,6 +108,12 @@ class Chess {
   }
 
   public getHint(): ChessResult {
+    // 打谱成功时不再响应棋盘交互
+    if (this.isSuccess()) {
+      Log.w(this.name, '打谱成功时不再响应棋盘交互');
+      return getChessResult(STATUS.WARN, '打谱成功时不再响应棋盘交互');
+    }
+
     const idx = this.nowSteps.length;
     const content = this.expectSteps[idx];
     Log.d(this.name, 'hint', idx, content);
