@@ -134,48 +134,70 @@ class ChessMap {
   }
 
   public run(step: string): ChessResult {
-    const arr = step.split('');
-    Log.d(this.name, 'run', step, arr);
-    if (arr.length !== 4) {
-      throw new Error('棋谱格式错误');
-    }
-
-    let key = '';
-    let index = -1;
-    const type = arr[2];
-    let range = -1;
-    let indexStr = '';
+    const reg1 = /^[车马相仕帅炮兵][一二三四五六七八九][进退平][一二三四五六七八九]$/;
+    const reg2 = /^[车马象士将炮卒][123456789][进退平][123456789]$/;
+    const reg3 = /^[前中后][车马相仕帅炮兵][进退平][一二三四五六七八九]$/;
+    const reg4 = /^[前中后][车马象士将炮卒][进退平][123456789]$/;
 
     let keyType = KeyType.NONE;
-    if (RANGE_NAME[0].includes(arr[3])) {
-      Log.d(this.name, 'keyType', keyType, 'KeyType.RED');
-      keyType = KeyType.RED;
-      range = RANGE_NAME[0].indexOf(arr[3]);
-    } else {
-      Log.d(this.name, 'keyType', keyType, 'KeyType.BLACK');
-      keyType = KeyType.BLACK;
-      range = RANGE_NAME[1].indexOf(arr[3]);
-    }
+    let key = '';
+    let index = -1;
+    let type = '';
+    let range = -1;
+    let y = -1;
 
-    if (['前', '中', '后'].includes(arr[0])) {
-      key = arr[1];
-      indexStr = arr[0];
-      const matchKeyInfos = this.keyInfos.filter(item => item.name === key && item.type === keyType);
-      Log.d(this.name, matchKeyInfos);
-      index = matchKeyInfos[0].x;
-    } else {
+    const arr = step.split('');
+    if (reg1.test(step)) {
+      Log.d(this.name, 'test OK', reg1);
+      keyType = KeyType.RED;
       key = arr[0];
-      if (keyType === KeyType.RED) {
-        index = IDX_NAME[0].indexOf(arr[1]);
+      index = IDX_NAME[0].indexOf(arr[1]);
+    } else if (reg2.test(step)) {
+      Log.d(this.name, 'test OK', reg2);
+      keyType = KeyType.BLACK;
+      key = arr[0];
+      index = IDX_NAME[1].indexOf(arr[1]);
+    } else if (reg3.test(step)) {
+      Log.d(this.name, 'test OK', reg3);
+      keyType = KeyType.RED;
+      key = arr[1];
+      const matchKeyInfos = this.keyInfos.filter(item => item.name === key && item.type === keyType).sort((a, b) => a.y - b.y);
+      index = matchKeyInfos[0].x;
+      const pos = arr[0];
+      if (pos === '前') {
+        y = matchKeyInfos[matchKeyInfos.length - 1].y;
+      } else if (pos === '后') {
+        y = matchKeyInfos[0].y;
       } else {
-        index = IDX_NAME[1].indexOf(arr[1]);
+        y = matchKeyInfos[1].y;
       }
+    } else if (reg4.test(step)) {
+      Log.d(this.name, 'test OK', reg4);
+      keyType = KeyType.BLACK;
+      key = arr[1];
+      const matchKeyInfos = this.keyInfos.filter(item => item.name === key && item.type === keyType);
+      index = matchKeyInfos[0].x;
+      const pos = arr[0];
+      if (pos === '前') {
+        y = matchKeyInfos[0].y;
+      } else if (pos === '后') {
+        y = matchKeyInfos[matchKeyInfos.length - 1].y;
+      } else {
+        y = matchKeyInfos[1].y;
+      }
+    } else {
+      Log.d(this.name, 'test fail');
+      throw new Error('棋谱格式错误');
     }
+    type = arr[2];
+    range = RANGE_NAME[keyType].indexOf(arr[3]);
+
     Log.d(this.name, 'key', key);
     Log.d(this.name, 'index', index);
     Log.d(this.name, 'type', type);
     Log.d(this.name, 'range', range);
-    return this.move(keyType, key, index, type, range, indexStr);
+    Log.d(this.name, 'y', y);
+    return this.move(keyType, key, index, type, range, y);
   }
 
   public setFenStr(fenStr: string): ChessResult {
@@ -192,27 +214,21 @@ class ChessMap {
     };
   }
 
-  private move(keyType: KeyType, key: string, index: number, type: string, range: number, indexStr: string): ChessResult {
+  private move(keyType: KeyType, key: string, index: number, type: string, range: number, y: number): ChessResult {
     Log.d(this.name, keyType, key, index, type, range);
-    const keyInfos = this.keyInfos.filter(item => item.type === keyType && item.name === key && item.x === index);
-    Log.d(this.name, keyInfos, this.keyInfos);
-    if (!keyInfos.length) {
+    let keyInfo = this.keyInfos.find((item) => {
+      if (y === -1) {
+        return item.type === keyType && item.name === key && item.x === index;
+      }
+
+      return item.type === keyType && item.name === key && item.x === index && item.y === y;
+    });
+    Log.d(this.name, keyInfo, this.keyInfos);
+    if (!keyInfo) {
       throw new Error('棋谱格式错误');
     }
 
-    if (indexStr) {
-      let idx = 0;
-      if (indexStr === '前') {
-        idx = keyInfos[0].type === KeyType.BLACK ? keyInfos.length - 1 : 0;
-      } else if (indexStr === '中') {
-        idx = keyInfos[0].type === KeyType.BLACK ? 1 : keyInfos.length - 2;
-      } else {
-        idx = keyInfos[0].type === KeyType.BLACK ? 0 : keyInfos.length - 1;
-      }
-      return this.moveKey(keyInfos[idx], type, range);
-    }
-
-    return this.moveKey(keyInfos[0], type, range);
+    return this.moveKey(keyInfo, type, range);
   }
 
   private moveKey(keyInfo: KeyInfo, type: string, range: number): ChessResult {
