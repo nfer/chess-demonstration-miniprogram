@@ -171,14 +171,14 @@ class ChessMap {
       Log.d(this.name, 'test OK', reg4);
       const keyType = KeyType.BLACK;
       const key = arr[1];
-      const matchKeyInfos = this.keyInfos.filter(item => item.name === key && item.type === keyType);
+      const matchKeyInfos = this.keyInfos.filter(item => item.name === key && item.type === keyType).sort((a, b) => a.y - b.y);
       const pos = arr[0];
       if (pos === '前') {
         keyInfo = matchKeyInfos[matchKeyInfos.length - 1];
       } else if (pos === '后') {
-        keyInfo = matchKeyInfos[1];
-      } else {
         keyInfo = matchKeyInfos[0];
+      } else {
+        keyInfo = matchKeyInfos[1];
       }
     } else {
       Log.d(this.name, 'test fail');
