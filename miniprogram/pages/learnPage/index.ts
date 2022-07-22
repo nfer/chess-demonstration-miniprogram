@@ -114,7 +114,7 @@ Component({
       // 重新加载棋谱
       const step = steps.find(item => item.id === chapterId) || { id: -1, data: [] as Array<string> };
       this.data._chess.setExpectSteps(step.data);
-      this.data._chess.reload();
+      this.reload();
     },
     // 棋子点击事件
     onChessClick(e: WechatMiniprogram.CustomEvent) {
