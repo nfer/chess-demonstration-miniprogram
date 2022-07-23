@@ -67,13 +67,8 @@ Component({
     },
     // 按钮事件：提示
     hint() {
-      const hint = this.data._chess.getHint();
-      Log.d(TAG, 'hint', hint);
-      wx.showModal({
-        title: '提示',
-        content: hint,
-        showCancel: false,
-      });
+      const result = this.data._chess.getHint();
+      this.handleChessResult(this.data._chess, result);
     },
     // 按钮事件：重来
     reload() {
@@ -119,7 +114,7 @@ Component({
       // 重新加载棋谱
       const step = steps.find(item => item.id === chapterId) || { id: -1, data: [] as Array<string> };
       this.data._chess.setExpectSteps(step.data);
-      this.data._chess.reload();
+      this.reload();
     },
     // 棋子点击事件
     onChessClick(e: WechatMiniprogram.CustomEvent) {

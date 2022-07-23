@@ -1,12 +1,16 @@
-import { KeyInfo, KeyType } from './index';
+import { EMPTY_KEYPOS, KeyInfo, KeyPos, KeyType } from './index';
 import Log from '../utils/log';
 
 class ChessItem {
   protected x = -1;
 
+  protected pronounceX = -1;
+
   protected y = -1;
 
   protected name = 'ChessItem';
+
+  protected direction = 0;
 
   private type = KeyType.NONE;
 
@@ -14,6 +18,18 @@ class ChessItem {
     this.type = keyInfo.type;
     this.x = keyInfo.x;
     this.y = keyInfo.y;
+    if (this.type === KeyType.RED) {
+      this.pronounceX = 9 - this.x;
+      this.direction = 1;
+    } else {
+      this.pronounceX = 1 + this.x;
+      this.direction = -1;
+    }
+  }
+
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range);
+    return EMPTY_KEYPOS;
   }
 
   public checkMove(x: number, y: number, keyInfos: Array<KeyInfo>): boolean {
@@ -60,6 +76,29 @@ export class KChessItem extends ChessItem {
     this.name = 'KChessItem';
   }
 
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '平':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y,
+        };
+      case '进':
+        return {
+          x: this.x,
+          y: this.y - range * this.direction,
+        };
+      case '退':
+        return {
+          x: this.x,
+          y: this.y + range * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
+  }
+
   protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     if (x < 3 || x > 5) return false;
@@ -85,6 +124,24 @@ export class AChessItem extends ChessItem {
     this.name = 'AChessItem';
   }
 
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '进':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y - Math.abs(this.pronounceX - range) * this.direction,
+        };
+      case '退':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y + Math.abs(this.pronounceX - range) * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
+  }
+
   protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     let arr = [];
@@ -108,6 +165,24 @@ export class BChessItem extends ChessItem {
   public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'BChessItem';
+  }
+
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '进':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y - Math.abs(this.pronounceX - range) * this.direction,
+        };
+      case '退':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y + Math.abs(this.pronounceX - range) * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
   }
 
   protected checkPosMove(x: number, y: number): boolean {
@@ -144,6 +219,24 @@ export class NChessItem extends ChessItem {
   public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'NChessItem';
+  }
+
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '进':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y - (3 - Math.abs(this.pronounceX - range)) * this.direction,
+        };
+      case '退':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y + (3 - Math.abs(this.pronounceX - range)) * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
   }
 
   protected checkPosMove(x: number, y: number): boolean {
@@ -184,6 +277,29 @@ export class RChessItem extends ChessItem {
     this.name = 'RChessItem';
   }
 
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '平':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y,
+        };
+      case '进':
+        return {
+          x: this.x,
+          y: this.y - range * this.direction,
+        };
+      case '退':
+        return {
+          x: this.x,
+          y: this.y + range * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
+  }
+
   protected checkPosMove(x: number, y: number): boolean {
     Log.d(this.name, 'checkPosMove', x, y);
     const xRange = Math.abs(this.x - x);
@@ -218,6 +334,29 @@ export class CChessItem extends ChessItem {
   public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'CChessItem';
+  }
+
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '平':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y,
+        };
+      case '进':
+        return {
+          x: this.x,
+          y: this.y - range * this.direction,
+        };
+      case '退':
+        return {
+          x: this.x,
+          y: this.y + range * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
   }
 
   protected checkPosMove(x: number, y: number): boolean {
@@ -262,6 +401,24 @@ export class PChessItem extends ChessItem {
   public constructor(keyInfo: KeyInfo) {
     super(keyInfo);
     this.name = 'PChessItem';
+  }
+
+  public getDestPos(type: string, range: number): KeyPos {
+    Log.d(this.name, 'getDestPos', type, range, this.pronounceX - range);
+    switch (type) {
+      case '平':
+        return {
+          x: this.x + (this.pronounceX - range) * this.direction,
+          y: this.y,
+        };
+      case '进':
+        return {
+          x: this.x,
+          y: this.y - range * this.direction,
+        };
+      default:
+        return EMPTY_KEYPOS;
+    }
   }
 
   protected checkPosMove(x: number, y: number): boolean {
